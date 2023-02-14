@@ -32,7 +32,7 @@ function Gameboard() {
           {item.piece !== null && 
           <div className="piece" 
             style={item?.piece === 'z' ? p1ChipStyle : item?.piece === 'x'? p2ChipStyle : {}}
-            onClick={() =>highlightMoves(item.x, item.y, item.piece)}
+            onClick={() =>highlightMoves(item.x, item.y, item.piece, item.player)}
           >
               {item.piece}
           </div>}
