@@ -74,91 +74,46 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
             return {...item, highlighted: true}
         }
         
-        // p1 top right take
+        // top right take
         if (
-          player === 1 &&
           item.x === xPosition + 2 &&
           item.y === yPosition - 2 &&
           item?.piece === null &&
-          boardData[index + 7].piece === 'x'
+          (boardData[index + 7].piece === 'x' && player === 1 ||
+          boardData[index + 7].piece === 'z' && player === 2)
           ) {
           tempArrForMoves.push(item)
           return {...item, highlighted: true}
         }
-        // p1 top left take
-        if (
-          player === 1 &&
+        // top left take
+        if (          
           item.x === xPosition - 2 &&
           item.y === yPosition - 2 &&
           item?.piece === null &&
-          boardData[index + 9].piece === 'x'
+          (boardData[index + 9].piece === 'x' && player === 1 ||
+          boardData[index + 9].piece === 'z' && player === 2)
         ) {
           tempArrForMoves.push(item)
           return {...item, highlighted: true}
         }
-        // p1 bottom right take
+        // bottom right take
         if (
-          player === 1 &&
           item.x === xPosition + 2 &&
           item.y === yPosition + 2 &&
           item?.piece === null &&
-          boardData[index - 9].piece === 'x'
+          (boardData[index - 9].piece === 'x' && player === 1 ||
+          boardData[index - 9].piece === 'z' && player === 2 )
         ) {
           tempArrForMoves.push(item)
           return {...item, highlighted: true}
         }
-        // p1 bottom left take
+        // bottom left take
         if (
-          player === 1 &&
           item.x === xPosition - 2 &&
           item.y === yPosition + 2 &&
           item?.piece === null &&
-          boardData[index - 7].piece === 'x'
-        ) {
-          tempArrForMoves.push(item)
-          return {...item, highlighted: true}
-        }
-
-        // p2 bottom right take
-        if (
-          player === 2 &&
-          item.x === xPosition + 2 &&
-          item.y === yPosition + 2 &&
-          item?.piece === null &&
-          boardData[index - 9].piece === 'z'
-        ) {
-          tempArrForMoves.push(item)
-          return {...item, highlighted: true}
-        }
-        // p2 bottom left take
-        if (
-          player === 2 &&
-          item.x === xPosition - 2 &&
-          item.y === yPosition + 2 &&
-          item?.piece === null &&
-          boardData[index - 7].piece === 'z'
-        ) {
-          tempArrForMoves.push(item)
-          return {...item, highlighted: true}
-        }
-        // p2 top right take
-        if (
-          player === 2 &&
-          item.x === xPosition + 2 &&
-          item.y === yPosition - 2 &&
-          item?.piece === null &&
-          boardData[index + 7].piece === 'z'
-        ) {
-          tempArrForMoves.push(item)
-          return {...item, highlighted: true}
-        }
-        // p2 top left take
-        if (
-          player === 2 &&
-          item.x === xPosition - 2 &&
-          item.y === yPosition - 2 &&
-          item?.piece === null &&
-          boardData[index + 9].piece === 'z'
+          (boardData[index - 7].piece === 'x' && player === 1 ||
+          boardData[index - 7].piece === 'z' && player === 2 )
         ) {
           tempArrForMoves.push(item)
           return {...item, highlighted: true}
