@@ -24,12 +24,12 @@ function Gameboard() {
       { boardData.map((item: [], index: number) => {
         return ( 
           <div className="square"
-            key={`{${item.x},${item.y}}`}
+            key={index}
             style={!item?.playable  ? emptySquareStyle : item.highlighted ? highlightedSquare: {}}
             onClick={
               () => {
                 if (!item.highlighted) return
-                movePiece(pieceToMove, item)
+                movePiece(pieceToMove, item, index)
               }
             }
           >

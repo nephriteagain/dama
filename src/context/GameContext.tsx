@@ -20,6 +20,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
   const [ boardData, setBoardData ] = useState(arrayData)
   const [ pieceToMove, setPieceToMove ] = useState(null)
   const [ possibleMoves, setPossibleMoves ] = useState([])
+  const [ possibleJumps, setPossibleJumps ] = useState([])
 
   function highlightMoves(itemToMove: [], position: number) {
     const xPosition = itemToMove.x
@@ -27,6 +28,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
     const piece = itemToMove.piece
     const player = itemToMove.player
     const tempArrForMoves = []
+    const tempArrForJumps = []
 
 
     if (piece === null) return
@@ -172,7 +174,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
   setBoardData([...newBoardData])
 }
 
-  function movePiece(pieceToMove: [], placeToLand: []) {
+  function movePiece(pieceToMove: [], placeToLand: [], index: number) {
     const xPosition : number = placeToLand.x
     const yPosition : number = placeToLand.y
     const player : number = placeToLand.player
@@ -182,7 +184,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
         return item
       }
     })
-    const newBoardData = boardData.map((item, index) => {
+    let newBoardData = boardData.map((item, index) => {
       if (!item.playable) return item
 
       if (item === chipToMove) {
@@ -196,6 +198,58 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
 
       return {...item, highlighted: false}
     })
+
+    // check if the move is jump
+    //  top right jump
+    if (pieceToMove.x + 2 === placeToLand.x &&
+      pieceToMove.y - 2 === placeToLand.y ) {
+        // find the piece to be taken
+      newBoardData = newBoardData.map((item) => {
+        if (item.x === boardData[index + 7].x && 
+          item.y === boardData[index + 7].y) {
+          
+          return {...item, player: null, piece: null}
+        }
+          return item
+      })
+    }
+    //  top left jump
+    if (pieceToMove.x -2 === placeToLand.x &&
+      pieceToMove.y - 2 === placeToLand.y) {
+        newBoardData = newBoardData.map((item) => {
+        if (item.x === boardData[index + 9].x && 
+          item.y === boardData[index + 9].y) {
+          
+          return {...item, player: null, piece: null}
+        }
+          return item
+      })
+      }
+      //  bottom right jump
+      if (pieceToMove.x + 2 === placeToLand.x &&
+      pieceToMove.y + 2 === placeToLand.y) {
+        newBoardData = newBoardData.map((item) => {
+        if (item.x === boardData[index - 9].x && 
+          item.y === boardData[index - 9].y) {
+          
+          return {...item, player: null, piece: null}
+        }
+          return item
+      })
+      }
+      // bottom left jump
+      if (pieceToMove.x - 2 === placeToLand.x &&
+      pieceToMove.y + 2 === placeToLand.y) {
+        newBoardData = newBoardData.map((item) => {
+        if (item.x === boardData[index - 7].x && 
+          item.y === boardData[index - 7].y) {
+          
+          return {...item, player: null, piece: null}
+        }
+          return item
+      })
+      }
+
     setPieceToMove(null)
     setBoardData([...newBoardData])
   }
@@ -223,15 +277,15 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
 
 
 
-  useEffect(() => {
-    if (pieceToMove) {
-      console.log(pieceToMove, 'piece to move')
-      console.log(possibleMoves, 'possible moves')
-    }
-    //  else {
-    //   console.log(boardData)
-    // }
-  }, [boardData])
+  // useEffect(() => {
+  //   if (pieceToMove) {
+  //     console.log(pieceToMove, 'piece to move')
+  //     console.log(possibleMoves, 'possible moves')
+  //   }
+  //   //  else {
+  //   //   console.log(boardData)
+  //   // }
+  // }, [boardData])
 
 
 
