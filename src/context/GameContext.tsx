@@ -129,12 +129,14 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
 
   function highlightMovesKing(itemToMove, position: number) {
     const { x: xPosition, y: yPosition, piece, player } = itemToMove;
-    const tempArrForMoves = []
+    let tempArrForMoves = []
     const tempArrForJumps = []
 
     if (piece === null) return
     if (!itemToMove.king) return
     console.log(itemToMove, position, 'item to move')
+
+
     // southwest direction
     if (boardData[position + 7]?.piece === null && boardData[position + 7].playable === true) {
       tempArrForMoves.push(boardData[position + 7])
@@ -151,32 +153,96 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
                 if (boardData[position + 49]?.piece === null && boardData[position + 49].playable === true) {
                   tempArrForMoves.push(boardData[position + 49])
                 }
-              }
+              } else if (
+      boardData[position + 42]?.piece !== null && 
+      boardData[position + 42]?.playable === true && 
+      itemToMove.piece !== boardData[position + 42]?.piece
+    ) {
+      tempArrForMoves.push(boardData[position + 49])
+    }
+            } else if (
+      boardData[position + 35]?.piece !== null && 
+      boardData[position + 35]?.playable === true && 
+      itemToMove.piece !== boardData[position + 35]?.piece
+    ) {
+      tempArrForMoves.push(boardData[position + 42])
+        if (boardData[position + 49]?.piece === null && boardData[position + 49].playable === true) {
+          tempArrForMoves.push(boardData[position + 49])
+        }
+    }
+          } else if (
+      boardData[position + 28]?.piece !== null && 
+      boardData[position + 28]?.playable === true && 
+      itemToMove.piece !== boardData[position + 28]?.piece
+    ) {
+      tempArrForMoves.push(boardData[position + 35])
+      if (boardData[position + 42]?.piece === null && boardData[position + 42].playable === true) {
+        tempArrForMoves.push(boardData[position + 42])
+        if (boardData[position + 49]?.piece === null && boardData[position + 49].playable === true) {
+          tempArrForMoves.push(boardData[position + 49])
+        }
+      }  
+    }
+        } else if (
+      boardData[position + 21]?.piece !== null && 
+      boardData[position + 21]?.playable === true && 
+      itemToMove.piece !== boardData[position + 21]?.piece
+    ) {
+      tempArrForMoves.push(boardData[position + 28])
+      if (boardData[position + 35]?.piece === null && boardData[position + 35].playable === true) {
+        tempArrForMoves.push(boardData[position + 35])
+        if (boardData[position + 42]?.piece === null && boardData[position + 42].playable === true) {
+          tempArrForMoves.push(boardData[position + 42])
+          if (boardData[position + 49]?.piece === null && boardData[position + 49].playable === true) {
+            tempArrForMoves.push(boardData[position + 49])
+          }
+        }
+      }   
+    }
+      } else if (
+      boardData[position + 14]?.piece !== null && 
+      boardData[position + 14]?.playable === true && 
+      itemToMove.piece !== boardData[position + 14]?.piece
+    ) {
+      tempArrForMoves.push(boardData[position + 21])
+      if (boardData[position + 28]?.piece === null && boardData[position + 28].playable === true) {
+        tempArrForMoves.push(boardData[position + 28])
+        if (boardData[position + 35]?.piece === null && boardData[position + 35].playable === true) {
+          tempArrForMoves.push(boardData[position + 35])
+          if (boardData[position + 42]?.piece === null && boardData[position + 42].playable === true) {
+            tempArrForMoves.push(boardData[position + 42])
+            if (boardData[position + 49]?.piece === null && boardData[position + 49].playable === true) {
+              tempArrForMoves.push(boardData[position + 49])
             }
           }
         }
       }
+        
     }
-    // souteast direction
-    if (boardData[position + 9]?.piece === null && boardData[position + 9].playable === true) {
-      tempArrForMoves.push(boardData[position + 9])
-      if (boardData[position + 18]?.piece === null && boardData[position + 18].playable === true) {
-        tempArrForMoves.push(boardData[position + 18])
-        if (boardData[position + 27]?.piece === null && boardData[position + 27].playable === true) {
-          tempArrForMoves.push(boardData[position + 27])
-          if (boardData[position + 36]?.piece === null && boardData[position + 36].playable === true) {
-            tempArrForMoves.push(boardData[position + 36])
-            if (boardData[position + 45]?.piece === null && boardData[position + 45].playable === true) {
-              tempArrForMoves.push(boardData[position + 45])
-              if (boardData[position + 54]?.piece === null && boardData[position + 54].playable === true) {
-                tempArrForMoves.push(boardData[position + 54])
+    } else if (
+      boardData[position + 7]?.piece !== null && 
+      boardData[position + 7]?.playable === true && 
+      itemToMove.piece !== boardData[position + 7]?.piece
+    ) {
+      tempArrForMoves.push(boardData[position + 14])
+      if (boardData[position + 21]?.piece === null && boardData[position + 21].playable === true) {
+          tempArrForMoves.push(boardData[position + 21])
+          if (boardData[position + 28]?.piece === null && boardData[position + 28].playable === true) {
+            tempArrForMoves.push(boardData[position + 28])
+            if (boardData[position + 35]?.piece === null && boardData[position + 35].playable === true) {
+              tempArrForMoves.push(boardData[position + 35])
+              if (boardData[position + 42]?.piece === null && boardData[position + 42].playable === true) {
+                tempArrForMoves.push(boardData[position + 42])
+                if (boardData[position + 49]?.piece === null && boardData[position + 49].playable === true) {
+                  tempArrForMoves.push(boardData[position + 49])
+                }
               }
             }
           }
         }
-      }
     }
-    // northeast
+
+     // northeast
     if (boardData[position - 7]?.piece === null && boardData[position - 7].playable === true) {
       tempArrForMoves.push(boardData[position - 7])
       if (boardData[position - 14]?.piece === null && boardData[position - 14].playable === true) {
@@ -192,15 +258,158 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
                 if (boardData[position - 49]?.piece === null && boardData[position - 49].playable === true) {
                   tempArrForMoves.push(boardData[position - 49])
                 }
-              }
+              } else if (
+      boardData[position - 42]?.piece !== null && 
+      boardData[position - 42]?.playable === true && 
+      itemToMove.piece !== boardData[position - 42]?.piece
+    ) {
+      tempArrForMoves.push(boardData[position - 49])
+    }
+            } else if (
+      boardData[position - 35]?.piece !== null && 
+      boardData[position - 35]?.playable === true && 
+      itemToMove.piece !== boardData[position - 35]?.piece
+    ) {
+      tempArrForMoves.push(boardData[position - 42])
+        if (boardData[position - 49]?.piece === null && boardData[position - 49].playable === true) {
+          tempArrForMoves.push(boardData[position - 49])
+        }
+    }
+          } else if (
+      boardData[position - 28]?.piece !== null && 
+      boardData[position - 28]?.playable === true && 
+      itemToMove.piece !== boardData[position - 28]?.piece
+    ) {
+      tempArrForMoves.push(boardData[position - 35])
+      if (boardData[position - 42]?.piece === null && boardData[position - 42].playable === true) {
+        tempArrForMoves.push(boardData[position - 42])
+        if (boardData[position - 49]?.piece === null && boardData[position - 49].playable === true) {
+          tempArrForMoves.push(boardData[position - 49])
+        }
+      }  
+    }
+        } else if (
+      boardData[position - 21]?.piece !== null && 
+      boardData[position - 21]?.playable === true && 
+      itemToMove.piece !== boardData[position - 21]?.piece
+    ) {
+      tempArrForMoves.push(boardData[position - 28])
+      if (boardData[position - 35]?.piece === null && boardData[position - 35].playable === true) {
+        tempArrForMoves.push(boardData[position - 35])
+        if (boardData[position - 42]?.piece === null && boardData[position - 42].playable === true) {
+          tempArrForMoves.push(boardData[position - 42])
+          if (boardData[position - 49]?.piece === null && boardData[position - 49].playable === true) {
+            tempArrForMoves.push(boardData[position - 49])
+          }
+        }
+      }   
+    }
+      } else if (
+      boardData[position - 14]?.piece !== null && 
+      boardData[position - 14]?.playable === true && 
+      itemToMove.piece !== boardData[position - 14]?.piece
+    ) {
+      tempArrForMoves.push(boardData[position - 21])
+      if (boardData[position - 28]?.piece === null && boardData[position - 28].playable === true) {
+        tempArrForMoves.push(boardData[position - 28])
+        if (boardData[position - 35]?.piece === null && boardData[position - 35].playable === true) {
+          tempArrForMoves.push(boardData[position - 35])
+          if (boardData[position - 42]?.piece === null && boardData[position - 42].playable === true) {
+            tempArrForMoves.push(boardData[position - 42])
+            if (boardData[position - 49]?.piece === null && boardData[position - 49].playable === true) {
+              tempArrForMoves.push(boardData[position - 49])
             }
           }
         }
       }
+        
     }
-    // northwest
+    } else if (
+      boardData[position - 7]?.piece !== null && 
+      boardData[position - 7]?.playable === true && 
+      itemToMove.piece !== boardData[position - 7]?.piece
+    ) {
+      tempArrForMoves.push(boardData[position - 14])
+      if (boardData[position - 21]?.piece === null && boardData[position - 21].playable === true) {
+          tempArrForMoves.push(boardData[position - 21])
+          if (boardData[position - 28]?.piece === null && boardData[position - 28].playable === true) {
+            tempArrForMoves.push(boardData[position - 28])
+            if (boardData[position - 35]?.piece === null && boardData[position - 35].playable === true) {
+              tempArrForMoves.push(boardData[position - 35])
+              if (boardData[position - 42]?.piece === null && boardData[position - 42].playable === true) {
+                tempArrForMoves.push(boardData[position - 42])
+                if (boardData[position - 49]?.piece === null && boardData[position - 49].playable === true) {
+                  tempArrForMoves.push(boardData[position - 49])
+                }
+              }
+            }
+          }
+        }
+    }
+
+    // southeast direction
+    if (boardData[position + 9]?.piece === null && boardData[position + 9].playable === true) {
+      tempArrForMoves.push(boardData[position + 9])
+      if (boardData[position + 18]?.piece === null && boardData[position + 18].playable === true) {
+        tempArrForMoves.push(boardData[position + 18])
+        if (boardData[position + 27]?.piece === null && boardData[position + 27].playable === true) {
+          tempArrForMoves.push(boardData[position + 27])
+          if (boardData[position + 36]?.piece === null && boardData[position + 36].playable === true) {
+            tempArrForMoves.push(boardData[position + 36])
+            if (boardData[position + 45]?.piece === null && boardData[position + 45].playable === true) {
+              tempArrForMoves.push(boardData[position + 45])
+              if (boardData[position + 54]?.piece === null && boardData[position + 54].playable === true) {
+                tempArrForMoves.push(boardData[position + 54])
+              }
+            } else if (boardData[position + 45]?.piece !== null && boardData[position + 45]?.playable === true && itemToMove.piece !== boardData[position + 45]?.piece) {
+      tempArrForMoves.push(boardData[position + 54])
+    }
+          } else if (boardData[position + 36]?.piece !== null && boardData[position + 36]?.playable === true && itemToMove.piece !== boardData[position + 36]?.piece) {
+      tempArrForMoves.push(boardData[position + 45])
+              if (boardData[position + 54]?.piece === null && boardData[position + 54].playable === true) {
+                tempArrForMoves.push(boardData[position + 54])
+              }    
+    }
+        } else if (boardData[position + 27]?.piece !== null && boardData[position + 27]?.playable === true && itemToMove.piece !== boardData[position + 27]?.piece) {
+      tempArrForMoves.push(boardData[position + 36])
+            if (boardData[position + 45]?.piece === null && boardData[position + 45].playable === true) {
+              tempArrForMoves.push(boardData[position + 45])
+              if (boardData[position + 54]?.piece === null && boardData[position + 54].playable === true) {
+                tempArrForMoves.push(boardData[position + 54])
+              }
+            }
+    }
+      } else if (boardData[position + 18]?.piece !== null && boardData[position + 18]?.playable === true && itemToMove.piece !== boardData[position + 18]?.piece) {
+      tempArrForMoves.push(boardData[position + 27])
+          if (boardData[position + 36]?.piece === null && boardData[position + 36].playable === true) {
+            tempArrForMoves.push(boardData[position + 36])
+            if (boardData[position + 45]?.piece === null && boardData[position + 45].playable === true) {
+              tempArrForMoves.push(boardData[position + 45])
+              if (boardData[position + 54]?.piece === null && boardData[position + 54].playable === true) {
+                tempArrForMoves.push(boardData[position + 54])
+              }
+            }
+          } 
+    }
+    } else if (boardData[position + 9]?.piece !== null && boardData[position + 9]?.playable === true && itemToMove.piece !== boardData[position + 9]?.piece) {
+      tempArrForMoves.push(boardData[position + 18])
+       if (boardData[position + 27]?.piece === null && boardData[position + 27].playable === true) {
+          tempArrForMoves.push(boardData[position + 27])
+          if (boardData[position + 36]?.piece === null && boardData[position + 36].playable === true) {
+            tempArrForMoves.push(boardData[position + 36])
+            if (boardData[position + 45]?.piece === null && boardData[position + 45].playable === true) {
+              tempArrForMoves.push(boardData[position + 45])
+              if (boardData[position + 54]?.piece === null && boardData[position + 54].playable === true) {
+                tempArrForMoves.push(boardData[position + 54])
+              }
+            }
+          }
+        }
+    }
+
+    // northwest direction
     if (boardData[position - 9]?.piece === null && boardData[position - 9].playable === true) {
-      tempArrForMoves.push(boardData[position - 9])
+      tempArrForMoves.push(boardData[position + 9])
       if (boardData[position - 18]?.piece === null && boardData[position - 18].playable === true) {
         tempArrForMoves.push(boardData[position - 18])
         if (boardData[position - 27]?.piece === null && boardData[position - 27].playable === true) {
@@ -212,13 +421,59 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
               if (boardData[position - 54]?.piece === null && boardData[position - 54].playable === true) {
                 tempArrForMoves.push(boardData[position - 54])
               }
+            } else if (boardData[position - 45]?.piece !== null && boardData[position - 45]?.playable === true && itemToMove.piece !== boardData[position - 45]?.piece) {
+      tempArrForMoves.push(boardData[position - 54])
+    }
+          } else if (boardData[position - 36]?.piece !== null && boardData[position - 36]?.playable === true && itemToMove.piece !== boardData[position - 36]?.piece) {
+      tempArrForMoves.push(boardData[position - 45])
+              if (boardData[position - 54]?.piece === null && boardData[position - 54].playable === true) {
+                tempArrForMoves.push(boardData[position - 54])
+              }    
+    }
+        } else if (boardData[position - 27]?.piece !== null && boardData[position - 27]?.playable === true && itemToMove.piece !== boardData[position - 27]?.piece) {
+      tempArrForMoves.push(boardData[position - 36])
+            if (boardData[position - 45]?.piece === null && boardData[position - 45].playable === true) {
+              tempArrForMoves.push(boardData[position - 45])
+              if (boardData[position - 54]?.piece === null && boardData[position - 54].playable === true) {
+                tempArrForMoves.push(boardData[position - 54])
+              }
+            }
+    }
+      } else if (boardData[position - 18]?.piece !== null && boardData[position - 18]?.playable === true && itemToMove.piece !== boardData[position - 18]?.piece) {
+      tempArrForMoves.push(boardData[position - 27])
+          if (boardData[position - 36]?.piece === null && boardData[position - 36].playable === true) {
+            tempArrForMoves.push(boardData[position - 36])
+            if (boardData[position - 45]?.piece === null && boardData[position - 45].playable === true) {
+              tempArrForMoves.push(boardData[position - 45])
+              if (boardData[position - 54]?.piece === null && boardData[position - 54].playable === true) {
+                tempArrForMoves.push(boardData[position - 54])
+              }
+            }
+          } 
+    }
+    } else if (boardData[position - 9]?.piece !== null && boardData[position - 9]?.playable === true && itemToMove.piece !== boardData[position - 9]?.piece) {
+      tempArrForMoves.push(boardData[position - 18])
+       if (boardData[position - 27]?.piece === null && boardData[position - 27].playable === true) {
+          tempArrForMoves.push(boardData[position - 27])
+          if (boardData[position - 36]?.piece === null && boardData[position - 36].playable === true) {
+            tempArrForMoves.push(boardData[position - 36])
+            if (boardData[position - 45]?.piece === null && boardData[position - 45].playable === true) {
+              tempArrForMoves.push(boardData[position - 45])
+              if (boardData[position - 54]?.piece === null && boardData[position - 54].playable === true) {
+                tempArrForMoves.push(boardData[position - 54])
+              }
             }
           }
         }
-      }
     }
 
 
+        // remove falsy items
+    tempArrForMoves = tempArrForMoves.filter(item => {
+      if (item) return item
+    })
+
+    console.log(tempArrForMoves)
     // checks all available moves
     const tempBoardData = boardData.map((item) => {
       const tempItem = tempArrForMoves.find((chip) => {
@@ -232,6 +487,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
       }
       return {...item, highlighted: false}
     })
+
 
     console.log(tempArrForMoves)
     setPossibleMoves([...tempArrForMoves])
