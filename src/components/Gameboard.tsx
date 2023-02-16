@@ -1,8 +1,14 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 import { useGlobalContext } from "../context/GameContext"
+import { arrayData } from "../data/arrayData"
+
+
 
 function Gameboard() {
+
+  const [ p1PossibleMoves, setP1PossibleMoves ] = useState([])
+  const [ p2PossibleMoves, setP2PossibleMoves ] = useState([])
 
   const { boardData, setBoardData, highlightMoves, movePiece, pieceToMove } = useGlobalContext()
 
@@ -11,10 +17,11 @@ function Gameboard() {
   const emptySquareStyle = {backgroundColor: '#111'}
   const highlightedSquare = {backgroundColor: '#ccccff'}
 
+
   
   return (
     <div className='board'>
-      { boardData.map((item) => {
+      { boardData.map((item: [], index: number) => {
         return ( 
           <div className="square"
             key={`{${item.x},${item.y}}`}
@@ -22,7 +29,7 @@ function Gameboard() {
             onClick={
               () => {
                 if (!item.highlighted) return
-                movePiece(pieceToMove, item.x, item.y, item.player)
+                movePiece(pieceToMove, item)
               }
             }
           >
@@ -32,7 +39,8 @@ function Gameboard() {
           {item.piece !== null && 
           <div className="piece" 
             style={item?.piece === 'z' ? p1ChipStyle : item?.piece === 'x'? p2ChipStyle : {}}
-            onClick={() =>highlightMoves(item.x, item.y, item.piece, item.player)}
+            onClick={() => {
+              highlightMoves(item, index)}}
           >
               {item.piece}
           </div>}

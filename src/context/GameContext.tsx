@@ -1,21 +1,38 @@
-import { useContext, createContext, useState, useEffect } from "react"
+import { useContext, createContext, useState, useEffect, ReactNode } from "react"
 
 import { arrayData } from "../data/arrayData"
 
+type GlobalContextProviderProps = {
+  children: ReactNode
+}
+
+// type GlobalContext = {
+//   highlightMoves : (itemToMove: [], position: number) => []
+//   movePiece : ()
+// }
+
+
 const GlobalContext = createContext()
 
-export const GlobalProvider = ({children}) => {
+export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
 
   
   const [ boardData, setBoardData ] = useState(arrayData)
   const [ pieceToMove, setPieceToMove ] = useState(null)
-  const [ takePiece, setTakePiece ] = useState(false)
+  const [ possibleMoves, setPossibleMoves ] = useState([])
 
-  function highlightMoves(xPosition: number, yPosition: number, piece : (string | null), player : number) {
+  function highlightMoves(itemToMove: [], position: number) {
+    const xPosition = itemToMove.x
+    const yPosition = itemToMove.y
+    const piece = itemToMove.piece
+    const player = itemToMove.player
+    const tempArrForMoves = []
+
 
     if (piece === null) return
     const newBoardData = boardData.map((item, index) => {
       if (!item.playable) return item
+
         // p1  right move
         if (
             item.x === xPosition + 1 && 
@@ -23,6 +40,7 @@ export const GlobalProvider = ({children}) => {
             item.piece === null &&
             player === 1
           ) {
+            tempArrForMoves.push(item)
             return {...item, highlighted: true}
         }
         // p1 left move
@@ -32,6 +50,7 @@ export const GlobalProvider = ({children}) => {
           item.piece === null &&
           player === 1
         ) {
+            tempArrForMoves.push(item)
             return {...item, highlighted: true}
         }
         // p2 right move
@@ -41,6 +60,7 @@ export const GlobalProvider = ({children}) => {
             item.piece === null &&
             player === 2
           ) {
+            tempArrForMoves.push(item)
             return {...item, highlighted: true}
         }
         // p2 left move
@@ -50,6 +70,7 @@ export const GlobalProvider = ({children}) => {
           item.piece === null &&
           player === 2
         ) {
+            tempArrForMoves.push(item)
             return {...item, highlighted: true}
         }
         
@@ -60,7 +81,8 @@ export const GlobalProvider = ({children}) => {
           item.y === yPosition - 2 &&
           item.piece === null &&
           boardData[index + 7].piece === 'x'
-        ) {
+          ) {
+          tempArrForMoves.push(item)
           return {...item, highlighted: true}
         }
         // p1 top left take
@@ -71,6 +93,7 @@ export const GlobalProvider = ({children}) => {
           item.piece === null &&
           boardData[index + 9].piece === 'x'
         ) {
+          tempArrForMoves.push(item)
           return {...item, highlighted: true}
         }
         // p1 bottom right take
@@ -81,6 +104,7 @@ export const GlobalProvider = ({children}) => {
           item.piece === null &&
           boardData[index - 9].piece === 'x'
         ) {
+          tempArrForMoves.push(item)
           return {...item, highlighted: true}
         }
         // p1 bottom left take
@@ -91,6 +115,7 @@ export const GlobalProvider = ({children}) => {
           item.piece === null &&
           boardData[index - 7].piece === 'x'
         ) {
+          tempArrForMoves.push(item)
           return {...item, highlighted: true}
         }
 
@@ -102,6 +127,7 @@ export const GlobalProvider = ({children}) => {
           item.piece === null &&
           boardData[index - 9].piece === 'z'
         ) {
+          tempArrForMoves.push(item)
           return {...item, highlighted: true}
         }
         // p2 bottom left take
@@ -112,6 +138,7 @@ export const GlobalProvider = ({children}) => {
           item.piece === null &&
           boardData[index - 7].piece === 'z'
         ) {
+          tempArrForMoves.push(item)
           return {...item, highlighted: true}
         }
         // p2 top right take
@@ -122,6 +149,7 @@ export const GlobalProvider = ({children}) => {
           item.piece === null &&
           boardData[index + 7].piece === 'z'
         ) {
+          tempArrForMoves.push(item)
           return {...item, highlighted: true}
         }
         // p2 top left take
@@ -132,23 +160,29 @@ export const GlobalProvider = ({children}) => {
           item.piece === null &&
           boardData[index + 9].piece === 'z'
         ) {
+          tempArrForMoves.push(item)
           return {...item, highlighted: true}
         }
 
 
         return {...item, highlighted: false}
       })
-  setPieceToMove({piece, x: xPosition, y: yPosition, player})
+  setPieceToMove({...itemToMove})
+  setPossibleMoves([...tempArrForMoves])
   setBoardData([...newBoardData])
 }
 
-  function movePiece(pieceToMove, xPosition: number, yPosition: number, player: number) {
+  function movePiece(pieceToMove: [], placeToLand: []) {
+    const xPosition : number = placeToLand.x
+    const yPosition : number = placeToLand.y
+    const player : number = placeToLand.player
+
     const chipToMove = boardData.find((item) => {
       if (item.x === pieceToMove.x && item.y === pieceToMove.y) {
         return item
       }
     })
-    const newBoardData = boardData.map((item) => {
+    const newBoardData = boardData.map((item, index) => {
       if (!item.playable) return item
 
       if (item === chipToMove) {
@@ -178,7 +212,9 @@ export const GlobalProvider = ({children}) => {
 
 
 
+  useEffect(() => {
 
+  })
 
 
 
@@ -189,7 +225,8 @@ export const GlobalProvider = ({children}) => {
 
   useEffect(() => {
     if (pieceToMove) {
-      console.log(pieceToMove)
+      console.log(pieceToMove, 'piece to move')
+      console.log(possibleMoves, 'possible moves')
     }
     //  else {
     //   console.log(boardData)
