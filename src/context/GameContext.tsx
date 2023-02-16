@@ -20,18 +20,16 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
   const [ boardData, setBoardData ] = useState(arrayData)
   const [ pieceToMove, setPieceToMove ] = useState(null)
   const [ possibleMoves, setPossibleMoves ] = useState([])
-  const [ possibleJumps, setPossibleJumps ] = useState([])
+  // const [ possibleJumps, setPossibleJumps ] = useState([])
 
-  function highlightMoves(itemToMove: [], position: number) {
-    const xPosition = itemToMove.x
-    const yPosition = itemToMove.y
-    const piece = itemToMove.piece
-    const player = itemToMove.player
+  function highlightMoves(itemToMove, position: number) {
+    const { x: xPosition, y: yPosition, piece, player } = itemToMove;
     const tempArrForMoves = []
     const tempArrForJumps = []
 
-
+    
     if (piece === null) return
+    if (itemToMove.king) return
     const newBoardData = boardData.map((item, index) => {
       if (!item.playable) return item
 
@@ -39,7 +37,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
         if (
             item.x === xPosition + 1 && 
             item.y === yPosition - 1 &&
-            item.piece === null &&
+            item?.piece === null &&
             player === 1
           ) {
             tempArrForMoves.push(item)
@@ -49,7 +47,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
         if (
           item.x === xPosition - 1 &&
           item.y === yPosition - 1 &&
-          item.piece === null &&
+          item?.piece === null &&
           player === 1
         ) {
             tempArrForMoves.push(item)
@@ -59,7 +57,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
         if (
             item.x === xPosition + 1 && 
             item.y === yPosition + 1 &&
-            item.piece === null &&
+            item?.piece === null &&
             player === 2
           ) {
             tempArrForMoves.push(item)
@@ -69,7 +67,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
         if (
           item.x === xPosition - 1 &&
           item.y === yPosition + 1 &&
-          item.piece === null &&
+          item?.piece === null &&
           player === 2
         ) {
             tempArrForMoves.push(item)
@@ -81,7 +79,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
           player === 1 &&
           item.x === xPosition + 2 &&
           item.y === yPosition - 2 &&
-          item.piece === null &&
+          item?.piece === null &&
           boardData[index + 7].piece === 'x'
           ) {
           tempArrForMoves.push(item)
@@ -92,7 +90,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
           player === 1 &&
           item.x === xPosition - 2 &&
           item.y === yPosition - 2 &&
-          item.piece === null &&
+          item?.piece === null &&
           boardData[index + 9].piece === 'x'
         ) {
           tempArrForMoves.push(item)
@@ -103,7 +101,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
           player === 1 &&
           item.x === xPosition + 2 &&
           item.y === yPosition + 2 &&
-          item.piece === null &&
+          item?.piece === null &&
           boardData[index - 9].piece === 'x'
         ) {
           tempArrForMoves.push(item)
@@ -114,7 +112,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
           player === 1 &&
           item.x === xPosition - 2 &&
           item.y === yPosition + 2 &&
-          item.piece === null &&
+          item?.piece === null &&
           boardData[index - 7].piece === 'x'
         ) {
           tempArrForMoves.push(item)
@@ -126,7 +124,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
           player === 2 &&
           item.x === xPosition + 2 &&
           item.y === yPosition + 2 &&
-          item.piece === null &&
+          item?.piece === null &&
           boardData[index - 9].piece === 'z'
         ) {
           tempArrForMoves.push(item)
@@ -137,7 +135,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
           player === 2 &&
           item.x === xPosition - 2 &&
           item.y === yPosition + 2 &&
-          item.piece === null &&
+          item?.piece === null &&
           boardData[index - 7].piece === 'z'
         ) {
           tempArrForMoves.push(item)
@@ -148,7 +146,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
           player === 2 &&
           item.x === xPosition + 2 &&
           item.y === yPosition - 2 &&
-          item.piece === null &&
+          item?.piece === null &&
           boardData[index + 7].piece === 'z'
         ) {
           tempArrForMoves.push(item)
@@ -159,7 +157,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
           player === 2 &&
           item.x === xPosition - 2 &&
           item.y === yPosition - 2 &&
-          item.piece === null &&
+          item?.piece === null &&
           boardData[index + 9].piece === 'z'
         ) {
           tempArrForMoves.push(item)
@@ -174,10 +172,122 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
   setBoardData([...newBoardData])
 }
 
+  function highlightMovesKing(itemToMove, position: number) {
+    const { x: xPosition, y: yPosition, piece, player } = itemToMove;
+    const tempArrForMoves = []
+    const tempArrForJumps = []
+
+    if (piece === null) return
+    if (!itemToMove.king) return
+    console.log(itemToMove, position, 'item to move')
+    // southwest direction
+    if (boardData[position + 7]?.piece === null && boardData[position + 7].playable === true) {
+      tempArrForMoves.push(boardData[position + 7])
+      if (boardData[position + 14]?.piece === null && boardData[position + 14].playable === true) {
+        tempArrForMoves.push(boardData[position + 14])
+        if (boardData[position + 21]?.piece === null && boardData[position + 21].playable === true) {
+          tempArrForMoves.push(boardData[position + 21])
+          if (boardData[position + 28]?.piece === null && boardData[position + 28].playable === true) {
+            tempArrForMoves.push(boardData[position + 28])
+            if (boardData[position + 35]?.piece === null && boardData[position + 35].playable === true) {
+              tempArrForMoves.push(boardData[position + 35])
+              if (boardData[position + 42]?.piece === null && boardData[position + 42].playable === true) {
+                tempArrForMoves.push(boardData[position + 42])
+                if (boardData[position + 49]?.piece === null && boardData[position + 49].playable === true) {
+                  tempArrForMoves.push(boardData[position + 49])
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    // souteast direction
+    if (boardData[position + 9]?.piece === null && boardData[position + 9].playable === true) {
+      tempArrForMoves.push(boardData[position + 9])
+      if (boardData[position + 18]?.piece === null && boardData[position + 18].playable === true) {
+        tempArrForMoves.push(boardData[position + 18])
+        if (boardData[position + 27]?.piece === null && boardData[position + 27].playable === true) {
+          tempArrForMoves.push(boardData[position + 27])
+          if (boardData[position + 36]?.piece === null && boardData[position + 36].playable === true) {
+            tempArrForMoves.push(boardData[position + 36])
+            if (boardData[position + 45]?.piece === null && boardData[position + 45].playable === true) {
+              tempArrForMoves.push(boardData[position + 45])
+              if (boardData[position + 54]?.piece === null && boardData[position + 54].playable === true) {
+                tempArrForMoves.push(boardData[position + 54])
+              }
+            }
+          }
+        }
+      }
+    }
+    // northeast
+    if (boardData[position - 7]?.piece === null && boardData[position - 7].playable === true) {
+      tempArrForMoves.push(boardData[position - 7])
+      if (boardData[position - 14]?.piece === null && boardData[position - 14].playable === true) {
+        tempArrForMoves.push(boardData[position - 14])
+        if (boardData[position - 21]?.piece === null && boardData[position - 21].playable === true) {
+          tempArrForMoves.push(boardData[position - 21])
+          if (boardData[position - 28]?.piece === null && boardData[position - 28].playable === true) {
+            tempArrForMoves.push(boardData[position - 28])
+            if (boardData[position - 35]?.piece === null && boardData[position - 35].playable === true) {
+              tempArrForMoves.push(boardData[position - 35])
+              if (boardData[position - 42]?.piece === null && boardData[position - 42].playable === true) {
+                tempArrForMoves.push(boardData[position - 42])
+                if (boardData[position - 49]?.piece === null && boardData[position - 49].playable === true) {
+                  tempArrForMoves.push(boardData[position - 49])
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    // northwest
+    if (boardData[position - 9]?.piece === null && boardData[position - 9].playable === true) {
+      tempArrForMoves.push(boardData[position - 9])
+      if (boardData[position - 18]?.piece === null && boardData[position - 18].playable === true) {
+        tempArrForMoves.push(boardData[position - 18])
+        if (boardData[position - 27]?.piece === null && boardData[position - 27].playable === true) {
+          tempArrForMoves.push(boardData[position - 27])
+          if (boardData[position - 36]?.piece === null && boardData[position - 36].playable === true) {
+            tempArrForMoves.push(boardData[position - 36])
+            if (boardData[position - 45]?.piece === null && boardData[position - 45].playable === true) {
+              tempArrForMoves.push(boardData[position - 45])
+              if (boardData[position - 54]?.piece === null && boardData[position - 54].playable === true) {
+                tempArrForMoves.push(boardData[position - 54])
+              }
+            }
+          }
+        }
+      }
+    }
+
+
+    // checks all available moves
+    const tempBoardData = boardData.map((item) => {
+      const tempItem = tempArrForMoves.find((chip) => {
+        if (item.x === chip.x && item.y === chip.y) {
+          return chip
+        }
+      })
+      if (tempItem) {
+        return {...item, highlighted: true,}
+      
+      }
+      return {...item, highlighted: false}
+    })
+
+    console.log(tempArrForMoves)
+    setPossibleMoves([...tempArrForMoves])
+    setBoardData([...tempBoardData])
+    setPieceToMove({...itemToMove})
+  }
+
+
   function movePiece(pieceToMove: [], placeToLand: [], index: number) {
     const xPosition : number = placeToLand.x
     const yPosition : number = placeToLand.y
-    const player : number = placeToLand.player
 
     const chipToMove = boardData.find((item) => {
       if (item.x === pieceToMove.x && item.y === pieceToMove.y) {
@@ -194,7 +304,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
       if (
         item.x === xPosition &&
         item.y ===  yPosition
-      ) return {...item, piece: pieceToMove.piece, highlighted: false, player: pieceToMove.player}
+      ) return {...item, piece: pieceToMove.piece, highlighted: false, player: pieceToMove.player, king: pieceToMove.king}
 
       return {...item, highlighted: false}
     })
@@ -250,8 +360,8 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
       })
       }
 
-    setPieceToMove(null)
-    setBoardData([...newBoardData])
+      setBoardData([...newBoardData])
+      setPieceToMove(null)
   }
 
   {/*
@@ -298,6 +408,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
       boardData, 
       setBoardData,
       highlightMoves,
+      highlightMovesKing,
       movePiece, 
       pieceToMove}}
     >
