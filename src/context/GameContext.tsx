@@ -20,10 +20,12 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
   const [ boardData, setBoardData ] = useState(arrayData)
   const [ pieceToMove, setPieceToMove ] = useState(null)
   const [ possibleMoves, setPossibleMoves ] = useState([])
+
+  const [ playerOneTurn, setPlayerOneTurn ] = useState(false) // player one will still be first to move regardless
   // const [ possibleJumps, setPossibleJumps ] = useState([])
 
-  function highlightMoves(itemToMove, position: number) {
-    const { x: xPosition, y: yPosition, piece, player } = itemToMove;
+  function highlightMoves(itemToMove, position: number, playerTurn) {
+    const { x: xPosition, y: yPosition, piece, player, selected } = itemToMove;
     const tempArrForMoves = []
     const tempArrForJumps = []
 
@@ -32,46 +34,55 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
     if (itemToMove.king) return
     const newBoardData = boardData.map((item, index) => {
       if (!item.playable) return item
+        // find the selected chip
+        if (xPosition === item.x && yPosition === item.y) {
+          return {...item, selected: true}
+        }
+
 
         // p1  right move
         if (
             item.x === xPosition + 1 && 
             item.y === yPosition - 1 &&
             item?.piece === null &&
-            player === 1
+            player === 1 &&
+            playerOneTurn
           ) {
             tempArrForMoves.push(item)
-            return {...item, highlighted: true}
+            return {...item, highlighted: true, selected: false}
         }
         // p1 left move
         if (
           item.x === xPosition - 1 &&
           item.y === yPosition - 1 &&
           item?.piece === null &&
-          player === 1
+          player === 1 &&
+          playerOneTurn === true
         ) {
             tempArrForMoves.push(item)
-            return {...item, highlighted: true}
+            return {...item, highlighted: true, selected: false}
         }
         // p2 right move
         if (
             item.x === xPosition + 1 && 
             item.y === yPosition + 1 &&
             item?.piece === null &&
-            player === 2
+            player === 2 &&
+            playerOneTurn === false
           ) {
             tempArrForMoves.push(item)
-            return {...item, highlighted: true}
+            return {...item, highlighted: true, selected: false}
         }
         // p2 left move
         if (
           item.x === xPosition - 1 &&
           item.y === yPosition + 1 &&
           item?.piece === null &&
-          player === 2
+          player === 2 &&
+          playerOneTurn === false
         ) {
             tempArrForMoves.push(item)
-            return {...item, highlighted: true}
+            return {...item, highlighted: true, selected: false}
         }
         
         // top right take
@@ -79,62 +90,63 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
           item.x === xPosition + 2 &&
           item.y === yPosition - 2 &&
           item?.piece === null &&
-          (boardData[index + 7].piece === 'x' && player === 1 ||
-          boardData[index + 7].piece === 'z' && player === 2)
+          (boardData[index + 7].piece === 'x' && player === 1 && playerOneTurn === true||
+          boardData[index + 7].piece === 'z' && player === 2 && playerOneTurn === false)
           ) {
           tempArrForMoves.push(item)
-          return {...item, highlighted: true}
+          return {...item, highlighted: true, selected: false}
         }
         // top left take
         if (          
           item.x === xPosition - 2 &&
           item.y === yPosition - 2 &&
           item?.piece === null &&
-          (boardData[index + 9].piece === 'x' && player === 1 ||
-          boardData[index + 9].piece === 'z' && player === 2)
+          (boardData[index + 9].piece === 'x' && player === 1 && playerOneTurn === true||
+          boardData[index + 9].piece === 'z' && player === 2 && playerOneTurn === false)
         ) {
           tempArrForMoves.push(item)
-          return {...item, highlighted: true}
+          return {...item, highlighted: true, selected: false}
         }
         // bottom right take
         if (
           item.x === xPosition + 2 &&
           item.y === yPosition + 2 &&
           item?.piece === null &&
-          (boardData[index - 9].piece === 'x' && player === 1 ||
-          boardData[index - 9].piece === 'z' && player === 2 )
+          (boardData[index - 9].piece === 'x' && player === 1 && playerOneTurn === true ||
+          boardData[index - 9].piece === 'z' && player === 2 && playerOneTurn === false )
         ) {
           tempArrForMoves.push(item)
-          return {...item, highlighted: true}
+          return {...item, highlighted: true, selected: false}
         }
         // bottom left take
         if (
           item.x === xPosition - 2 &&
           item.y === yPosition + 2 &&
           item?.piece === null &&
-          (boardData[index - 7].piece === 'x' && player === 1 ||
-          boardData[index - 7].piece === 'z' && player === 2 )
+          (boardData[index - 7].piece === 'x' && player === 1 && playerOneTurn === true ||
+          boardData[index - 7].piece === 'z' && player === 2 && playerOneTurn === false )
         ) {
           tempArrForMoves.push(item)
-          return {...item, highlighted: true}
+          return {...item, highlighted: true, selected: false}
         }
 
 
-        return {...item, highlighted: false}
+        return {...item, highlighted: false, selected: false}
       })
   setPieceToMove({...itemToMove})
   setPossibleMoves([...tempArrForMoves])
   setBoardData([...newBoardData])
 }
 
-  function highlightMovesKing(itemToMove, position: number) {
+  function highlightMovesKing(itemToMove, position: number, playerTurn) {
     const { x: xPosition, y: yPosition, piece, player } = itemToMove;
     let tempArrForMoves = []
     const tempArrForJumps = []
 
     if (piece === null) return
     if (!itemToMove.king) return
-    // console.log(itemToMove, position, 'item to move')
+    // if p1 try to access p2 chips it will immeadeatly return and vice versa for player 2
+    if (playerTurn === true && player === 2 || !playerTurn && player === 1) return
 
 
     // southwest direction
@@ -525,7 +537,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
       if (item) return item
     })
 
-    console.log(tempArrForMoves)
+
     // checks all available moves
     const tempBoardData = boardData.map((item) => {
       const tempItem = tempArrForMoves.find((chip) => {
@@ -534,10 +546,14 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
         }
       })
       if (tempItem) {
-        return {...item, highlighted: true,}
+        return {...item, highlighted: true, selected: false}
       
       }
-      return {...item, highlighted: false}
+      // check if it is the selected item
+      if (xPosition === item.x && yPosition === item.y) {
+          return {...item, highlighted: false ,selected: true}
+        }
+      return {...item, highlighted: false, selected: false}
     })
 
 
@@ -552,6 +568,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
     const xPosition : number = placeToLand.x
     const yPosition : number = placeToLand.y
 
+    // find the selected chip
     const chipToMove = boardData.find((item) => {
       if (item.x === pieceToMove.x && item.y === pieceToMove.y) {
         return item
@@ -561,15 +578,15 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
       if (!item.playable) return item
 
       if (item === chipToMove) {
-        return {...item, piece: null, player: null}
+        return {...item, piece: null, player: null, selected: false}
       }
 
       if (
         item.x === xPosition &&
         item.y ===  yPosition
-      ) return {...item, piece: pieceToMove.piece, highlighted: false, player: pieceToMove.player, king: pieceToMove.king}
+      ) return {...item, piece: pieceToMove.piece, highlighted: false, player: pieceToMove.player, king: pieceToMove.king, selected: false}
 
-      return {...item, highlighted: false}
+      return {...item, highlighted: false, selected: false}
     })
 
     // check if the move is jump
@@ -625,7 +642,14 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
 
       setBoardData([...newBoardData])
       setPieceToMove(null)
+      
   }
+
+  useEffect(() => {
+    if (pieceToMove === null) {
+      setPlayerOneTurn(!playerOneTurn)
+    }
+  }, [pieceToMove])
 
   {/*
   how to eat a piece?
@@ -639,32 +663,6 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
 
 
 
-  useEffect(() => {
-
-  })
-
-
-
-
-
-
-
-
-  // useEffect(() => {
-  //   if (pieceToMove) {
-  //     console.log(pieceToMove, 'piece to move')
-  //     console.log(possibleMoves, 'possible moves')
-  //   }
-  //   //  else {
-  //   //   console.log(boardData)
-  //   // }
-  // }, [boardData])
-
-
-
-
-
-
 
   return (
     <GlobalContext.Provider value={{
@@ -673,7 +671,9 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
       highlightMoves,
       highlightMovesKing,
       movePiece, 
-      pieceToMove}}
+      pieceToMove,
+      playerOneTurn
+    }}
     >
       {children}
     </GlobalContext.Provider>

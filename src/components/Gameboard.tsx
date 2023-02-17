@@ -7,16 +7,16 @@ import { arrayData } from "../data/arrayData"
 
 function Gameboard() {
 
-  const [ p1PossibleMoves, setP1PossibleMoves ] = useState([])
-  const [ p2PossibleMoves, setP2PossibleMoves ] = useState([])
 
-  const { boardData, setBoardData, highlightMoves, movePiece, pieceToMove, highlightMovesKing } = useGlobalContext()
+
+  const { boardData, setBoardData, highlightMoves, movePiece, pieceToMove, highlightMovesKing, playerOneTurn } = useGlobalContext()
 
   const p1ChipStyle = {backgroundColor: 'red'}
   const p2ChipStyle = {backgroundColor: 'blue'}
   const emptySquareStyle = {backgroundColor: '#111'}
   const highlightedSquare = {backgroundColor: '#ccccff'}
   const kingChip = {border: '6px solid #111'}
+  const selectedChip = {scale: '1.15'}
 
 
   useEffect(() => {
@@ -42,15 +42,31 @@ function Gameboard() {
     
   },[pieceToMove])  
 
+
   return (
+    <>
+    <div className="player-turn"
+    style={playerOneTurn? {color: 'red'} : {color: 'blue'}}
+    >
+      Player {playerOneTurn? 'One' : 'Two'}'s Turn
+    </div>
     <div className='board'>
       { boardData.map((item: [], index: number) => {
+        const boardStyle  = {}
+        if (!item.playable) {
+          boardStyle.backgroundColor = '#111'
+        } else if (item?.highlighted) {
+          boardStyle.backgroundColor = '#ccccff'
+        } else if (item?.selected) {
+          boardStyle.backgroundColor = '#6CD486'
+        }
         
+
 
         return ( 
           <div className="square"
             key={index}
-            style={!item?.playable  ? emptySquareStyle : item.highlighted ? highlightedSquare: {}}
+            style={boardStyle}
             onClick={
               () => {
                 if (!item.highlighted) return
@@ -70,8 +86,8 @@ function Gameboard() {
           }
             onClick={() => {
               item.king === false ? 
-              highlightMoves(item, index,) : // for normal piece
-              highlightMovesKing(item, index) // for king piece
+              highlightMoves(item, index, playerOneTurn) : // for normal piece
+              highlightMovesKing(item, index, playerOneTurn) // for king piece
             }}
           >
               
@@ -79,6 +95,7 @@ function Gameboard() {
         </div> )
       }) }
     </div>
+    </>
   )
 }
 

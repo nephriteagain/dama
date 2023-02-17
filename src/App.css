@@ -52,3 +52,9 @@
 .even {
   background-color: #bbb;
 }
+
+.player-turn {
+  font-size: 48px;
+  text-align: center;
+  font-weight: bold;
+}
