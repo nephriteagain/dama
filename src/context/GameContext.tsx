@@ -1,6 +1,7 @@
 import { useContext, createContext, useState, useEffect, ReactNode } from "react"
 
 import { arrayData } from "../data/arrayData"
+import { POSSIBLEJUMPS } from "../data/possibleJumps"
 
 type GlobalContextProviderProps = {
   children: ReactNode
@@ -567,6 +568,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
   function movePiece(pieceToMove: [], placeToLand: [], index: number) {
     const xPosition : number = placeToLand.x
     const yPosition : number = placeToLand.y
+    let chipToBeTaken = {}
 
     // find the selected chip
     const chipToMove = boardData.find((item) => {
@@ -574,8 +576,15 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
         return item
       }
     })
+
     let newBoardData = boardData.map((item, index) => {
       if (!item.playable) return item
+
+      const indexStart = boardData.indexOf(chipToMove)
+      const indexLand = boardData.indexOf(placeToLand)
+
+      
+            
 
       if (item === chipToMove) {
         return {...item, piece: null, player: null, selected: false, king:false}
@@ -585,66 +594,40 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
         item.x === xPosition &&
         item.y ===  yPosition
       ) return {...item, piece: pieceToMove.piece, highlighted: false, player: pieceToMove.player, king: pieceToMove.king, selected: false}
+      
 
+      POSSIBLEJUMPS.forEach((possibleMoves) => {
+        if (
+          possibleMoves.indexOf(index) !== -1 &&
+          possibleMoves.indexOf(indexStart) !== -1 &&
+          possibleMoves.indexOf(indexLand) !== -1 &&
+          indexLand !== index &&
+          item?.piece !== null &&
+          (index > indexStart && index < indexLand || 
+            index < indexStart && index > indexLand)
+        ) {
+            chipToBeTaken = item
+          
+          
+        }
+        
+      })
+
+    
       
       return {...item, highlighted: false, selected: false,}
     })
 
-// the top and bottom part has two different ways of doing stuff, fix this in the future
 
-    // check if the move is jump
-    //  top right jump
-    // console.log(pieceToMove)
-    if (pieceToMove.x + 2 === placeToLand.x &&
-      pieceToMove.y - 2 === placeToLand.y ) {
-        // find the piece to be taken
-      newBoardData = newBoardData.map((item) => {
-        if (item.x === boardData[index + 7].x && 
-          item.y === boardData[index + 7].y) {
-          
-          return {...item, player: null, piece: null}
-        }
-          return item
-      })
-    }
-    //  top left jump
-    if (pieceToMove.x -2 === placeToLand.x &&
-      pieceToMove.y - 2 === placeToLand.y) {
-        newBoardData = newBoardData.map((item) => {
-        if (item.x === boardData[index + 9].x && 
-          item.y === boardData[index + 9].y) {
-          
-          return {...item, player: null, piece: null}
-        }
-          return item
-      })
+    const newArr =  newBoardData.map((item) => {
+      if (item.x === chipToBeTaken.x && item.y === chipToBeTaken.y) {
+        console.log(item)
+        return {...item, player: null, piece: null, king: false, selected: false, highlighted: false}
       }
-      //  bottom right jump
-      if (pieceToMove.x + 2 === placeToLand.x &&
-      pieceToMove.y + 2 === placeToLand.y) {
-        newBoardData = newBoardData.map((item) => {
-        if (item.x === boardData[index - 9].x && 
-          item.y === boardData[index - 9].y) {
-          
-          return {...item, player: null, piece: null}
-        }
-          return item
-      })
-      }
-      // bottom left jump
-      if (pieceToMove.x - 2 === placeToLand.x &&
-      pieceToMove.y + 2 === placeToLand.y) {
-        newBoardData = newBoardData.map((item) => {
-        if (item.x === boardData[index - 7].x && 
-          item.y === boardData[index - 7].y) {
-          
-          return {...item, player: null, piece: null}
-        }
-          return item
-      })
-      }
-
-      setBoardData([...newBoardData])
+      return item
+    })
+ 
+      setBoardData([...newArr])
       setPieceToMove(null)
   }
 
@@ -662,14 +645,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
   after the transaction, the opponent must have fewer piece
   also account if there is a probable multiple possible piece to take
   */}
-  useEffect(() => {
-      boardData.forEach((item) => {
-        if (item.playable && item.king) {
-          console.log(item)
-        }
-      })
-      console.log('line  break')
-  },[playerOneTurn])
+
 
 
 

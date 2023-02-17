@@ -22,7 +22,7 @@ function Gameboard() {
   useEffect(() => {
     // after every move this will check if a new king is awakened
 
-      const tempArr = boardData.map((item) => {
+      const tempArr = boardData.map((item, index) => {
 
       // checks for player 1 new king
       if (item.y === 0 && item.piece === 'z' && item.king === false) {
@@ -75,7 +75,8 @@ function Gameboard() {
             }
           >
           <div className="temp-position">
-            {`${item.x}, ${item.y}`}
+            {`${item.x}, ${item.y} ${index} ${item.king? 'K' : ''}`}
+            
           </div>
           {item.piece !== null && 
           <div className="piece" 
@@ -90,7 +91,6 @@ function Gameboard() {
               highlightMovesKing(item, index, playerOneTurn) // for king piece
             }}
           >
-              
           </div>}
         </div> )
       }) }
