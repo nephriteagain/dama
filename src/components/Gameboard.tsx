@@ -42,7 +42,6 @@ function Gameboard() {
     
   },[pieceToMove])  
 
-  
   return (
     <div className='board'>
       { boardData.map((item: [], index: number) => {
@@ -71,8 +70,8 @@ function Gameboard() {
           }
             onClick={() => {
               item.king === false ? 
-              highlightMoves(item, index,) :
-              highlightMovesKing(item, index)
+              highlightMoves(item, index,) : // for normal piece
+              highlightMovesKing(item, index) // for king piece
             }}
           >
               
