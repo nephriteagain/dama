@@ -578,7 +578,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
       if (!item.playable) return item
 
       if (item === chipToMove) {
-        return {...item, piece: null, player: null, selected: false}
+        return {...item, piece: null, player: null, selected: false, king:false}
       }
 
       if (
@@ -586,11 +586,15 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
         item.y ===  yPosition
       ) return {...item, piece: pieceToMove.piece, highlighted: false, player: pieceToMove.player, king: pieceToMove.king, selected: false}
 
-      return {...item, highlighted: false, selected: false}
+      
+      return {...item, highlighted: false, selected: false,}
     })
+
+// the top and bottom part has two different ways of doing stuff, fix this in the future
 
     // check if the move is jump
     //  top right jump
+    // console.log(pieceToMove)
     if (pieceToMove.x + 2 === placeToLand.x &&
       pieceToMove.y - 2 === placeToLand.y ) {
         // find the piece to be taken
@@ -642,7 +646,6 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
 
       setBoardData([...newBoardData])
       setPieceToMove(null)
-      
   }
 
   useEffect(() => {
@@ -659,7 +662,14 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
   after the transaction, the opponent must have fewer piece
   also account if there is a probable multiple possible piece to take
   */}
-
+  useEffect(() => {
+      boardData.forEach((item) => {
+        if (item.playable && item.king) {
+          console.log(item)
+        }
+      })
+      console.log('line  break')
+  },[playerOneTurn])
 
 
 
