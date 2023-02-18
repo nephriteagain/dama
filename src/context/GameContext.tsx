@@ -1,4 +1,5 @@
 import { useContext, createContext, useState, useEffect, ReactNode } from "react"
+import Gameboard from "../components/Gameboard"
 
 import { arrayData } from "../data/arrayData"
 import { POSSIBLEJUMPS } from "../data/possibleJumps"
@@ -23,7 +24,8 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
   const [ possibleMoves, setPossibleMoves ] = useState([])
 
   const [ playerOneTurn, setPlayerOneTurn ] = useState(false) // player one will still be first to move regardless
-  // const [ possibleJumps, setPossibleJumps ] = useState([])
+  const [ playerChipsCount, setPlayerChipsCount ] = useState({p1: 12, p2: 12})
+  const [ gameOver, setGameOver ] = useState(false)
 
   function highlightMoves(itemToMove, position: number, playerTurn) {
     const { x: xPosition, y: yPosition, piece, player, selected } = itemToMove;
@@ -33,103 +35,73 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
     
     if (piece === null) return
     if (itemToMove.king) return
+    // if p1 try to access p2 chips it will immediately return and vice versa for player 2
+    if (playerTurn === true && player === 2 || !playerTurn && player === 1) return
+    
     const newBoardData = boardData.map((item, index) => {
       if (!item.playable) return item
+      
         // find the selected chip
         if (xPosition === item.x && yPosition === item.y) {
           return {...item, selected: true}
         }
 
+        //  p1 move
+        if (
+          item.piece === null &&
+          itemToMove.piece === 'z' &&
+          (index === boardData.indexOf(itemToMove) - 7||
+          index === boardData.indexOf(itemToMove) - 9)
+          ) {
+            tempArrForMoves.push(item)
+            return {...item, highlighted: true, selected: false}
+          }
+          // p2 move
+        if (
+          item.piece === null &&
+          itemToMove.piece === 'x' &&
+          (index === boardData.indexOf(itemToMove) + 7||
+          index === boardData.indexOf(itemToMove) + 9)
+          ) {
+            tempArrForMoves.push(item)
+            return {...item, highlighted: true, selected: false}
+          }
 
-        // p1  right move
+          // p1 jump
+          if (
+          item.piece === null &&
+          itemToMove.piece === 'z' &&
+          ((index === boardData.indexOf(itemToMove) - 14 || 
+          index === boardData.indexOf(itemToMove) - 18 ) &&
+          (boardData[index + 7]?.piece === 'x' ||
+          boardData[index + 9]?.piece === 'x') ||
+          (index === boardData.indexOf(itemToMove) + 14 || 
+          index === boardData.indexOf(itemToMove) + 18 ) &&
+          (boardData[index - 7]?.piece === 'x' ||
+          boardData[index - 9]?.piece === 'x'))
+          ) {
+            
+            console.log(boardData.indexOf(itemToMove))
+            tempArrForMoves.push(item)
+            return {...item, highlighted: true, selected: false}
+          }
+          // p2 jump
         if (
-            item.x === xPosition + 1 && 
-            item.y === yPosition - 1 &&
-            item?.piece === null &&
-            player === 1 &&
-            playerOneTurn
+          item.piece === null &&
+          itemToMove.piece === 'x' &&
+          ((index === boardData.indexOf(itemToMove) + 14 || 
+          index === boardData.indexOf(itemToMove) + 18 ) &&
+          (boardData[index - 7]?.piece === 'z' ||
+          boardData[index - 9]?.piece === 'z') ||
+          (index === boardData.indexOf(itemToMove) - 14 || 
+          index === boardData.indexOf(itemToMove) - 18 ) &&
+          (boardData[index + 7]?.piece === 'z' ||
+          boardData[index + 9]?.piece === 'z'))
           ) {
             tempArrForMoves.push(item)
             return {...item, highlighted: true, selected: false}
-        }
-        // p1 left move
-        if (
-          item.x === xPosition - 1 &&
-          item.y === yPosition - 1 &&
-          item?.piece === null &&
-          player === 1 &&
-          playerOneTurn === true
-        ) {
-            tempArrForMoves.push(item)
-            return {...item, highlighted: true, selected: false}
-        }
-        // p2 right move
-        if (
-            item.x === xPosition + 1 && 
-            item.y === yPosition + 1 &&
-            item?.piece === null &&
-            player === 2 &&
-            playerOneTurn === false
-          ) {
-            tempArrForMoves.push(item)
-            return {...item, highlighted: true, selected: false}
-        }
-        // p2 left move
-        if (
-          item.x === xPosition - 1 &&
-          item.y === yPosition + 1 &&
-          item?.piece === null &&
-          player === 2 &&
-          playerOneTurn === false
-        ) {
-            tempArrForMoves.push(item)
-            return {...item, highlighted: true, selected: false}
-        }
-        
-        // top right take
-        if (
-          item.x === xPosition + 2 &&
-          item.y === yPosition - 2 &&
-          item?.piece === null &&
-          (boardData[index + 7].piece === 'x' && player === 1 && playerOneTurn === true||
-          boardData[index + 7].piece === 'z' && player === 2 && playerOneTurn === false)
-          ) {
-          tempArrForMoves.push(item)
-          return {...item, highlighted: true, selected: false}
-        }
-        // top left take
-        if (          
-          item.x === xPosition - 2 &&
-          item.y === yPosition - 2 &&
-          item?.piece === null &&
-          (boardData[index + 9].piece === 'x' && player === 1 && playerOneTurn === true||
-          boardData[index + 9].piece === 'z' && player === 2 && playerOneTurn === false)
-        ) {
-          tempArrForMoves.push(item)
-          return {...item, highlighted: true, selected: false}
-        }
-        // bottom right take
-        if (
-          item.x === xPosition + 2 &&
-          item.y === yPosition + 2 &&
-          item?.piece === null &&
-          (boardData[index - 9].piece === 'x' && player === 1 && playerOneTurn === true ||
-          boardData[index - 9].piece === 'z' && player === 2 && playerOneTurn === false )
-        ) {
-          tempArrForMoves.push(item)
-          return {...item, highlighted: true, selected: false}
-        }
-        // bottom left take
-        if (
-          item.x === xPosition - 2 &&
-          item.y === yPosition + 2 &&
-          item?.piece === null &&
-          (boardData[index - 7].piece === 'x' && player === 1 && playerOneTurn === true ||
-          boardData[index - 7].piece === 'z' && player === 2 && playerOneTurn === false )
-        ) {
-          tempArrForMoves.push(item)
-          return {...item, highlighted: true, selected: false}
-        }
+          }
+
 
 
         return {...item, highlighted: false, selected: false}
@@ -146,7 +118,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
 
     if (piece === null) return
     if (!itemToMove.king) return
-    // if p1 try to access p2 chips it will immeadeatly return and vice versa for player 2
+    // if p1 try to access p2 chips it will immediately return and vice versa for player 2
     if (playerTurn === true && player === 2 || !playerTurn && player === 1) return
 
 
@@ -631,12 +603,29 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
       setPieceToMove(null)
   }
 
+  // player turn handler
   useEffect(() => {
     if (pieceToMove === null) {
       setPlayerOneTurn(!playerOneTurn)
     }
   }, [pieceToMove])
 
+  // player chips counter
+  useEffect(() => {
+    let p1ChipCounter = 0;
+    let p2ChipCounter = 0;
+    const gameState = boardData.forEach((item) => {
+      if (item?.piece === 'z') p1ChipCounter ++
+      if (item?.piece === 'x') p2ChipCounter ++
+    })
+    setPlayerChipsCount({p1: p1ChipCounter, p2: p2ChipCounter})
+  }, [playerOneTurn])
+
+  // gameover checker
+  useEffect(() => {
+    const {p1, p2} = playerChipsCount
+    if (p1 === 0 || p2 === 0) setGameOver(true)
+  })
   {/*
   how to eat a piece?
   a piece must be on range
@@ -658,7 +647,11 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
       highlightMovesKing,
       movePiece, 
       pieceToMove,
-      playerOneTurn
+      playerOneTurn,
+      setPlayerOneTurn,
+      gameOver,
+      setGameOver,
+      playerChipsCount
     }}
     >
       {children}

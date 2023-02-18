@@ -7,9 +7,19 @@ import { arrayData } from "../data/arrayData"
 
 function Gameboard() {
 
-
-
-  const { boardData, setBoardData, highlightMoves, movePiece, pieceToMove, highlightMovesKing, playerOneTurn } = useGlobalContext()
+  const { 
+    boardData,
+    setBoardData, 
+    highlightMoves, 
+    movePiece, 
+    pieceToMove, 
+    highlightMovesKing, 
+    playerOneTurn,
+    setPlayerOneTurn,
+    gameOver,
+    setGameOver,
+    playerChipsCount
+  } = useGlobalContext()
 
   const p1ChipStyle = {backgroundColor: 'red'}
   const p2ChipStyle = {backgroundColor: 'blue'}
@@ -18,20 +28,24 @@ function Gameboard() {
   const kingChip = {border: '6px solid #111'}
   const selectedChip = {scale: '1.15'}
 
-
+  function handleRestart() {
+    setPlayerOneTurn(true)
+    setBoardData(arrayData)
+  }
+  
   useEffect(() => {
     // after every move this will check if a new king is awakened
 
       const tempArr = boardData.map((item, index) => {
 
       // checks for player 1 new king
-      if (item.y === 0 && item.piece === 'z' && item.king === false) {
+      if (item.y === 7 && item.piece === 'z' && item.king === false) {
         console.log('player 1 king awakened!')
         return {...item, king: true}
       }
 
       // checks for player 2 new king
-      if (item.y === 7 && item.piece == 'x' && item.king === false) {
+      if (item.y === 0 && item.piece == 'x' && item.king === false) {
         console.log('player 2 king awakened!')
         return {...item, king: true}
       }
@@ -40,7 +54,11 @@ function Gameboard() {
     setBoardData(tempArr)
 
     
-  },[pieceToMove])  
+  },[pieceToMove]) 
+
+  useEffect(() => {
+    if (gameOver) console.log('game over')
+  })  
 
 
   return (
@@ -50,6 +68,11 @@ function Gameboard() {
     >
       Player {playerOneTurn? 'One' : 'Two'}'s Turn
     </div>
+
+    <div className="restart-game">
+      <button className="btn-restart" onClick={handleRestart}>Restart Game</button>
+    </div>
+
     <div className='board'>
       { boardData.map((item: [], index: number) => {
         const boardStyle  = {}
@@ -75,7 +98,7 @@ function Gameboard() {
             }
           >
           <div className="temp-position">
-            {`${item.x}, ${item.y} ${index} ${item.king? 'K' : ''}`}
+            {`${index} ${item.king? 'K' : ''}`}
             
           </div>
           {item.piece !== null && 
@@ -95,6 +118,7 @@ function Gameboard() {
         </div> )
       }) }
     </div>
+    
     </>
   )
 }
