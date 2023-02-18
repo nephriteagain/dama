@@ -4,7 +4,6 @@ import { useGlobalContext } from "../context/GameContext"
 import { arrayData } from "../data/arrayData"
 
 
-
 function Gameboard() {
 
   const { 
@@ -17,8 +16,16 @@ function Gameboard() {
     playerOneTurn,
     setPlayerOneTurn,
     gameOver,
+    setPossibleMoves,
     setGameOver,
-    playerChipsCount
+    playerChipsCount,
+    jumpedChip,
+    setJumpedChip,
+    multipleCapture,
+    setMultipleCapture,
+    forceCapture,
+    setForceCapture
+    
   } = useGlobalContext()
 
   const p1ChipStyle = {backgroundColor: 'red'}
@@ -30,36 +37,22 @@ function Gameboard() {
 
   function handleRestart() {
     setPlayerOneTurn(true)
+    setPossibleMoves([])
     setBoardData(arrayData)
+    setJumpedChip(null)
   }
   
-  useEffect(() => {
-    // after every move this will check if a new king is awakened
+ 
 
-      const tempArr = boardData.map((item, index) => {
-
-      // checks for player 1 new king
-      if (item.y === 7 && item.piece === 'z' && item.king === false) {
-        console.log('player 1 king awakened!')
-        return {...item, king: true}
-      }
-
-      // checks for player 2 new king
-      if (item.y === 0 && item.piece == 'x' && item.king === false) {
-        console.log('player 2 king awakened!')
-        return {...item, king: true}
-      }
-      return item
-    })
-    setBoardData(tempArr)
-
-    
-  },[pieceToMove]) 
-
+  // game over handler
   useEffect(() => {
     if (gameOver) console.log('game over')
   })  
 
+  // chip jump tracker
+
+    
+ 
 
   return (
     <>
@@ -98,7 +91,7 @@ function Gameboard() {
             }
           >
           <div className="temp-position">
-            {`${index} ${item.king? 'K' : ''}`}
+            {`${index} ${item.king? 'K' : ''} ${item.x} ${item.y}`}
             
           </div>
           {item.piece !== null && 

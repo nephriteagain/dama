@@ -26,11 +26,16 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
   const [ playerOneTurn, setPlayerOneTurn ] = useState(false) // player one will still be first to move regardless
   const [ playerChipsCount, setPlayerChipsCount ] = useState({p1: 12, p2: 12})
   const [ gameOver, setGameOver ] = useState(false)
+  const [ jumpedChip, setJumpedChip ] = useState(null)
+  const [multipleCapture, setMultipleCapture] = useState(false)
+  const [forceCapture, setForceCapture] = useState([])
+
+  
 
   function highlightMoves(itemToMove, position: number, playerTurn) {
     const { x: xPosition, y: yPosition, piece, player, selected } = itemToMove;
     const tempArrForMoves = []
-    const tempArrForJumps = []
+    // const tempArrForJumps = []
 
     
     if (piece === null) return
@@ -38,11 +43,14 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
     // if p1 try to access p2 chips it will immediately return and vice versa for player 2
     if (playerTurn === true && player === 2 || !playerTurn && player === 1) return
     
+
+    
     const newBoardData = boardData.map((item, index) => {
       if (!item.playable) return item
-      
+    
+
         // find the selected chip
-        if (xPosition === item.x && yPosition === item.y) {
+        if (position === index) {
           return {...item, selected: true}
         }
 
@@ -50,62 +58,86 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
         if (
           item.piece === null &&
           itemToMove.piece === 'z' &&
-          (index === boardData.indexOf(itemToMove) - 7||
-          index === boardData.indexOf(itemToMove) - 9)
-          ) {
-            tempArrForMoves.push(item)
-            return {...item, highlighted: true, selected: false}
-          }
-          // p2 move
-        if (
-          item.piece === null &&
-          itemToMove.piece === 'x' &&
-          (index === boardData.indexOf(itemToMove) + 7||
-          index === boardData.indexOf(itemToMove) + 9)
+          (index + 7 === position||
+          index + 9 === position)
           ) {
             tempArrForMoves.push(item)
             return {...item, highlighted: true, selected: false}
           }
 
-          // p1 jump
-          if (
-          item.piece === null &&
-          itemToMove.piece === 'z' &&
-          ((index === boardData.indexOf(itemToMove) - 14 || 
-          index === boardData.indexOf(itemToMove) - 18 ) &&
-          (boardData[index + 7]?.piece === 'x' ||
-          boardData[index + 9]?.piece === 'x') ||
-          (index === boardData.indexOf(itemToMove) + 14 || 
-          index === boardData.indexOf(itemToMove) + 18 ) &&
-          (boardData[index - 7]?.piece === 'x' ||
-          boardData[index - 9]?.piece === 'x'))
-          ) {
-            
-            console.log(boardData.indexOf(itemToMove))
-            tempArrForMoves.push(item)
-            return {...item, highlighted: true, selected: false}
-          }
-          // p2 jump
-        if (
+        // p2 move
+        else if (
           item.piece === null &&
           itemToMove.piece === 'x' &&
-          ((index === boardData.indexOf(itemToMove) + 14 || 
-          index === boardData.indexOf(itemToMove) + 18 ) &&
-          (boardData[index - 7]?.piece === 'z' ||
-          boardData[index - 9]?.piece === 'z') ||
-          (index === boardData.indexOf(itemToMove) - 14 || 
-          index === boardData.indexOf(itemToMove) - 18 ) &&
-          (boardData[index + 7]?.piece === 'z' ||
-          boardData[index + 9]?.piece === 'z'))
+          (index - 7 === position||
+          index - 9 === position)
           ) {
             tempArrForMoves.push(item)
             return {...item, highlighted: true, selected: false}
           }
+
+          // top right jump
+        else if (
+          item.piece === null &&
+          boardData[index + 7]?.piece !== null &&
+          boardData[index + 7]?.piece !== boardData[index + 14]?.piece &&
+          index + 14 === position
+        ) {
+          tempArrForMoves.push(item)
+          return {...item, highlighted: true, selected: false}
+        }
+          // top left jump
+        else if (
+          item.piece === null &&
+          boardData[index + 9]?.piece !== null &&
+          boardData[index + 9]?.piece !== boardData[index + 18]?.piece &&
+          index + 18 === position
+        ) {
+          tempArrForMoves.push(item)
+          return {...item, highlighted: true, selected: false}
+        }
+
+        // bottom right
+        else if (
+          item.piece === null &&
+          boardData[index - 9]?.piece !== null &&
+          boardData[index - 9]?.piece !== boardData[index - 18]?.piece &&
+          index - 18 === position
+        ) {
+          tempArrForMoves.push(item)
+          return {...item, highlighted: true, selected: false}
+        }
+
+        // bottom left
+        else if (
+          item.piece === null &&
+          boardData[index - 7]?.piece !== null &&
+          boardData[index - 7]?.piece !== boardData[index - 14]?.piece &&
+          index - 14 === position
+        ) {
+          tempArrForMoves.push(item)
+          return {...item, highlighted: true, selected: false}
+        }
+
+
+        
+      
+          
+
+          
+
+          
 
 
 
         return {...item, highlighted: false, selected: false}
       })
+    
+
+
+    
+    
+    console.log(tempArrForMoves)
   setPieceToMove({...itemToMove})
   setPossibleMoves([...tempArrForMoves])
   setBoardData([...newBoardData])
@@ -538,8 +570,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
 
 
   function movePiece(pieceToMove: [], placeToLand: [], index: number) {
-    const xPosition : number = placeToLand.x
-    const yPosition : number = placeToLand.y
+    
     let chipToBeTaken = {}
 
     // find the selected chip
@@ -563,8 +594,8 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
       }
 
       if (
-        item.x === xPosition &&
-        item.y ===  yPosition
+        item.x === placeToLand.x &&
+        item.y ===  placeToLand.y
       ) return {...item, piece: pieceToMove.piece, highlighted: false, player: pieceToMove.player, king: pieceToMove.king, selected: false}
       
 
@@ -588,20 +619,43 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
     
       
       return {...item, highlighted: false, selected: false,}
+
     })
 
 
-    const newArr =  newBoardData.map((item) => {
+
+    const newArr =  newBoardData.map((item, index) => {
       if (item.x === chipToBeTaken.x && item.y === chipToBeTaken.y) {
-        console.log(item)
-        return {...item, player: null, piece: null, king: false, selected: false, highlighted: false}
+        console.log('captured', item)
+        return {
+          ...item, 
+          player: null,
+          piece: null, 
+          king: false, 
+          selected: false, 
+          highlighted: false}
       }
-      return item
+      
+      if (item.y === 7 && item.piece === 'z' && item.king === false) {
+        console.log('player 1 king awakened!')
+        return {...item, king: true}
+      }
+
+      // checks for player 2 new king
+      if (item.y === 0 && item.piece == 'x' && item.king === false) {
+        console.log('player 2 king awakened!')
+        return {...item, king: true}
+      }
+
+
+        return item
+      
     })
- 
-      setBoardData([...newArr])
-      setPieceToMove(null)
+    setBoardData([...newArr])
+    setPieceToMove(null)
   }
+
+
 
   // player turn handler
   useEffect(() => {
@@ -626,14 +680,6 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
     const {p1, p2} = playerChipsCount
     if (p1 === 0 || p2 === 0) setGameOver(true)
   })
-  {/*
-  how to eat a piece?
-  a piece must be on range
-  a piece of opposite type right to each other
-  the landing area is empty
-  after the transaction, the opponent must have fewer piece
-  also account if there is a probable multiple possible piece to take
-  */}
 
 
 
@@ -651,7 +697,12 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
       setPlayerOneTurn,
       gameOver,
       setGameOver,
-      playerChipsCount
+      playerChipsCount,
+      setPossibleMoves,
+      jumpedChip,
+      setJumpedChip,
+      multipleCapture,
+      setMultipleCapture
     }}
     >
       {children}
