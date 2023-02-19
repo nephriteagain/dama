@@ -47,7 +47,17 @@ function Gameboard() {
   // game over handler
   useEffect(() => {
     if (gameOver) console.log('game over')
-  })  
+  }) 
+
+  // force eat
+  // useEffect(() => {
+  //   const forceFeed = []
+  //   boardData.forEach((item, index) => {
+  //     // regular chips
+      
+  //   })
+
+  // }, [playerOneTurn])
 
 
   return (
