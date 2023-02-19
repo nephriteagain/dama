@@ -30,117 +30,120 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
   const [multipleCapture, setMultipleCapture] = useState(false)
   const [forceCapture, setForceCapture] = useState([])
 
-  
 
-  function highlightMoves(itemToMove, position: number, playerTurn) {
+  function highlightMoves(itemToMove, position: number, playerTurn: boolean) {
     const { x: xPosition, y: yPosition, piece, player, selected } = itemToMove;
-    const tempArrForMoves = []
-    // const tempArrForJumps = []
+    let tempArrForMoves = []
+    let tempArrForJumps = []
 
     
     if (piece === null) return
     if (itemToMove.king) return
     // if p1 try to access p2 chips it will immediately return and vice versa for player 2
     if (playerTurn === true && player === 2 || !playerTurn && player === 1) return
-    
+    console.log(position)    
 
-    
-    const newBoardData = boardData.map((item, index) => {
+          // p1 man left move
+    if (
+      itemToMove?.piece === 'z' &&
+      boardData[position - 9]?.piece === null &&
+      boardData[position - 9]?.playable
+      ) {
+      tempArrForMoves.push(boardData[position - 9])
+
+    }
+    // p1 man right move
+    if (
+      itemToMove?.piece === 'z' &&
+      boardData[position - 7]?.piece === null &&
+      boardData[position - 7]?.playable
+      ) {
+      tempArrForMoves.push(boardData[position - 7])
+
+    }
+    // p2 man left move
+    if (
+      itemToMove?.piece === 'x' &&
+      boardData[position + 9]?.piece === null &&
+      boardData[position + 9]?.playable
+      ) {
+      tempArrForMoves.push(boardData[position + 9])
+
+    }
+    // p2 man right move
+    if (
+      itemToMove?.piece === 'x' &&
+      boardData[position + 7]?.piece === null &&
+      boardData[position + 7]?.playable
+
+      ) {
+      tempArrForMoves.push(boardData[position + 7])
+
+    }
+
+    // top right jump
+    if (
+      boardData[position - 14]?.playable &&
+      boardData[position - 14]?.piece === null &&
+      boardData[position - 7]?.piece !== null &&
+      boardData[position - 7]?.piece !== itemToMove?.piece
+      ) {
+        tempArrForJumps.push(boardData[position - 14])
+
+      }
+    // top left
+    if (
+      boardData[position - 18]?.playable &&
+      boardData[position - 18]?.piece === null &&
+      boardData[position - 9]?.piece !== null &&
+      boardData[position - 9]?.piece !== itemToMove?.piece
+      ) {
+        tempArrForJumps.push(boardData[position - 18])
+
+      }
+    // bot right
+    if (
+      boardData[position + 14]?.playable &&
+      boardData[position + 14]?.piece === null &&
+      boardData[position + 7]?.piece !== null &&
+      boardData[position + 7]?.piece !== itemToMove?.piece
+      ) {
+        tempArrForJumps.push(boardData[position + 14])
+
+      }
+    // bot left
+    if (
+      boardData[position + 18]?.playable &&
+      boardData[position + 18]?.piece === null &&
+      boardData[position + 9]?.piece !== null &&
+      boardData[position + 9]?.piece !== itemToMove?.piece
+      ) {
+        tempArrForJumps.push(boardData[position + 18])
+
+      }
+
+
+
+    const boardDataCopy = boardData.map((item, index) => {
       if (!item.playable) return item
-    
-
-        // find the selected chip
-        if (position === index) {
+      else if (position === index) {
           return {...item, selected: true}
         }
-
-        //  p1 move
-        if (
-          item.piece === null &&
-          itemToMove.piece === 'z' &&
-          (index + 7 === position||
-          index + 9 === position)
-          ) {
-            tempArrForMoves.push(item)
-            return {...item, highlighted: true, selected: false}
-          }
-
-        // p2 move
-        else if (
-          item.piece === null &&
-          itemToMove.piece === 'x' &&
-          (index - 7 === position||
-          index - 9 === position)
-          ) {
-            tempArrForMoves.push(item)
-            return {...item, highlighted: true, selected: false}
-          }
-
-          // top right jump
-        else if (
-          item.piece === null &&
-          boardData[index + 7]?.piece !== null &&
-          boardData[index + 7]?.piece !== boardData[index + 14]?.piece &&
-          index + 14 === position
-        ) {
-          tempArrForMoves.push(item)
+      if (tempArrForJumps.length) {
+        if (tempArrForJumps.indexOf(item) > -1) {
           return {...item, highlighted: true, selected: false}
         }
-          // top left jump
-        else if (
-          item.piece === null &&
-          boardData[index + 9]?.piece !== null &&
-          boardData[index + 9]?.piece !== boardData[index + 18]?.piece &&
-          index + 18 === position
-        ) {
-          tempArrForMoves.push(item)
-          return {...item, highlighted: true, selected: false}
-        }
+      }
+      else if (tempArrForMoves.indexOf(item) > -1) {
+        return {...item, highlighted: true, selected: false}
+      }
+      return {...item, highlighted: false, selected: false}
+    })
 
-        // bottom right
-        else if (
-          item.piece === null &&
-          boardData[index - 9]?.piece !== null &&
-          boardData[index - 9]?.piece !== boardData[index - 18]?.piece &&
-          index - 18 === position
-        ) {
-          tempArrForMoves.push(item)
-          return {...item, highlighted: true, selected: false}
-        }
-
-        // bottom left
-        else if (
-          item.piece === null &&
-          boardData[index - 7]?.piece !== null &&
-          boardData[index - 7]?.piece !== boardData[index - 14]?.piece &&
-          index - 14 === position
-        ) {
-          tempArrForMoves.push(item)
-          return {...item, highlighted: true, selected: false}
-        }
-
-
-        
-      
-          
-
-          
-
-          
-
-
-
-        return {...item, highlighted: false, selected: false}
-      })
-    
-
-
-    
-    
-    console.log(tempArrForMoves)
+  
   setPieceToMove({...itemToMove})
   setPossibleMoves([...tempArrForMoves])
-  setBoardData([...newBoardData])
+  setBoardData([...boardDataCopy])
 }
 
   function highlightMovesKing(itemToMove, position: number, playerTurn) {

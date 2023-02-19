@@ -49,10 +49,6 @@ function Gameboard() {
     if (gameOver) console.log('game over')
   })  
 
-  // chip jump tracker
-
-    
- 
 
   return (
     <>
