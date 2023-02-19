@@ -28,7 +28,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
   const [ gameOver, setGameOver ] = useState(false)
   const [ jumpedChip, setJumpedChip ] = useState(null)
   const [multipleCapture, setMultipleCapture] = useState(false)
-  const [forceCapture, setForceCapture] = useState([])
+  const [forceCapture, setForceCapture] = useState(false)
 
 
   function highlightMoves(itemToMove, position: number, playerTurn: boolean) {
@@ -41,7 +41,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
     if (itemToMove.king) return
     // if p1 try to access p2 chips it will immediately return and vice versa for player 2
     if (playerTurn === true && player === 2 || !playerTurn && player === 1) return
-    console.log(position)    
+    // console.log(position)   
 
           // p1 man left move
     if (
@@ -140,7 +140,6 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
       return {...item, highlighted: false, selected: false}
     })
 
-  
   setPieceToMove({...itemToMove})
   setPossibleMoves([...tempArrForMoves])
   setBoardData([...boardDataCopy])
@@ -618,6 +617,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
             
 
       if (item === chipToMove) {
+        console.log(item, 'jumoped')
         return {...item, piece: null, player: null, selected: false, king:false}
       }
 
@@ -681,6 +681,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
     })
     setBoardData([...newArr])
     setPieceToMove(null)
+    setForceCapture(false)
   }
 
 
@@ -721,6 +722,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
       highlightMovesKing,
       movePiece, 
       pieceToMove,
+      setPieceToMove,
       playerOneTurn,
       setPlayerOneTurn,
       gameOver,
@@ -730,7 +732,9 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
       jumpedChip,
       setJumpedChip,
       multipleCapture,
-      setMultipleCapture
+      setMultipleCapture,
+      forceCapture,
+      setForceCapture
     }}
     >
       {children}

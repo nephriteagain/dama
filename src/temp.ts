@@ -1,40 +1,44 @@
-// top right jump
-    if (
-      boardData[index - 14]?.playable &&
-      boardData[index - 14]?.piece === null &&
-      boardData[index - 7]?.piece !== null &&
-      boardData[index - 7]?.piece !== item?.piece
-      ) {
-        forceFeed.push(boardData[index - 14])
+if (!playerOneTurn) {
+        if (
+        item.piece !== 'x' &&
+        boardData[index - 7]?.piece === 'z' &&
+        boardData[index - 14]?.playable &&
+        boardData[index - 14]?.piece === null
+        ) {
+          forceFeed.push(boardData[index - 14])
+          forceEat.push(item)
+        }
+      // top left jump
+      if (
+        item.piece !== 'x' &&
+        boardData[index - 9]?.piece === 'z' &&
+        boardData[index - 18]?.playable &&
+        boardData[index - 18]?.piece === null
+        ) {
+          forceFeed.push(boardData[index - 18])
+          forceEat.push(item)
 
-      }
-    // top left
-    if (
-      boardData[index - 18]?.playable &&
-      boardData[index - 18]?.piece === null &&
-      boardData[index - 9]?.piece !== null &&
-      boardData[index - 9]?.piece !== item?.piece
-      ) {
-        forceFeed.push(boardData[index - 18])
+        }
+      // bot left jump
+      if (
+        item.piece !== 'x' &&
+        boardData[index + 7]?.piece === 'z' &&
+        boardData[index + 14]?.playable &&
+        boardData[index + 14]?.piece === null
+        ) {
+          forceFeed.push(boardData[index + 14])
+          forceEat.push(item)
 
-      }
-    // bot right
-    if (
-      boardData[index + 14]?.playable &&
-      boardData[index + 14]?.piece === null &&
-      boardData[index + 7]?.piece !== null &&
-      boardData[index + 7]?.piece !== item?.piece
-      ) {
-        forceFeed.push(boardData[index + 14])
+        }
+      // bot right jump
+      if (
+        item.piece !== 'x' &&
+        boardData[index - 9]?.piece === 'z' &&
+        boardData[index - 18]?.playable &&
+        boardData[index - 18]?.piece === null
+        ) {
+          forceFeed.push(boardData[index + 18])
+          forceEat.push(item)
 
-      }
-    // bot left
-    if (
-      boardData[index + 18]?.playable &&
-      boardData[index + 18]?.piece === null &&
-      boardData[index + 9]?.piece !== null &&
-      boardData[index + 9]?.piece !== item?.piece
-      ) {
-        forceFeed.push(boardData[index + 18])
-
+        }
       }
