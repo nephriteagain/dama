@@ -60,16 +60,16 @@ export const arrayData = [
   {x: 7, y: 3, piece: null, playable: false, highlighted: false},
 
   {x: 0, y: 2, piece: null, playable: false, highlighted: false},
-  {x: 1, y: 2, piece: 'z', player: 1, playable: true, highlighted: false, king: false, selected: false, movable: true},
+  {x: 1, y: 2, piece: null, player: 1, playable: true, highlighted: false, king: false, selected: false, movable: true},
 
   {x: 2, y: 2, piece: null, playable: false, highlighted: false},
-  {x: 3, y: 2, piece: 'z', player: 1, playable: true, highlighted: false, king: false, selected: false, movable: true},
+  {x: 3, y: 2, piece: null, player: 1, playable: true, highlighted: false, king: false, selected: false, movable: true},
 
   {x: 4, y: 2, piece: null, playable: false, highlighted: false},
-  {x: 5, y: 2, piece: 'z', player: 1, playable: true, highlighted: false, king: false, selected: false, movable: true},
+  {x: 5, y: 2, piece: null, player: 1, playable: true, highlighted: false, king: false, selected: false, movable: true},
 
   {x: 6, y: 2, piece: null, playable: false, highlighted: false},
-  {x: 7, y: 2, piece: 'z', player: 1, playable: true, highlighted: false, king: false, selected: false, movable: true},
+  {x: 7, y: 2, piece: null, player: 1, playable: true, highlighted: false, king: false, selected: false, movable: true},
 
   {x: 0, y: 1, piece: 'z', player: 1, playable: true, highlighted: false, king: false, selected: false, movable: true},
   {x: 1, y: 1, piece: null, playable: false, highlighted: false},

@@ -284,6 +284,16 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
               tempArrForMoves.push(boardData[position - 45])
               if (boardData[position - 54]?.piece === null && boardData[position - 54].playable === true) {
                 tempArrForMoves.push(boardData[position - 54])
+                if (boardData[position - 63]?.piece === null && boardData[position - 63].playable === true) {
+                tempArrForMoves.push(boardData[position - 63])
+                }
+              } else if (
+      boardData[position - 54]?.piece !== null &&
+      boardData[position - 54]?.piece !== itemToMove.piece &&
+      boardData[position - 63]?.playable &&
+      boardData[position - 63]?.piece === null
+    ) {
+                tempArrForJumps.push(boardData[position - 63])
               }
             } else if (
       boardData[position - 45]?.piece !== null &&
@@ -292,6 +302,9 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
       boardData[position - 54]?.piece === null
     ) {
                 tempArrForJumps.push(boardData[position - 54])
+                if (boardData[position - 63]?.piece === null && boardData[position - 63].playable === true) {
+                tempArrForJumps.push(boardData[position - 63])
+                }
               }
             
           } else if (
@@ -303,6 +316,9 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
               tempArrForJumps.push(boardData[position - 45])
               if (boardData[position - 54]?.piece === null && boardData[position - 54].playable === true) {
                 tempArrForJumps.push(boardData[position - 54])
+                if (boardData[position - 63]?.piece === null && boardData[position - 63].playable === true) {
+                tempArrForJumps.push(boardData[position - 63])
+                }
               }
             }
 
@@ -317,6 +333,9 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
               tempArrForJumps.push(boardData[position - 45])
               if (boardData[position - 54]?.piece === null && boardData[position - 54].playable === true) {
                 tempArrForJumps.push(boardData[position - 54])
+                if (boardData[position - 63]?.piece === null && boardData[position - 63].playable === true) {
+                tempArrForJumps.push(boardData[position - 63])
+                }
               }
             }
           }
@@ -334,6 +353,9 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
               tempArrForJumps.push(boardData[position - 45])
               if (boardData[position - 54]?.piece === null && boardData[position - 54].playable === true) {
                 tempArrForJumps.push(boardData[position - 54])
+                if (boardData[position - 63]?.piece === null && boardData[position - 63].playable === true) {
+                tempArrForJumps.push(boardData[position - 63])
+                }
               }
             }
           }
@@ -354,6 +376,9 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
               tempArrForJumps.push(boardData[position - 45])
               if (boardData[position - 54]?.piece === null && boardData[position - 54].playable === true) {
                 tempArrForJumps.push(boardData[position - 54])
+                if (boardData[position - 63]?.piece === null && boardData[position - 63].playable === true) {
+                tempArrForJumps.push(boardData[position - 63])
+                }
               }
             }
           }
@@ -373,6 +398,16 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
               tempArrForMoves.push(boardData[position + 45])
               if (boardData[position + 54]?.piece === null && boardData[position + 54].playable === true) {
                 tempArrForMoves.push(boardData[position + 54])
+                if (boardData[position + 63]?.piece === null && boardData[position + 63].playable === true) {
+                tempArrForMoves.push(boardData[position + 63])
+                }
+              } else if (
+      boardData[position + 54]?.piece !== null &&
+      boardData[position + 54]?.piece !== itemToMove.piece &&
+      boardData[position + 63]?.playable &&
+      boardData[position + 63]?.piece === null
+    ) {
+                tempArrForJumps.push(boardData[position + 63])
               }
             } else if (
       boardData[position + 45]?.piece !== null &&
@@ -381,6 +416,9 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
       boardData[position + 54]?.piece === null
     ) {
                 tempArrForJumps.push(boardData[position + 54])
+                if (boardData[position + 63]?.piece === null && boardData[position + 63].playable === true) {
+                tempArrForJumps.push(boardData[position + 63])
+                }
               }
             
           } else if (
@@ -392,6 +430,9 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
               tempArrForJumps.push(boardData[position + 45])
               if (boardData[position + 54]?.piece === null && boardData[position + 54].playable === true) {
                 tempArrForJumps.push(boardData[position + 54])
+                if (boardData[position + 63]?.piece === null && boardData[position + 63].playable === true) {
+                tempArrForJumps.push(boardData[position + 63])
+                }
               }
             }
 
@@ -406,6 +447,9 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
               tempArrForJumps.push(boardData[position + 45])
               if (boardData[position + 54]?.piece === null && boardData[position + 54].playable === true) {
                 tempArrForJumps.push(boardData[position + 54])
+                if (boardData[position + 63]?.piece === null && boardData[position + 63].playable === true) {
+                tempArrForJumps.push(boardData[position + 63])
+                }
               }
             }
           }
@@ -423,6 +467,9 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
               tempArrForJumps.push(boardData[position + 45])
               if (boardData[position + 54]?.piece === null && boardData[position + 54].playable === true) {
                 tempArrForJumps.push(boardData[position + 54])
+                if (boardData[position + 63]?.piece === null && boardData[position + 63].playable === true) {
+                tempArrForJumps.push(boardData[position + 63])
+                }
               }
             }
           }
@@ -443,6 +490,9 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
               tempArrForJumps.push(boardData[position + 45])
               if (boardData[position + 54]?.piece === null && boardData[position + 54].playable === true) {
                 tempArrForJumps.push(boardData[position + 54])
+                if (boardData[position + 63]?.piece === null && boardData[position + 63].playable === true) {
+                tempArrForJumps.push(boardData[position + 63])
+                }
               }
             }
           }
@@ -599,6 +649,8 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
   function movePiece(pieceToMove: [], placeToLand: [], index: number) {
     
     let chipToBeTaken = {}
+    let multipleJumpSearcher = {}
+    let jumpSearcherIndex = -1000
 
     // find the selected chip
     const chipToMove = boardData.find((item) => {
@@ -623,7 +675,18 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
       if (
         item.x === placeToLand.x &&
         item.y ===  placeToLand.y
-      ) return {...item, piece: pieceToMove.piece, highlighted: false, player: pieceToMove.player, king: pieceToMove.king, selected: false}
+      ) {
+        multipleJumpSearcher = {
+          ...item,
+          piece: pieceToMove.piece,
+          highlighted: false, 
+          player: pieceToMove.player, 
+          king: pieceToMove.king, 
+          selected: false
+        }
+        jumpSearcherIndex = index
+        return multipleJumpSearcher
+      }
       
 
       POSSIBLEJUMPS.forEach((possibleMoves) => {
@@ -651,7 +714,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
 
 
 
-    const newArr =  newBoardData.map((item, index) => {
+    let newArr =  newBoardData.map((item, index) => {
       if (item.x === chipToBeTaken.x && item.y === chipToBeTaken.y) {
         console.log('captured', item)
         return {
@@ -681,6 +744,27 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
       
     })
     setBoardData([...newArr])
+    
+    function eatMoreChips(pieceToJump, index, board) {
+      let forceFeed = []
+
+      if (!pieceToJump.king) {
+        // top right
+        if (
+        pieceToJump.piece !== null &&
+        board[index - 14]?.playable &&
+        board[index - 7]?.piece !== null &&
+        board[index - 7]?.piece !== pieceToJump.piece &&
+        board[index - 14]?.piece === null
+        ) {
+          forceFeed.push(pieceToJump)
+        }
+      }
+      if (forceFeed.length) console.log(forceFeed, 'you must eat this again')
+    }
+
+    eatMoreChips(multipleJumpSearcher, jumpSearcherIndex, newArr)
+
     setPieceToMove(null)
     setForceCapture(false)
   }
