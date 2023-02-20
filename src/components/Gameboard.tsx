@@ -29,12 +29,6 @@ function Gameboard() {
     
   } = useGlobalContext()
 
-  const p1ChipStyle = {backgroundColor: 'red'}
-  const p2ChipStyle = {backgroundColor: 'blue'}
-  const emptySquareStyle = {backgroundColor: '#111'}
-  const highlightedSquare = {backgroundColor: '#ccccff'}
-  const kingChip = {border: '6px solid #111'}
-  const selectedChip = {scale: '1.15'}
 
   function handleRestart() {
     setPlayerOneTurn(true)
@@ -51,8 +45,9 @@ function Gameboard() {
   }) 
 
   // force eat
-  // regular chips
+  // regular chips NOTE: THIS USEFFECT HAS A BUG!
   useEffect(() => {
+    if (forceCapture) return //this wont rerun again multiple times
     let forceFeed = []
     boardData.forEach((item, index) => {
       if (!item.playable) return
@@ -65,11 +60,7 @@ function Gameboard() {
         boardData[index - 7]?.piece !== item.piece &&
         boardData[index - 14]?.piece === null
         ) {
-          forceFeed.push({
-            feed: boardData[index - 14],
-            eat: item,
-            index: boardData.indexOf(boardData[index - 14])
-          })
+          forceFeed.push(item)
         }
       // top left jump
       if (
@@ -79,12 +70,7 @@ function Gameboard() {
         boardData[index - 9]?.piece !== item.piece &&
         boardData[index - 18]?.piece === null
         ) {
-          forceFeed.push({
-            feed: boardData[index - 18],
-            eat: item,
-            index: boardData.indexOf(boardData[index - 18])
-          })
-
+          forceFeed.push(item)
         }
       // bot left jump
       if (
@@ -94,11 +80,7 @@ function Gameboard() {
         boardData[index + 7]?.piece !== item.piece &&
         boardData[index + 14]?.piece === null
         ) {
-          forceFeed.push({
-            feed: boardData[index + 14],
-            eat: item,
-            index: boardData.indexOf(boardData[index + 14])
-          })
+          forceFeed.push(item)
 
         }
       // bot right jump
@@ -109,57 +91,41 @@ function Gameboard() {
         boardData[index + 9]?.piece !== item.piece &&
         boardData[index + 18]?.piece === null
         ) {
-          forceFeed.push({
-            feed: boardData[index + 18],
-            eat: item,
-            index: boardData.indexOf(boardData[index + 14])
-          })
+          forceFeed.push(item)
         }
 
       })
 
 
-    let forceEat = [] // this is done to prevent bug
     if (forceFeed.length) {
       forceFeed = forceFeed.filter((force) => {
-      if (playerOneTurn) return force.eat.piece === 'z'
-      if (!playerOneTurn) return force.eat.piece === 'x'
+      if (playerOneTurn) return force.piece === 'x'
+      if (!playerOneTurn) return force.piece === 'z'
     })
-      forceEat = forceFeed.map((item) => {
-        return item.eat
-      })
-
-      forceFeed = forceFeed.map((item) => {
-        return item.feed
-      
-      })
     }
-    
+    console.log('forcefeed arr', forceFeed)
     console.log(forceFeed.length)
-    if (forceFeed.length) setForceCapture(true)
     
     if (forceFeed.length) {
-      const tempBoardData = boardData.map((item, index) => {
+      setForceCapture(true)
+      const boardDataCopy = boardData.map((item, index) => {
         if (!item.playable) return item
+        if(!item === null) return item
+        if (playerOneTurn && item?.piece === 'z') return item
+        if (!playerOneTurn && item?.piece === 'x') return item
 
-        if (forceEat.indexOf(item) > -1 ) {
-          setPieceToMove(item)
-          return {...item, selected: true}
+        else if (forceFeed.indexOf(item) > - 1) {
+          return {...item, movable: true}
         }
 
-        if (forceFeed.indexOf(item) > -1 ) {
-          return {...item, highlighted: true, selected: false}
-        }
 
-        return {...item, highlighted: false, selected: false}
+        return {...item, movable: false}
       })
 
-
-      setBoardData([...tempBoardData])
-      console.log('rerendered')
+      setBoardData(boardDataCopy)
     }
-    
-  }, [playerOneTurn])
+  
+  }, [pieceToMove])
 
 
   return (
@@ -176,6 +142,8 @@ function Gameboard() {
 
     <div className='board'>
       { boardData.map((item: [], index: number) => {
+
+
         const boardStyle  = {}
         if (!item.playable) {
           boardStyle.backgroundColor = '#111'
@@ -184,8 +152,14 @@ function Gameboard() {
         } else if (item?.selected) {
           boardStyle.backgroundColor = '#6CD486'
         }
-        
 
+        const chipStyle = {}
+        if (item?.piece === 'z') chipStyle.backgroundColor = 'red'
+        if (item?.piece === 'x') chipStyle.backgroundColor = 'blue'
+        if (item?.king) chipStyle.border = '6px solid #111'
+        if (item?.movable) chipStyle.opacity = '1'
+        if (!item?.movable) chipStyle.opacity = '0.4'
+        
 
         return ( 
           <div className="square"
@@ -204,13 +178,9 @@ function Gameboard() {
           </div>
           {item.piece !== null && 
           <div className="piece" 
-            style={item?.piece === 'z' && item?.king === false ? p1ChipStyle : 
-            item?.piece === 'x' && item?.king === false ? p2ChipStyle : 
-            item?.piece === 'z' && item?.king === true ? {...p1ChipStyle, ...kingChip} :
-            item?.piece === 'x' && item?.king === true ? {...p2ChipStyle, ...kingChip} : {}
-          }
+            style={chipStyle}
             onClick={() => {
-              !forceCapture &&
+              if (!item.movable) return
               item.king === false ? 
               highlightMoves(item, index, playerOneTurn) : // for normal piece
               highlightMovesKing(item, index, playerOneTurn) // for king piece

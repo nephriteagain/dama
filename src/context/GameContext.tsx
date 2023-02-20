@@ -617,7 +617,6 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
             
 
       if (item === chipToMove) {
-        console.log(item, 'jumoped')
         return {...item, piece: null, player: null, selected: false, king:false}
       }
 
@@ -661,22 +660,24 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
           piece: null, 
           king: false, 
           selected: false, 
-          highlighted: false}
+          highlighted: false,
+          movable: true
+        }
       }
       
       if (item.y === 7 && item.piece === 'z' && item.king === false) {
         console.log('player 1 king awakened!')
-        return {...item, king: true}
+        return {...item, king: true, movable: true}
       }
 
       // checks for player 2 new king
       if (item.y === 0 && item.piece == 'x' && item.king === false) {
         console.log('player 2 king awakened!')
-        return {...item, king: true}
+        return {...item, king: true, movable: true}
       }
 
 
-        return item
+        return {...item, movable: true}
       
     })
     setBoardData([...newArr])
