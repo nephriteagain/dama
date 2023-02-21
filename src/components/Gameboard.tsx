@@ -60,7 +60,6 @@ function Gameboard() {
       return
     }
     
-    // console.log('no additional move')
     if (pieceToMove !== null) return
     if (pieceToMove === null) setPlayerOneTurn(!playerOneTurn)
     if (forceCapture) return //this wont rerun again multiple times

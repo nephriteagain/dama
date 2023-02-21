@@ -23,7 +23,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
   const [ pieceToMove, setPieceToMove ] = useState(null)
   const [ possibleMoves, setPossibleMoves ] = useState([])
 
-  const [ playerOneTurn, setPlayerOneTurn ] = useState(false) // player one will still be first to move regardless
+  const [ playerOneTurn, setPlayerOneTurn ] = useState(true) // player one will still be first to move regardless
   const [ playerChipsCount, setPlayerChipsCount ] = useState({p1: 12, p2: 12})
   const [ gameOver, setGameOver ] = useState(false)
   const [ jumpedChip, setJumpedChip ] = useState(null)
@@ -38,6 +38,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
     let tempArrForJumps = [] // stores capturing moves
     let jumpDirection = [] // stores direction of jumps
     const doubleTakeArr : number[] = [] // stores jumps from double captures
+    const tripleTakeArr : number[] = []
     const jumpDirection2nd : string[] = [] // stores direction jumps from double captures
     const jumpDirectionMaster = []
     
@@ -45,7 +46,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
     if (piece === null) return
     if (itemToMove.king) return
     // if p1 try to access p2 chips it will immediately return and vice versa for player 2
-    if (playerTurn === true && player === 2 || !playerTurn && player === 1) return
+    if (playerTurn === true && piece === 'x' || !playerTurn && piece === 'z') return
     // console.log(position)   
 
     if (!itemToMove.king) {
@@ -163,6 +164,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
             ) {
               doubleTakeArr.push(tempArrForJumps[index])
               jumpDirection2nd.push('top right')
+              tripleTakeArr.push(board[jumpIndex - 14])
 
             }
           // top left
@@ -175,6 +177,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
             ) {
               doubleTakeArr.push(tempArrForJumps[index])
               jumpDirection2nd.push('top left')
+              tripleTakeArr.push(board[jumpIndex - 18])
 
             }
           // bot right
@@ -187,6 +190,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
             ) {
               doubleTakeArr.push(board[tempArrForJumps[index]])
               jumpDirection2nd.push('bot right')
+              tripleTakeArr.push(board[jumpIndex + 14])
 
             }
           // bot left
@@ -199,22 +203,34 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
             ) {
               doubleTakeArr.push(tempArrForJumps[index])
               jumpDirection2nd.push('bot left')
+              tripleTakeArr.push(board[jumpIndex + 18])
+
             }
       }
       })
     }
     doubleTake()
 
-      // transformed jumped arr
-      
-
     
+    
+    
+    // transformed jumped arr
     console.log(doubleTakeArr, 'double take')
-    console.log(jumpDirection)
-// ----------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------
+    
+    // tripleTake------------------------------------------
+    
+    function tripleTake() {
+      if (!doubleTakeArr.length) return
+      console.log(doubleTakeArr, 'triple')
+
+    }
+    tripleTake()
 
 
-    if (doubleTakeArr.length) tempArrForJumps = doubleTakeArr
+
+//-----------------------------------------------------
+if (doubleTakeArr.length) tempArrForJumps = doubleTakeArr
 
     const boardCopy = board.map((item, index) => {
       if (!item.playable) return item
@@ -233,8 +249,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
     })
 
 
-    
-// -------------------------------continue this shit
+  
 
 
   
@@ -1499,10 +1514,11 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
         setPieceToMove(pieceToJump)
         setMultipleCapture(true)
         
-    //     forceFeed = forceFeed.filter((force) => {
-    //   if (playerOneTurn) return force.piece === 'x'
-    //   if (!playerOneTurn) return force.piece === 'z'
-    // })
+        forceFeed = forceFeed.filter((force) => {
+      if (playerOneTurn) return force.piece === 'x'
+      if (!playerOneTurn) return force.piece === 'z'
+    })
+
         const boardForceEat = board.map((item, sameIndex) => {
           if (!item.playable) return item
           if (!item === null) return item
@@ -1535,8 +1551,8 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
 
 
   useEffect(() => {
-    console.log(jumpDirections, 'jumpDirections')
-  }, [jumpDirections])
+    console.log(pieceToMove)
+  }, [pieceToMove])
 
 
   // player chips counter
