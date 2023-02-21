@@ -29,13 +29,18 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
   const [ jumpedChip, setJumpedChip ] = useState(null)
   const [multipleCapture, setMultipleCapture] = useState(false)
   const [forceCapture, setForceCapture] = useState(false)
+  const [ jumpDirections, setJumpDirection ] = useState([])
 
 
- function highlightMoves(itemToMove, position: number, playerTurn: boolean, board) {
+  function highlightMoves(itemToMove, position: number, playerTurn: boolean, board) {
     const { x: xPosition, y: yPosition, piece, player, selected } = itemToMove;
-    let tempArrForMoves = []
-    let tempArrForJumps = []
-
+    let tempArrForMoves = [] // stores non capturing moves
+    let tempArrForJumps = [] // stores capturing moves
+    let jumpDirection = [] // stores direction of jumps
+    const doubleTakeArr : number[] = [] // stores jumps from double captures
+    const jumpDirection2nd : string[] = [] // stores direction jumps from double captures
+    const jumpDirectionMaster = []
+    
     
     if (piece === null) return
     if (itemToMove.king) return
@@ -43,7 +48,8 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
     if (playerTurn === true && player === 2 || !playerTurn && player === 1) return
     // console.log(position)   
 
-          // p1 man left move
+    if (!itemToMove.king) {
+     // p1 man left move
     if (
       itemToMove?.piece === 'z' &&
       board[position - 9]?.piece === null &&
@@ -89,7 +95,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
       board[position - 7]?.piece !== itemToMove?.piece
       ) {
         tempArrForJumps.push(board[position - 14])
-
+        jumpDirection.push('top right')
       }
     // top left
     if (
@@ -99,7 +105,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
       board[position - 9]?.piece !== itemToMove?.piece
       ) {
         tempArrForJumps.push(board[position - 18])
-
+        jumpDirection.push('top left')
       }
     // bot right
     if (
@@ -109,6 +115,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
       board[position + 7]?.piece !== itemToMove?.piece
       ) {
         tempArrForJumps.push(board[position + 14])
+        jumpDirection.push('bot right')
 
       }
     // bot left
@@ -119,10 +126,95 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
       board[position + 9]?.piece !== itemToMove?.piece
       ) {
         tempArrForJumps.push(board[position + 18])
+        jumpDirection.push('bot right')
 
       }
+    }
+//--------this area check if there is a double take opportunity
+    
+    function doubleTake() {
+      if (!tempArrForJumps.length) return
+      const arrToJump = tempArrForJumps.map(item => {
+        return {
+          ...item,
+          piece: itemToMove.piece,
+          highlighted: false,
+        }
+        
+      })
+      // transformed jumped arr indices
+      const  arrToJumpIndices = tempArrForJumps.map(item => {
+        return boardData.indexOf(item)
+      })
+      // total number of jumps
+      const jumpNum = tempArrForJumps.map((item, index) => 0)
+      console.log(arrToJump);console.log(arrToJumpIndices);console.log(jumpNum)
+      arrToJump.forEach((itemToMove, index) => {
+        const jumpIndex = arrToJumpIndices[index]
+
+        if (!itemToMove.king) {
+          // top right jump
+          if (
+            board[jumpIndex - 14]?.playable &&
+            board[jumpIndex - 14]?.piece === null &&
+            board[jumpIndex - 7]?.piece !== null &&
+            board[jumpIndex - 7]?.piece !== itemToMove?.piece &&
+            jumpDirection[index] !== 'bot left'
+            ) {
+              doubleTakeArr.push(tempArrForJumps[index])
+              jumpDirection2nd.push('top right')
+
+            }
+          // top left
+          if (
+            board[jumpIndex - 18]?.playable &&
+            board[jumpIndex - 18]?.piece === null &&
+            board[jumpIndex - 9]?.piece !== null &&
+            board[jumpIndex - 9]?.piece !== itemToMove?.piece &&
+            jumpDirection[index] !== 'bot right'
+            ) {
+              doubleTakeArr.push(tempArrForJumps[index])
+              jumpDirection2nd.push('top left')
+
+            }
+          // bot right
+          if (
+            board[jumpIndex + 14]?.playable &&
+            board[jumpIndex + 14]?.piece === null &&
+            board[jumpIndex + 7]?.piece !== null &&
+            board[jumpIndex + 7]?.piece !== itemToMove?.piece &&
+            jumpDirection[index] !== 'top left'
+            ) {
+              doubleTakeArr.push(board[tempArrForJumps[index]])
+              jumpDirection2nd.push('bot right')
+
+            }
+          // bot left
+          if (
+            board[jumpIndex + 18]?.playable &&
+            board[jumpIndex + 18]?.piece === null &&
+            board[jumpIndex + 9]?.piece !== null &&
+            board[jumpIndex + 9]?.piece !== itemToMove?.piece &&
+            jumpDirection[index] !== 'top right'
+            ) {
+              doubleTakeArr.push(tempArrForJumps[index])
+              jumpDirection2nd.push('bot left')
+            }
+      }
+      })
+    }
+    doubleTake()
+
+      // transformed jumped arr
+      
+
+    
+    console.log(doubleTakeArr, 'double take')
+    console.log(jumpDirection)
+// ----------------------------------------------------------------------------------
 
 
+    if (doubleTakeArr.length) tempArrForJumps = doubleTakeArr
 
     const boardCopy = board.map((item, index) => {
       if (!item.playable) return item
@@ -140,10 +232,16 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
       return {...item, highlighted: false, selected: false}
     })
 
+
+    
+// -------------------------------continue this shit
+
+
+  
   setPieceToMove({...itemToMove})
   setPossibleMoves([...tempArrForMoves])
   setBoardData([...boardCopy])
-}
+  }
 
   function highlightMovesKing(itemToMove, position: number, playerTurn, board) {
     const { x: xPosition, y: yPosition, piece, player } = itemToMove;
@@ -623,7 +721,6 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
           ...item,
           piece: itemToMove.piece,
           highlighted: false, 
-          player: itemToMove.player, 
           king: itemToMove.king, 
           selected: false,
           movable: true},
@@ -1011,7 +1108,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
             
 
       if (item === chipToMove) {
-        return {...item, piece: null, player: null, selected: false, king:false}
+        return {...item, piece: null, selected: false, king:false}
       }
 
       if (
@@ -1022,7 +1119,6 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
           ...item,
           piece: pieceToMove.piece,
           highlighted: false, 
-          player: pieceToMove.player, 
           king: pieceToMove.king, 
           selected: false
         }
@@ -1057,13 +1153,13 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
 
 
 
+  
     let newArr =  newBoardData.map((item, index) => {
       if (item.x === chipToBeTaken.x && item.y === chipToBeTaken.y) {
         console.log('captured', item)
         jumped = true
         return {
           ...item, 
-          player: null,
           piece: null, 
           king: false, 
           selected: false, 
@@ -1438,7 +1534,9 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
   }
 
 
-
+  useEffect(() => {
+    console.log(jumpDirections, 'jumpDirections')
+  }, [jumpDirections])
 
 
   // player chips counter
