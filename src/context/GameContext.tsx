@@ -29,7 +29,6 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
   const [ jumpedChip, setJumpedChip ] = useState(null)
   const [multipleCapture, setMultipleCapture] = useState(false)
   const [forceCapture, setForceCapture] = useState(false)
-  const [ jumpDirections, setJumpDirection ] = useState([])
 
 
   function highlightMoves(itemToMove, position: number, playerTurn: boolean, board) {
@@ -38,9 +37,8 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
     let tempArrForJumps = [] // stores capturing moves
     let jumpDirection = [] // stores direction of jumps
     const doubleTakeArr : number[] = [] // stores jumps from double captures
-    const tripleTakeArr : number[] = []
+    let tripleTakeArr : number[] = []
     const jumpDirection2nd : string[] = [] // stores direction jumps from double captures
-    const jumpDirectionMaster = []
     
     
     if (piece === null) return
@@ -140,6 +138,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
           ...item,
           piece: itemToMove.piece,
           highlighted: false,
+          king: itemToMove.king
         }
         
       })
@@ -149,10 +148,9 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
       })
       // total number of jumps
       const jumpNum = tempArrForJumps.map((item, index) => 0)
-      console.log(arrToJump);console.log(arrToJumpIndices);console.log(jumpNum)
+      // console.log(arrToJump);console.log(arrToJumpIndices);console.log(jumpNum)
       arrToJump.forEach((itemToMove, index) => {
         const jumpIndex = arrToJumpIndices[index]
-
         if (!itemToMove.king) {
           // top right jump
           if (
@@ -164,8 +162,6 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
             ) {
               doubleTakeArr.push(tempArrForJumps[index])
               jumpDirection2nd.push('top right')
-              tripleTakeArr.push(board[jumpIndex - 14])
-
             }
           // top left
           if (
@@ -177,8 +173,6 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
             ) {
               doubleTakeArr.push(tempArrForJumps[index])
               jumpDirection2nd.push('top left')
-              tripleTakeArr.push(board[jumpIndex - 18])
-
             }
           // bot right
           if (
@@ -190,9 +184,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
             ) {
               doubleTakeArr.push(board[tempArrForJumps[index]])
               jumpDirection2nd.push('bot right')
-              tripleTakeArr.push(board[jumpIndex + 14])
-
-            }
+            } 
           // bot left
           if (
             board[jumpIndex + 18]?.playable &&
@@ -203,34 +195,116 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
             ) {
               doubleTakeArr.push(tempArrForJumps[index])
               jumpDirection2nd.push('bot left')
-              tripleTakeArr.push(board[jumpIndex + 18])
-
             }
       }
       })
     }
     doubleTake()
-
     
     
     
     // transformed jumped arr
-    console.log(doubleTakeArr, 'double take')
+    // console.log(doubleTakeArr, 'double take')
     // ----------------------------------------------------------------------------------
     
     // tripleTake------------------------------------------
     
     function tripleTake() {
       if (!doubleTakeArr.length) return
-      console.log(doubleTakeArr, 'triple')
+      const jumpIndices = doubleTakeArr.map((item, index) => {
+        if (
+          jumpDirection2nd[index] === 'top right' &&
+          board[board.indexOf(item) - 14]?.playable &&
+          board[board.indexOf(item) - 14]?.piece === null
+        ) return board.indexOf(item) - 14
+        else if (
+          jumpDirection2nd[index] === 'top left' &&
+          board[board.indexOf(item) - 18]?.playable &&
+          board[board.indexOf(item) - 18]?.piece === null
+        ) return board.indexOf(item) - 18
+        else if (
+          jumpDirection2nd[index] === 'bot right' &&
+          board[board.indexOf(item) + 18]?.playable &&
+          board[board.indexOf(item) + 18]?.piece === null
+        ) return board.indexOf(item) + 18
+        else if (
+          jumpDirection2nd[index] === 'bot left' &&
+          board[board.indexOf(item) + 14]?.playable &&
+          board[board.indexOf(item) + 14]?.piece === null
+        ) return board.indexOf(item) + 14
+      })
+      const arrToJump = doubleTakeArr.map((item, index) => {
+        return {
+          ...item,
+          piece: itemToMove.piece,
+          king: itemToMove.king,
+          highlighted: false,
 
+        }
+      })
+    
+
+    // console.log(arrToJump, 'arrToJumps')
+    // console.log(jumpIndices, 'triple')
+    arrToJump.forEach((item, index) => {
+      if (!itemToMove.king) {
+        if (
+            board[jumpIndices[index] - 14]?.playable &&
+            board[jumpIndices[index] - 14]?.piece === null &&
+            board[jumpIndices[index] - 7]?.piece !== null &&
+            board[jumpIndices[index] - 7]?.piece !== itemToMove?.piece &&
+            jumpDirection[index] !== 'bot left'
+            ) {
+              tripleTakeArr.push(tempArrForJumps[index])
+
+            }
+          // top left
+          if (
+            board[jumpIndices[index] - 18]?.playable &&
+            board[jumpIndices[index] - 18]?.piece === null &&
+            board[jumpIndices[index] - 9]?.piece !== null &&
+            board[jumpIndices[index] - 9]?.piece !== itemToMove?.piece &&
+            jumpDirection[index] !== 'bot right'
+            ) {
+              tripleTakeArr.push(tempArrForJumps[index])
+            }
+          // bot right
+          if (
+            board[jumpIndices[index] + 14]?.playable &&
+            board[jumpIndices[index] + 14]?.piece === null &&
+            board[jumpIndices[index] + 7]?.piece !== null &&
+            board[jumpIndices[index] + 7]?.piece !== itemToMove?.piece &&
+            jumpDirection[index] !== 'top left'
+            ) {
+              tripleTakeArr.push(board[tempArrForJumps[index]])
+            } 
+          // bot left
+          if (
+            board[jumpIndices[index] + 18]?.playable &&
+            board[jumpIndices[index] + 18]?.piece === null &&
+            board[jumpIndices[index] + 9]?.piece !== null &&
+            board[jumpIndices[index] + 9]?.piece !== itemToMove?.piece &&
+            jumpDirection[index] !== 'top right'
+            ) {
+              tripleTakeArr.push(tempArrForJumps[index])
+            }
+      }
+    })
+
+    tripleTakeArr = tripleTakeArr.filter((item) => {
+      return item !== undefined
+    })
     }
-    tripleTake()
 
+    tripleTake()
+    console.log(doubleTakeArr, 'double take')
+    console.log(tripleTakeArr, 'triple take')
 
 
 //-----------------------------------------------------
 if (doubleTakeArr.length) tempArrForJumps = doubleTakeArr
+if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
+
 
     const boardCopy = board.map((item, index) => {
       if (!item.playable) return item
