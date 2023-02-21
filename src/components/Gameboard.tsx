@@ -45,10 +45,24 @@ function Gameboard() {
     if (gameOver) console.log('game over')
   }) 
 
+    // player turn handler
+  // useEffect(() => {
+  //   if (pieceToMove === null) {
+  //     setPlayerOneTurn(!playerOneTurn)
+  //   }
+  // }, [pieceToMove])
+
   // force eat
   // regular chips NOTE: THIS USEFFECT HAS A BUG!
   useEffect(() => {
-    if (multipleCapture) return 
+    if (multipleCapture) {
+      setMultipleCapture(false)
+      return
+    }
+    
+    console.log('no additional move')
+    if (pieceToMove !== null) return
+    if (pieceToMove === null) setPlayerOneTurn(!playerOneTurn)
     if (forceCapture) return //this wont rerun again multiple times
     let forceFeed = []
 
@@ -359,7 +373,7 @@ function Gameboard() {
         }
           
       }
-
+      
       })
     
     
@@ -395,6 +409,7 @@ function Gameboard() {
   
   }, [pieceToMove])
 
+  
 
   return (
     <>
@@ -449,9 +464,9 @@ function Gameboard() {
             style={chipStyle}
             onClick={() => {
               if (!item.movable) return
-              item.king === false ? 
-              highlightMoves(item, index, playerOneTurn) : // for normal piece
-              highlightMovesKing(item, index, playerOneTurn) // for king piece
+              item.king === false ?
+              highlightMoves(item, index, playerOneTurn, boardData) : // for normal piece
+              highlightMovesKing(item, index, playerOneTurn, boardData) // for king piece
             }}
           >
           </div>}
