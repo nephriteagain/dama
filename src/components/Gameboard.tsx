@@ -60,7 +60,7 @@ function Gameboard() {
       return
     }
     
-    console.log('no additional move')
+    // console.log('no additional move')
     if (pieceToMove !== null) return
     if (pieceToMove === null) setPlayerOneTurn(!playerOneTurn)
     if (forceCapture) return //this wont rerun again multiple times
@@ -113,7 +113,7 @@ function Gameboard() {
         }
       }
       else if (item.king) {
-        // top right
+        // top right ----------------------
         if (
         item.piece !== null &&
         boardData[index - 7]?.piece !== null && boardData[index - 7]?.piece !== item.piece &&
@@ -160,7 +160,7 @@ function Gameboard() {
           forceFeed.push(item)
         }
 
-        // bot left
+        // bot left -----------------------------
         if (
         item.piece !== null &&
         boardData[index + 7]?.piece !== null && boardData[index + 7]?.piece !== item.piece &&
@@ -207,7 +207,7 @@ function Gameboard() {
           forceFeed.push(item)
         }
 
-        // top left
+        // top left ----------------------------
         if (
         item.piece !== null &&
         boardData[index - 9]?.piece !== null && boardData[index - 9]?.piece !== item.piece &&
@@ -266,7 +266,7 @@ function Gameboard() {
           forceFeed.push(item)
         }
 
-        // bottom right
+        // bottom right --------------------
         if (
         item.piece !== null &&
         boardData[index + 7]?.piece !== null && boardData[index + 7]?.piece !== item.piece &&

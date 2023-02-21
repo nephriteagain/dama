@@ -1,8 +1,8 @@
 export const arrayData = [
-  {x: 0, y: 7, piece: 'x', player: 2, playable: true, highlighted: false, king: true  , selected: false, movable: true},
+  {x: 0, y: 7, piece: null, player: 2, playable: true, highlighted: false, king: true  , selected: false, movable: true},
   {x: 1, y: 7, piece: null, playable: false, highlighted: false},
 
-  {x: 2, y: 7, piece: 'x', player: 2, playable: true, highlighted: false, king: true  , selected: false, movable: true},
+  {x: 2, y: 7, piece: null, player: 2, playable: true, highlighted: false, king: true  , selected: false, movable: true},
   {x: 3, y: 7, piece: null, playable: false, highlighted: false},
 
   {x: 4, y: 7, piece: 'x', player: 2, playable: true, highlighted: false, king: true  , selected: false, movable: true},
