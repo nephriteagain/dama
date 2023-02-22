@@ -248,12 +248,13 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
     // console.log(jumpIndices, 'triple')
     arrToJump.forEach((item, index) => {
       if (!itemToMove.king) {
+        // top right
         if (
             board[jumpIndices[index] - 14]?.playable &&
             board[jumpIndices[index] - 14]?.piece === null &&
             board[jumpIndices[index] - 7]?.piece !== null &&
             board[jumpIndices[index] - 7]?.piece !== itemToMove?.piece &&
-            jumpDirection[index] !== 'bot left'
+            jumpDirection2nd[index] !== 'bot left'
             ) {
               tripleTakeArr.push(tempArrForJumps[index])
 
@@ -264,7 +265,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
             board[jumpIndices[index] - 18]?.piece === null &&
             board[jumpIndices[index] - 9]?.piece !== null &&
             board[jumpIndices[index] - 9]?.piece !== itemToMove?.piece &&
-            jumpDirection[index] !== 'bot right'
+            jumpDirection2nd[index] !== 'bot right'
             ) {
               tripleTakeArr.push(tempArrForJumps[index])
             }
@@ -274,7 +275,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
             board[jumpIndices[index] + 14]?.piece === null &&
             board[jumpIndices[index] + 7]?.piece !== null &&
             board[jumpIndices[index] + 7]?.piece !== itemToMove?.piece &&
-            jumpDirection[index] !== 'top left'
+            jumpDirection2nd[index] !== 'top left'
             ) {
               tripleTakeArr.push(board[tempArrForJumps[index]])
             } 
@@ -284,7 +285,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
             board[jumpIndices[index] + 18]?.piece === null &&
             board[jumpIndices[index] + 9]?.piece !== null &&
             board[jumpIndices[index] + 9]?.piece !== itemToMove?.piece &&
-            jumpDirection[index] !== 'top right'
+            jumpDirection2nd[index] !== 'top right'
             ) {
               tripleTakeArr.push(tempArrForJumps[index])
             }
@@ -336,15 +337,22 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
     const { x: xPosition, y: yPosition, piece, player } = itemToMove;
     let tempArrForMoves = []
     let tempArrForJumps = []
-
+    let jumpDirection = []
+    
+    let doubleTakeArr = []
+    let tripleTakeArr = []
+    let jumpDirection2nd = []
+    let doubleTakeLanding = []
 
     if (piece === null) return
     if (!itemToMove.king) return
-    // if p1 try to access p2 chips it will immediately return and vice versa for player 2
+    // if p1 try to access p2 ch0ips it will immediately return and vice versa for player 2
     if (playerTurn === true && player === 2 || !playerTurn && player === 1) return
 
-    // top right move
-    if (board[position - 7]?.piece === null && board[position - 7].playable === true) {
+    if (itemToMove.king) {
+      // top right move
+      function topRight() {
+        if (board[position - 7]?.piece === null && board[position - 7].playable === true) {
       tempArrForMoves.push(board[position - 7])
       if (board[position - 14]?.piece === null && board[position - 14].playable === true) {
         tempArrForMoves.push(board[position - 14])
@@ -366,6 +374,7 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       board[position - 49]?.piece === null
     ) {
                   tempArrForJumps.push(board[position - 49])
+                  jumpDirection.push('top right')
                 }
 
             }  else if (
@@ -375,8 +384,10 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       board[position - 42]?.piece === null
     ) {
                 tempArrForJumps.push(board[position - 42])
+                jumpDirection.push('top right')
                 if (board[position - 49]?.piece === null && board[position - 49].playable === true) {
                   tempArrForJumps.push(board[position - 49])
+                  jumpDirection.push('top right')
                 }
               }
 
@@ -387,10 +398,13 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       board[position - 35]?.piece === null
     ) {
               tempArrForJumps.push(board[position - 35])
+              jumpDirection.push('top right')
               if (board[position - 42]?.piece === null && board[position - 42].playable === true) {
                 tempArrForJumps.push(board[position - 42])
+                jumpDirection.push('top right')
                 if (board[position - 49]?.piece === null && board[position - 49].playable === true) {
                   tempArrForJumps.push(board[position - 49])
+                  jumpDirection.push('top right')
                 }
               }
             }
@@ -402,12 +416,16 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       board[position - 28]?.piece === null
     ) {
             tempArrForJumps.push(board[position - 28])
+            jumpDirection.push('top right')
             if (board[position - 35]?.piece === null && board[position - 35].playable === true) {
               tempArrForJumps.push(board[position - 35])
+              jumpDirection.push('top right')
               if (board[position - 42]?.piece === null && board[position - 42].playable === true) {
                 tempArrForJumps.push(board[position - 42])
+                jumpDirection.push('top right')
                 if (board[position - 49]?.piece === null && board[position - 49].playable === true) {
                   tempArrForJumps.push(board[position - 49])
+                  jumpDirection.push('top right')
                 }
               }
             }
@@ -420,14 +438,19 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       board[position - 21]?.piece === null
     ) {
           tempArrForJumps.push(board[position - 21])
+          jumpDirection.push('top right')
           if (board[position - 28]?.piece === null && board[position - 28].playable === true) {
             tempArrForJumps.push(board[position - 28])
+            jumpDirection.push('top right')
             if (board[position - 35]?.piece === null && board[position - 35].playable === true) {
               tempArrForJumps.push(board[position - 35])
+              jumpDirection.push('top right')
               if (board[position - 42]?.piece === null && board[position - 42].playable === true) {
                 tempArrForJumps.push(board[position - 42])
+                jumpDirection.push('top right')
                 if (board[position - 49]?.piece === null && board[position - 49].playable === true) {
                   tempArrForJumps.push(board[position - 49])
+                  jumpDirection.push('top right')
                 }
               }
             }
@@ -441,25 +464,34 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       board[position - 14]?.piece === null
     ) {
         tempArrForJumps.push(board[position - 14])
+        jumpDirection.push('top right')
         if (board[position - 21]?.piece === null && board[position - 21].playable === true) {
           tempArrForJumps.push(board[position - 21])
+          jumpDirection.push('top right')
           if (board[position - 28]?.piece === null && board[position - 28].playable === true) {
             tempArrForJumps.push(board[position - 28])
+            jumpDirection.push('top right')
             if (board[position - 35]?.piece === null && board[position - 35].playable === true) {
               tempArrForJumps.push(board[position - 35])
+              jumpDirection.push('top right')
               if (board[position - 42]?.piece === null && board[position - 42].playable === true) {
                 tempArrForJumps.push(board[position - 42])
+                jumpDirection.push('top right')
                 if (board[position - 49]?.piece === null && board[position - 49].playable === true) {
                   tempArrForJumps.push(board[position - 49])
+                  jumpDirection.push('top right')
                 }
               }
             }
           }
         }
       }
+      }
+    
 
     // top left move
-    if (board[position - 9]?.piece === null && board[position - 9].playable === true) {
+    function topLeft() {
+      if (board[position - 9]?.piece === null && board[position - 9].playable === true) {
       tempArrForMoves.push(board[position - 9])
       if (board[position - 18]?.piece === null && board[position - 18].playable === true) {
         tempArrForMoves.push(board[position - 18])
@@ -481,6 +513,8 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       board[position - 63]?.piece === null
     ) {
                 tempArrForJumps.push(board[position - 63])
+                jumpDirection.push('top left')
+
               }
             } else if (
       board[position - 45]?.piece !== null &&
@@ -489,8 +523,12 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       board[position - 54]?.piece === null
     ) {
                 tempArrForJumps.push(board[position - 54])
+                jumpDirection.push('top left')
+
                 if (board[position - 63]?.piece === null && board[position - 63].playable === true) {
                 tempArrForJumps.push(board[position - 63])
+                jumpDirection.push('top left')
+
                 }
               }
             
@@ -501,10 +539,16 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       board[position - 45]?.piece === null
     ) {
               tempArrForJumps.push(board[position - 45])
+              jumpDirection.push('top left')
+
               if (board[position - 54]?.piece === null && board[position - 54].playable === true) {
                 tempArrForJumps.push(board[position - 54])
+                jumpDirection.push('top left')
+
                 if (board[position - 63]?.piece === null && board[position - 63].playable === true) {
                 tempArrForJumps.push(board[position - 63])
+                jumpDirection.push('top left')
+
                 }
               }
             }
@@ -516,12 +560,20 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       board[position - 36]?.piece === null
     ) {
             tempArrForJumps.push(board[position - 36])
+            jumpDirection.push('top left')
+
             if (board[position - 45]?.piece === null && board[position - 45].playable === true) {
               tempArrForJumps.push(board[position - 45])
+              jumpDirection.push('top left')
+
               if (board[position - 54]?.piece === null && board[position - 54].playable === true) {
                 tempArrForJumps.push(board[position - 54])
+                jumpDirection.push('top left')
+
                 if (board[position - 63]?.piece === null && board[position - 63].playable === true) {
                 tempArrForJumps.push(board[position - 63])
+                jumpDirection.push('top left')
+
                 }
               }
             }
@@ -534,14 +586,24 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       board[position - 27]?.piece === null
     ) {
           tempArrForJumps.push(board[position - 27])
+          jumpDirection.push('top left')
+
           if (board[position - 36]?.piece === null && board[position - 36].playable === true) {
             tempArrForJumps.push(board[position - 36])
+            jumpDirection.push('top left')
+
             if (board[position - 45]?.piece === null && board[position - 45].playable === true) {
               tempArrForJumps.push(board[position - 45])
+              jumpDirection.push('top left')
+
               if (board[position - 54]?.piece === null && board[position - 54].playable === true) {
                 tempArrForJumps.push(board[position - 54])
+                jumpDirection.push('top left')
+
                 if (board[position - 63]?.piece === null && board[position - 63].playable === true) {
                 tempArrForJumps.push(board[position - 63])
+                jumpDirection.push('top left')
+
                 }
               }
             }
@@ -555,25 +617,39 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       board[position - 18]?.piece === null
     ) {
         tempArrForJumps.push(board[position - 18])
+        jumpDirection.push('top left')
+
         if (board[position - 27]?.piece === null && board[position - 27].playable === true) {
           tempArrForJumps.push(board[position - 27])
+          jumpDirection.push('top left')
+
           if (board[position - 36]?.piece === null && board[position - 36].playable === true) {
             tempArrForJumps.push(board[position - 36])
+            jumpDirection.push('top left')
+
             if (board[position - 45]?.piece === null && board[position - 45].playable === true) {
               tempArrForJumps.push(board[position - 45])
+              jumpDirection.push('top left')
+
               if (board[position - 54]?.piece === null && board[position - 54].playable === true) {
                 tempArrForJumps.push(board[position - 54])
+                jumpDirection.push('top left')
+
                 if (board[position - 63]?.piece === null && board[position - 63].playable === true) {
                 tempArrForJumps.push(board[position - 63])
+                jumpDirection.push('top left')
+
                 }
               }
             }
           }
         }
       }
-
+    }
+    
     // bottom right move
-    if (board[position + 9]?.piece === null && board[position + 9].playable === true) {
+    function botRight() {
+      if (board[position + 9]?.piece === null && board[position + 9].playable === true) {
       tempArrForMoves.push(board[position + 9])
       if (board[position + 18]?.piece === null && board[position + 18].playable === true) {
         tempArrForMoves.push(board[position + 18])
@@ -595,6 +671,7 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       board[position + 63]?.piece === null
     ) {
                 tempArrForJumps.push(board[position + 63])
+                jumpDirection.push('bot right')
               }
             } else if (
       board[position + 45]?.piece !== null &&
@@ -603,8 +680,10 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       board[position + 54]?.piece === null
     ) {
                 tempArrForJumps.push(board[position + 54])
+                jumpDirection.push('bot right')
                 if (board[position + 63]?.piece === null && board[position + 63].playable === true) {
                 tempArrForJumps.push(board[position + 63])
+                jumpDirection.push('bot right')
                 }
               }
             
@@ -615,10 +694,13 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       board[position + 45]?.piece === null
     ) {
               tempArrForJumps.push(board[position + 45])
+              jumpDirection.push('bot right')
               if (board[position + 54]?.piece === null && board[position + 54].playable === true) {
                 tempArrForJumps.push(board[position + 54])
+                jumpDirection.push('bot right')
                 if (board[position + 63]?.piece === null && board[position + 63].playable === true) {
                 tempArrForJumps.push(board[position + 63])
+                jumpDirection.push('bot right')
                 }
               }
             }
@@ -630,12 +712,16 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       board[position + 36]?.piece === null
     ) {
             tempArrForJumps.push(board[position + 36])
+            jumpDirection.push('bot right')
             if (board[position + 45]?.piece === null && board[position + 45].playable === true) {
               tempArrForJumps.push(board[position + 45])
+              jumpDirection.push('bot right')
               if (board[position + 54]?.piece === null && board[position + 54].playable === true) {
                 tempArrForJumps.push(board[position + 54])
+                jumpDirection.push('bot right')
                 if (board[position + 63]?.piece === null && board[position + 63].playable === true) {
                 tempArrForJumps.push(board[position + 63])
+                jumpDirection.push('bot right')
                 }
               }
             }
@@ -648,14 +734,19 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       board[position + 27]?.piece === null
     ) {
           tempArrForJumps.push(board[position + 27])
+          jumpDirection.push('bot right')
           if (board[position + 36]?.piece === null && board[position + 36].playable === true) {
             tempArrForJumps.push(board[position + 36])
+            jumpDirection.push('bot right')
             if (board[position + 45]?.piece === null && board[position + 45].playable === true) {
               tempArrForJumps.push(board[position + 45])
+              jumpDirection.push('bot right')
               if (board[position + 54]?.piece === null && board[position + 54].playable === true) {
                 tempArrForJumps.push(board[position + 54])
+                jumpDirection.push('bot right')
                 if (board[position + 63]?.piece === null && board[position + 63].playable === true) {
                 tempArrForJumps.push(board[position + 63])
+                jumpDirection.push('bot right')
                 }
               }
             }
@@ -669,25 +760,33 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       board[position + 18]?.piece === null
     ) {
         tempArrForJumps.push(board[position + 18])
+        jumpDirection.push('bot right')
         if (board[position + 27]?.piece === null && board[position + 27].playable === true) {
           tempArrForJumps.push(board[position + 27])
+          jumpDirection.push('bot right')
           if (board[position + 36]?.piece === null && board[position + 36].playable === true) {
             tempArrForJumps.push(board[position + 36])
+            jumpDirection.push('bot right')
             if (board[position + 45]?.piece === null && board[position + 45].playable === true) {
               tempArrForJumps.push(board[position + 45])
+              jumpDirection.push('bot right')
               if (board[position + 54]?.piece === null && board[position + 54].playable === true) {
                 tempArrForJumps.push(board[position + 54])
+                jumpDirection.push('bot right')
                 if (board[position + 63]?.piece === null && board[position + 63].playable === true) {
                 tempArrForJumps.push(board[position + 63])
+                jumpDirection.push('bot right')
                 }
               }
             }
           }
         }
       }
+    }
     
     // bottom left move
-    if (board[position + 7]?.piece === null && board[position + 7].playable === true) {
+    function botLeft() {
+      if (board[position + 7]?.piece === null && board[position + 7].playable === true) {
       tempArrForMoves.push(board[position + 7])
       if (board[position + 14]?.piece === null && board[position + 14].playable === true) {
         tempArrForMoves.push(board[position + 14])
@@ -709,6 +808,7 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       board[position + 49]?.piece === null
     ) {
                   tempArrForJumps.push(board[position + 49])
+                  jumpDirection.push('bot left')
                 }
 
             }  else if (
@@ -718,8 +818,10 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       board[position + 42]?.piece === null
     ) {
                 tempArrForJumps.push(board[position + 42])
+                jumpDirection.push('bot left')
                 if (board[position + 49]?.piece === null && board[position + 49].playable === true) {
                   tempArrForJumps.push(board[position + 49])
+                  jumpDirection.push('bot left')
                 }
               }
 
@@ -730,10 +832,13 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       board[position + 35]?.piece === null
     ) {
               tempArrForJumps.push(board[position + 35])
+              jumpDirection.push('bot left')
               if (board[position + 42]?.piece === null && board[position + 42].playable === true) {
                 tempArrForJumps.push(board[position + 42])
+                jumpDirection.push('bot left')
                 if (board[position + 49]?.piece === null && board[position + 49].playable === true) {
                   tempArrForJumps.push(board[position + 49])
+                  jumpDirection.push('bot left')
                 }
               }
             }
@@ -745,12 +850,16 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       board[position + 28]?.piece === null
     ) {
             tempArrForJumps.push(board[position + 28])
+            jumpDirection.push('bot left')
             if (board[position + 35]?.piece === null && board[position + 35].playable === true) {
               tempArrForJumps.push(board[position + 35])
+              jumpDirection.push('bot left')
               if (board[position + 42]?.piece === null && board[position + 42].playable === true) {
                 tempArrForJumps.push(board[position + 42])
+                jumpDirection.push('bot left')
                 if (board[position + 49]?.piece === null && board[position + 49].playable === true) {
                   tempArrForJumps.push(board[position + 49])
+                  jumpDirection.push('bot left')
                 }
               }
             }
@@ -763,14 +872,19 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       board[position + 21]?.piece === null
     ) {
           tempArrForJumps.push(board[position + 21])
+          jumpDirection.push('bot left')
           if (board[position + 28]?.piece === null && board[position + 28].playable === true) {
             tempArrForJumps.push(board[position + 28])
+            jumpDirection.push('bot left')
             if (board[position + 35]?.piece === null && board[position + 35].playable === true) {
               tempArrForJumps.push(board[position + 35])
+              jumpDirection.push('bot left')
               if (board[position + 42]?.piece === null && board[position + 42].playable === true) {
                 tempArrForJumps.push(board[position + 42])
+                jumpDirection.push('bot left')
                 if (board[position + 49]?.piece === null && board[position + 49].playable === true) {
                   tempArrForJumps.push(board[position + 49])
+                  jumpDirection.push('bot left')
                 }
               }
             }
@@ -784,367 +898,794 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       board[position + 14]?.piece === null
     ) {
         tempArrForJumps.push(board[position + 14])
+        jumpDirection.push('bot left')
         if (board[position + 21]?.piece === null && board[position + 21].playable === true) {
           tempArrForJumps.push(board[position + 21])
+          jumpDirection.push('bot left')
           if (board[position + 28]?.piece === null && board[position + 28].playable === true) {
             tempArrForJumps.push(board[position + 28])
+            jumpDirection.push('bot left')
             if (board[position + 35]?.piece === null && board[position + 35].playable === true) {
               tempArrForJumps.push(board[position + 35])
+              jumpDirection.push('bot left')
               if (board[position + 42]?.piece === null && board[position + 42].playable === true) {
                 tempArrForJumps.push(board[position + 42])
+                jumpDirection.push('bot left')
                 if (board[position + 49]?.piece === null && board[position + 49].playable === true) {
                   tempArrForJumps.push(board[position + 49])
+                  jumpDirection.push('bot left')
                 }
               }
             }
           }
         }
       }
+    }
+    
+    topRight();topLeft();botRight();botLeft()
+    }
+    
+    
 
-    function filterJumps() {
-      if (!tempArrForJumps.length) return // not jumps dont run this
 
-      // modify the jump like if they already jumped
-      const arrThatJumped = tempArrForJumps.map((item) => {
-        return  { jump: {
+    // console.log(tempArrForMoves, 'moves')
+
+
+// ----- double take checker --------------------------
+function doubleTake() {
+  if (!tempArrForJumps.length) return
+
+  const arrToJump = tempArrForJumps.map(item => {
+    return {
+      ...item,
+      piece: itemToMove.piece,
+      highlighted: false,
+      king: itemToMove.king
+    }
+  })
+  const arrToJumpIndices = tempArrForJumps.map(item => {
+        return boardData.indexOf(item)
+      })
+
+  arrToJump.forEach((itemToMove, index) => {
+    const jumpIndex = arrToJumpIndices[index]
+    // top right
+    function topRight() {
+      if (
+        jumpDirection[index] !== 'bot left' &&
+        board[jumpIndex - 7]?.piece !== itemToMove?.piece &&
+        board[jumpIndex - 7]?.piece !== null &&
+        board[jumpIndex - 14]?.playable &&
+        board[jumpIndex - 14]?.piece === null
+      ) {
+        doubleTakeArr.push(tempArrForJumps[index])
+        jumpDirection2nd.push('top right')
+        doubleTakeLanding.push(board[jumpIndex - 14])
+      }
+      if (
+        jumpDirection[index] !== 'bot left' &&
+        board[jumpIndex - 7]?.playable &&
+        board[jumpIndex - 7]?.piece === null &&
+        board[jumpIndex - 14]?.piece !== itemToMove?.piece &&
+        board[jumpIndex - 14]?.piece !== null &&
+        board[jumpIndex - 21]?.playable &&
+        board[jumpIndex - 21]?.piece === null 
+      ) {
+        doubleTakeArr.push(tempArrForJumps[index])
+        jumpDirection2nd.push('top right')
+        doubleTakeLanding.push(board[jumpIndex - 21])
+      }
+      if (
+        jumpDirection[index] !== 'bot left' &&
+        board[jumpIndex - 7]?.playable &&
+        board[jumpIndex - 7]?.piece === null &&
+        board[jumpIndex - 14]?.playable &&
+        board[jumpIndex - 14]?.piece === null &&
+        board[jumpIndex - 21]?.piece !== itemToMove?.piece &&
+        board[jumpIndex - 21]?.piece !== null &&
+        board[jumpIndex - 28]?.playable &&
+        board[jumpIndex - 28]?.piece === null 
+      ) {
+        doubleTakeArr.push(tempArrForJumps[index])
+        jumpDirection2nd.push('top right')
+        doubleTakeLanding.push(board[jumpIndex - 28])
+      }
+      if (
+        jumpDirection[index] !== 'bot left' &&
+        board[jumpIndex - 7]?.playable &&
+        board[jumpIndex - 7]?.piece === null &&
+        board[jumpIndex - 14]?.playable &&
+        board[jumpIndex - 14]?.piece === null &&
+        board[jumpIndex - 21]?.playable &&
+        board[jumpIndex - 21]?.piece === null &&
+        board[jumpIndex - 28]?.piece !== itemToMove?.piece &&
+        board[jumpIndex - 28]?.piece !== null &&
+        board[jumpIndex - 35]?.playable &&
+        board[jumpIndex - 35]?.piece === null 
+      ) {
+        doubleTakeArr.push(tempArrForJumps[index])
+        jumpDirection2nd.push('top right')
+        doubleTakeLanding.push(board[jumpIndex - 35])
+      }
+      if (
+        jumpDirection[index] !== 'bot left' &&
+        board[jumpIndex - 7]?.playable &&
+        board[jumpIndex - 7]?.piece === null &&
+        board[jumpIndex - 14]?.playable &&
+        board[jumpIndex - 14]?.piece === null &&
+        board[jumpIndex - 21]?.playable &&
+        board[jumpIndex - 21]?.piece === null &&
+        board[jumpIndex - 28]?.playable &&
+        board[jumpIndex - 28]?.piece === null &&
+        board[jumpIndex - 35]?.piece !== itemToMove?.piece &&
+        board[jumpIndex - 35]?.piece !== null &&
+        board[jumpIndex - 42]?.playable &&
+        board[jumpIndex - 42]?.piece === null 
+      ) {
+        doubleTakeArr.push(tempArrForJumps[index])
+        jumpDirection2nd.push('top right')
+        doubleTakeLanding.push(board[jumpIndex - 42])
+      }
+    }
+    // top left
+    function topLeft() {
+      if (
+        jumpDirection[index] !== 'bot right' &&
+        board[jumpIndex - 9]?.piece !== itemToMove?.piece &&
+        board[jumpIndex - 9]?.piece !== null &&
+        board[jumpIndex - 18]?.playable &&
+        board[jumpIndex - 18]?.piece === null
+      ) {
+        doubleTakeArr.push(tempArrForJumps[index])
+        jumpDirection2nd.push('top left')
+        doubleTakeLanding.push(board[jumpIndex - 18])
+      }
+      if (
+        jumpDirection[index] !== 'bot right' &&
+        board[jumpIndex - 9]?.playable &&
+        board[jumpIndex - 9]?.piece === null &&
+        board[jumpIndex - 18]?.piece !== itemToMove?.piece &&
+        board[jumpIndex - 18]?.piece !== null &&
+        board[jumpIndex - 27]?.playable &&
+        board[jumpIndex - 27]?.piece === null 
+      ) {
+        doubleTakeArr.push(tempArrForJumps[index])
+        jumpDirection2nd.push('top left')
+        doubleTakeLanding.push(board[jumpIndex - 27])
+      }
+      if (
+        jumpDirection[index] !== 'bot right' &&
+        board[jumpIndex - 9]?.playable &&
+        board[jumpIndex - 9]?.piece === null &&
+        board[jumpIndex - 18]?.playable &&
+        board[jumpIndex - 18]?.piece === null &&
+        board[jumpIndex - 27]?.piece !== itemToMove?.piece &&
+        board[jumpIndex - 27]?.piece !== null &&
+        board[jumpIndex - 36]?.playable &&
+        board[jumpIndex - 36]?.piece === null 
+      ) {
+        doubleTakeArr.push(tempArrForJumps[index])
+        jumpDirection2nd.push('top left')
+        doubleTakeLanding.push(board[jumpIndex - 36])
+      }
+      if (
+        jumpDirection[index] !== 'bot right' &&
+        board[jumpIndex - 9]?.playable &&
+        board[jumpIndex - 9]?.piece === null &&
+        board[jumpIndex - 18]?.playable &&
+        board[jumpIndex - 18]?.piece === null &&
+        board[jumpIndex - 27]?.playable &&
+        board[jumpIndex - 27]?.piece === null &&
+        board[jumpIndex - 36]?.piece !== itemToMove?.piece &&
+        board[jumpIndex - 36]?.piece !== null &&
+        board[jumpIndex - 45]?.playable &&
+        board[jumpIndex - 45]?.piece === null 
+      ) {
+        doubleTakeArr.push(tempArrForJumps[index])
+        jumpDirection2nd.push('top left')
+        doubleTakeLanding.push(board[jumpIndex - 45])
+      }
+      if (
+        jumpDirection[index] !== 'bot right' &&
+        board[jumpIndex - 9]?.playable &&
+        board[jumpIndex - 9]?.piece === null &&
+        board[jumpIndex - 18]?.playable &&
+        board[jumpIndex - 18]?.piece === null &&
+        board[jumpIndex - 27]?.playable &&
+        board[jumpIndex - 27]?.piece === null &&
+        board[jumpIndex - 36]?.playable &&
+        board[jumpIndex - 36]?.piece === null &&
+        board[jumpIndex - 45]?.piece !== itemToMove?.piece &&
+        board[jumpIndex - 45]?.piece !== null &&
+        board[jumpIndex - 54]?.playable &&
+        board[jumpIndex - 54]?.piece === null 
+      ) {
+        doubleTakeArr.push(tempArrForJumps[index])
+        jumpDirection2nd.push('top left')
+        doubleTakeLanding.push(board[jumpIndex - 54])
+      }
+      if (
+        jumpDirection[index] !== 'bot right' &&
+        board[jumpIndex - 9]?.playable &&
+        board[jumpIndex - 9]?.piece === null &&
+        board[jumpIndex - 18]?.playable &&
+        board[jumpIndex - 18]?.piece === null &&
+        board[jumpIndex - 27]?.playable &&
+        board[jumpIndex - 27]?.piece === null &&
+        board[jumpIndex - 36]?.playable &&
+        board[jumpIndex - 36]?.piece === null &&
+        board[jumpIndex - 45]?.playable &&
+        board[jumpIndex - 45]?.piece === null &&
+        board[jumpIndex - 54]?.piece !== itemToMove?.piece &&
+        board[jumpIndex - 54]?.piece !== null &&
+        board[jumpIndex - 63]?.playable &&
+        board[jumpIndex - 63]?.piece === null 
+      ) {
+        doubleTakeArr.push(tempArrForJumps[index])
+        jumpDirection2nd.push('top left')
+        doubleTakeLanding.push(board[jumpIndex - 63])
+      }
+    }
+    // bot left
+    function botLeft() {
+      if (
+        jumpDirection[index] !== 'top right' &&
+        board[jumpIndex + 7]?.piece !== itemToMove?.piece &&
+        board[jumpIndex + 7]?.piece !== null &&
+        board[jumpIndex + 14]?.playable &&
+        board[jumpIndex + 14]?.piece === null
+      ) {
+        doubleTakeArr.push(tempArrForJumps[index])
+        jumpDirection2nd.push('bot left')
+        doubleTakeLanding.push(board[jumpIndex + 14])
+      }
+      if (
+        jumpDirection[index] !== 'top right' &&
+        board[jumpIndex + 7]?.playable &&
+        board[jumpIndex + 7]?.piece === null &&
+        board[jumpIndex + 14]?.piece !== itemToMove?.piece &&
+        board[jumpIndex + 14]?.piece !== null &&
+        board[jumpIndex + 21]?.playable &&
+        board[jumpIndex + 21]?.piece === null 
+      ) {
+        doubleTakeArr.push(tempArrForJumps[index])
+        jumpDirection2nd.push('bot left')
+        doubleTakeLanding.push(board[jumpIndex + 21])
+      }
+      if (
+        jumpDirection[index] !== 'top right' &&
+        board[jumpIndex + 7]?.playable &&
+        board[jumpIndex + 7]?.piece === null &&
+        board[jumpIndex + 14]?.playable &&
+        board[jumpIndex + 14]?.piece === null &&
+        board[jumpIndex + 21]?.piece !== itemToMove?.piece &&
+        board[jumpIndex + 21]?.piece !== null &&
+        board[jumpIndex + 28]?.playable &&
+        board[jumpIndex + 28]?.piece === null 
+      ) {
+        doubleTakeArr.push(tempArrForJumps[index])
+        jumpDirection2nd.push('bot left')
+        doubleTakeLanding.push(board[jumpIndex + 28])
+      }
+      if (
+        jumpDirection[index] !== 'top right' &&
+        board[jumpIndex + 7]?.playable &&
+        board[jumpIndex + 7]?.piece === null &&
+        board[jumpIndex + 14]?.playable &&
+        board[jumpIndex + 14]?.piece === null &&
+        board[jumpIndex + 21]?.playable &&
+        board[jumpIndex + 21]?.piece === null &&
+        board[jumpIndex + 28]?.piece !== itemToMove?.piece &&
+        board[jumpIndex + 28]?.piece !== null &&
+        board[jumpIndex + 35]?.playable &&
+        board[jumpIndex + 35]?.piece === null 
+      ) {
+        doubleTakeArr.push(tempArrForJumps[index])
+        jumpDirection2nd.push('bot left')
+        doubleTakeLanding.push(board[jumpIndex + 35])
+      }
+      if (
+        jumpDirection[index] !== 'top right' &&
+        board[jumpIndex + 7]?.playable &&
+        board[jumpIndex + 7]?.piece === null &&
+        board[jumpIndex + 14]?.playable &&
+        board[jumpIndex + 14]?.piece === null &&
+        board[jumpIndex + 21]?.playable &&
+        board[jumpIndex + 21]?.piece === null &&
+        board[jumpIndex + 28]?.playable &&
+        board[jumpIndex + 28]?.piece === null &&
+        board[jumpIndex + 35]?.piece !== itemToMove?.piece &&
+        board[jumpIndex + 35]?.piece !== null &&
+        board[jumpIndex + 42]?.playable &&
+        board[jumpIndex + 42]?.piece === null 
+      ) {
+        doubleTakeArr.push(tempArrForJumps[index])
+        jumpDirection2nd.push('bot left')
+        doubleTakeLanding.push(board[jumpIndex + 42])
+      }
+    }
+    // bot right
+    function botRight() {
+      if (
+        jumpDirection[index] !== 'top left' &&
+        board[jumpIndex + 9]?.piece !== itemToMove?.piece &&
+        board[jumpIndex + 9]?.piece !== null &&
+        board[jumpIndex + 18]?.playable &&
+        board[jumpIndex + 18]?.piece === null
+      ) {
+        doubleTakeArr.push(tempArrForJumps[index])
+        jumpDirection2nd.push('bot right')
+        doubleTakeLanding.push(board[jumpIndex + 18])
+        
+      }
+      if (
+        jumpDirection[index] !== 'top left' &&
+        board[jumpIndex + 9]?.playable &&
+        board[jumpIndex + 9]?.piece === null &&
+        board[jumpIndex + 18]?.piece !== itemToMove?.piece &&
+        board[jumpIndex + 18]?.piece !== null &&
+        board[jumpIndex + 27]?.playable &&
+        board[jumpIndex + 27]?.piece === null 
+      ) {
+        doubleTakeArr.push(tempArrForJumps[index])
+        jumpDirection2nd.push('bot right')
+        doubleTakeLanding.push(board[jumpIndex + 27])
+      }
+      if (
+        jumpDirection[index] !== 'top left' &&
+        board[jumpIndex + 9]?.playable &&
+        board[jumpIndex + 9]?.piece === null &&
+        board[jumpIndex + 18]?.playable &&
+        board[jumpIndex + 18]?.piece === null &&
+        board[jumpIndex + 27]?.piece !== itemToMove?.piece &&
+        board[jumpIndex + 27]?.piece !== null &&
+        board[jumpIndex + 36]?.playable &&
+        board[jumpIndex + 36]?.piece === null 
+      ) {
+        doubleTakeArr.push(tempArrForJumps[index])
+        jumpDirection2nd.push('bot right')
+        doubleTakeLanding.push(board[jumpIndex + 36])
+      }
+      if (
+        jumpDirection[index] !== 'top left' &&
+        board[jumpIndex + 9]?.playable &&
+        board[jumpIndex + 9]?.piece === null &&
+        board[jumpIndex + 18]?.playable &&
+        board[jumpIndex + 18]?.piece === null &&
+        board[jumpIndex + 27]?.playable &&
+        board[jumpIndex + 27]?.piece === null &&
+        board[jumpIndex + 36]?.piece !== itemToMove?.piece &&
+        board[jumpIndex + 36]?.piece !== null &&
+        board[jumpIndex + 45]?.playable &&
+        board[jumpIndex + 45]?.piece === null 
+      ) {
+        doubleTakeArr.push(tempArrForJumps[index])
+        jumpDirection2nd.push('bot right')
+        doubleTakeLanding.push(board[jumpIndex + 45])
+      }
+      if (
+        jumpDirection[index] !== 'top left' &&
+        board[jumpIndex + 9]?.playable &&
+        board[jumpIndex + 9]?.piece === null &&
+        board[jumpIndex + 18]?.playable &&
+        board[jumpIndex + 18]?.piece === null &&
+        board[jumpIndex + 27]?.playable &&
+        board[jumpIndex + 27]?.piece === null &&
+        board[jumpIndex + 36]?.playable &&
+        board[jumpIndex + 36]?.piece === null &&
+        board[jumpIndex + 45]?.piece !== itemToMove?.piece &&
+        board[jumpIndex + 45]?.piece !== null &&
+        board[jumpIndex + 54]?.playable &&
+        board[jumpIndex + 54]?.piece === null 
+      ) {
+        doubleTakeArr.push(tempArrForJumps[index])
+        jumpDirection2nd.push('bot right')
+        doubleTakeLanding.push(board[jumpIndex + 54])
+      }
+      if (
+        jumpDirection[index] !== 'top left' &&
+        board[jumpIndex + 9]?.playable &&
+        board[jumpIndex + 9]?.piece === null &&
+        board[jumpIndex + 18]?.playable &&
+        board[jumpIndex + 18]?.piece === null &&
+        board[jumpIndex + 27]?.playable &&
+        board[jumpIndex + 27]?.piece === null &&
+        board[jumpIndex + 36]?.playable &&
+        board[jumpIndex + 36]?.piece === null &&
+        board[jumpIndex + 45]?.playable &&
+        board[jumpIndex + 45]?.piece === null &&
+        board[jumpIndex + 54]?.piece !== itemToMove?.piece &&
+        board[jumpIndex + 54]?.piece !== null &&
+        board[jumpIndex + 63]?.playable &&
+        board[jumpIndex + 63]?.piece === null 
+      ) {
+        doubleTakeArr.push(tempArrForJumps[index])
+        jumpDirection2nd.push('bot right')
+        doubleTakeLanding.push(board[jumpIndex + 63])
+      }
+    }
+    topRight();topLeft();botLeft();botRight()
+  })
+  console.log(doubleTakeArr, 'doubletakearr')
+
+}
+
+doubleTake()
+// ----------------------------------------------------
+// triple take checker
+function tripleTake() {
+  if (!doubleTakeArr.length) return
+  const jumpIndices = doubleTakeLanding.map((item, index) => {
+    return board.indexOf(item)
+  })
+  const arrToJump = doubleTakeLanding.map((item, index) => {
+        return {
           ...item,
           piece: itemToMove.piece,
-          highlighted: false, 
-          king: itemToMove.king, 
-          selected: false,
-          movable: true},
-          extraJump: 0
+          king: itemToMove.king,
+          highlighted: false,
+
         }
       })
-
-      const jumpPaths = {}
-      console.log(arrThatJumped, 'transformed jump')
-      arrThatJumped.forEach((item, index) => {
-        const jumpIndex = boardData.indexOf(tempArrForJumps[index])
-        function jumpChecker() {
-          let path = {}
-         // top right ------------------------
-          function topRight() {
-            if (
-          boardData[jumpIndex - 7]?.piece !== null && boardData[jumpIndex - 7]?.piece !== arrThatJumped[index].piece &&
-          boardData[jumpIndex - 14]?.playable && boardData[jumpIndex - 14]?.piece === null
-        ) {
-          if (path.hasOwnProperty(jumpIndex)) {
-            path[jumpIndex].push(jumpIndex - 14)
-          } else {
-            path[jumpIndex] = [jumpIndex - 14]
-          }
-          
-        }
-        if (
-          boardData[jumpIndex - 7]?.playable && boardData[jumpIndex - 7]?.piece === null &&
-          boardData[jumpIndex - 14]?.piece !== null && boardData[jumpIndex - 14]?.piece !== arrThatJumped[index].piece &&
-          boardData[jumpIndex - 21]?.playable && boardData[jumpIndex - 21]?.piece === null
-        ) {
-          if (path.hasOwnProperty(jumpIndex)) {
-            path[jumpIndex].push(jumpIndex - 21)
-          } else {
-            path[jumpIndex] = [jumpIndex - 21]
-          }
-          
-        }
-        if (
-          boardData[jumpIndex - 7]?.playable && boardData[jumpIndex - 7]?.piece === null &&
-          boardData[jumpIndex - 14]?.playable && boardData[jumpIndex - 14]?.piece === null &&
-          boardData[jumpIndex - 21]?.piece !== null && boardData[jumpIndex - 21]?.piece !== arrThatJumped[index].piece &&
-          boardData[jumpIndex - 28]?.playable && boardData[jumpIndex - 28]?.piece === null
-        ) {
-          if (path.hasOwnProperty(jumpIndex)) {
-            path[jumpIndex].push(jumpIndex - 28)
-          } else {
-            path[jumpIndex] = [jumpIndex - 28]
-          }
-          
-        }
-        if (
-          boardData[jumpIndex - 7]?.playable && boardData[jumpIndex - 7]?.piece === null &&
-          boardData[jumpIndex - 14]?.playable && boardData[jumpIndex - 14]?.piece === null &&
-          boardData[jumpIndex - 21]?.playable && boardData[jumpIndex - 21]?.piece === null &&
-          boardData[jumpIndex - 28]?.piece !== null && boardData[jumpIndex - 28]?.piece !== arrThatJumped[index].piece &&
-          boardData[jumpIndex - 35]?.playable && boardData[jumpIndex - 35]?.piece === null
-        ) {
-          if (path.hasOwnProperty(jumpIndex)) {
-            path[jumpIndex].push(jumpIndex - 35)
-          } else {
-            path[jumpIndex] = [jumpIndex - 35]
-          }
-          
-        }
-        if (
-          boardData[jumpIndex - 7]?.playable && boardData[jumpIndex - 7]?.piece === null &&
-          boardData[jumpIndex - 14]?.playable && boardData[jumpIndex - 14]?.piece === null &&
-          boardData[jumpIndex - 21]?.playable && boardData[jumpIndex - 21]?.piece === null &&
-          boardData[jumpIndex - 28]?.playable && boardData[jumpIndex - 28]?.piece === null &&
-          boardData[jumpIndex - 35]?.piece !== null && boardData[jumpIndex - 35]?.piece !== arrThatJumped[index].piece &&
-          boardData[jumpIndex - 42]?.playable && boardData[jumpIndex - 42]?.piece === null
-        ) {
-          if (path.hasOwnProperty(jumpIndex)) {
-            path[jumpIndex].push(jumpIndex - 42)
-          } else {
-            path[jumpIndex] = [jumpIndex - 42]
-          }
-          
-        }
-          }
-          // bot left -------------------
-          function botLeft() {
-            if (
-          boardData[jumpIndex + 7]?.piece !== null && boardData[jumpIndex + 7]?.piece !== arrThatJumped[index].piece &&
-          boardData[jumpIndex + 14]?.playable && boardData[jumpIndex + 14]?.piece === null
-        ) {
-          if (path.hasOwnProperty(jumpIndex)) {
-            path[jumpIndex].push(jumpIndex + 14)
-          } else {
-            path[jumpIndex] = [jumpIndex + 14]
-          }
-          
-        }
-        if (
-          boardData[jumpIndex + 7]?.playable && boardData[jumpIndex + 7]?.piece === null &&
-          boardData[jumpIndex + 14]?.piece !== null && boardData[jumpIndex + 14]?.piece !== arrThatJumped[index].piece &&
-          boardData[jumpIndex + 21]?.playable && boardData[jumpIndex + 21]?.piece === null
-        ) {
-          if (path.hasOwnProperty(jumpIndex)) {
-            path[jumpIndex].push(jumpIndex + 21)
-          } else {
-            path[jumpIndex] = [jumpIndex + 21]
-          }
-          
-        }
-        if (
-          boardData[jumpIndex + 7]?.playable && boardData[jumpIndex + 7]?.piece === null &&
-          boardData[jumpIndex + 14]?.playable && boardData[jumpIndex + 14]?.piece === null &&
-          boardData[jumpIndex + 21]?.piece !== null && boardData[jumpIndex + 21]?.piece !== arrThatJumped[index].piece &&
-          boardData[jumpIndex + 28]?.playable && boardData[jumpIndex + 28]?.piece === null
-        ) {
-          if (path.hasOwnProperty(jumpIndex)) {
-            path[jumpIndex].push(jumpIndex + 28)
-          } else {
-            path[jumpIndex] = [jumpIndex + 28]
-          }
-          
-        }
-        if (
-          boardData[jumpIndex + 7]?.playable && boardData[jumpIndex + 7]?.piece === null &&
-          boardData[jumpIndex + 14]?.playable && boardData[jumpIndex + 14]?.piece === null &&
-          boardData[jumpIndex + 21]?.playable && boardData[jumpIndex + 21]?.piece === null &&
-          boardData[jumpIndex + 28]?.piece !== null && boardData[jumpIndex + 28]?.piece !== arrThatJumped[index].piece &&
-          boardData[jumpIndex + 35]?.playable && boardData[jumpIndex + 35]?.piece === null
-        ) {
-          if (path.hasOwnProperty(jumpIndex)) {
-            path[jumpIndex].push(jumpIndex + 35)
-          } else {
-            path[jumpIndex] = [jumpIndex + 35]
-          }
-          
-        }
-        if (
-          boardData[jumpIndex + 7]?.playable && boardData[jumpIndex + 7]?.piece === null &&
-          boardData[jumpIndex + 14]?.playable && boardData[jumpIndex + 14]?.piece === null &&
-          boardData[jumpIndex + 21]?.playable && boardData[jumpIndex + 21]?.piece === null &&
-          boardData[jumpIndex + 28]?.playable && boardData[jumpIndex + 28]?.piece === null &&
-          boardData[jumpIndex + 35]?.piece !== null && boardData[jumpIndex + 35]?.piece !== arrThatJumped[index].piece &&
-          boardData[jumpIndex + 42]?.playable && boardData[jumpIndex + 42]?.piece === null
-        ) {
-          if (path.hasOwnProperty(jumpIndex)) {
-            path[jumpIndex].push(jumpIndex + 42)
-          } else {
-            path[jumpIndex] = [jumpIndex + 42]
-          }
-          
-        }
-          }
-        // top left
-          function topLeft() {
-          if (
-          boardData[jumpIndex - 9]?.piece !== null && boardData[jumpIndex - 9]?.piece !== arrThatJumped[index].piece &&
-          boardData[jumpIndex - 18]?.playable && boardData[jumpIndex - 18]?.piece === null
-        ) {
-          if (path.hasOwnProperty(jumpIndex)) {
-            path[jumpIndex].push(jumpIndex - 18)
-          } else {
-            path[jumpIndex] = [jumpIndex - 18]
-          }
-          
-        }
-        if (
-          boardData[jumpIndex - 9]?.playable && boardData[jumpIndex - 9]?.piece === null &&
-          boardData[jumpIndex - 18]?.piece !== null && boardData[jumpIndex - 18]?.piece !== arrThatJumped[index].piece &&
-          boardData[jumpIndex - 27]?.playable && boardData[jumpIndex - 27]?.piece === null
-        ) {
-          if (path.hasOwnProperty(jumpIndex)) {
-            path[jumpIndex].push(jumpIndex - 27)
-          } else {
-            path[jumpIndex] = [jumpIndex - 27]
-          }
-          
-        }
-        if (
-          boardData[jumpIndex - 9]?.playable && boardData[jumpIndex - 9]?.piece === null &&
-          boardData[jumpIndex - 18]?.playable && boardData[jumpIndex - 18]?.piece === null &&
-          boardData[jumpIndex - 27]?.piece !== null && boardData[jumpIndex - 27]?.piece !== arrThatJumped[index].piece &&
-          boardData[jumpIndex - 36]?.playable && boardData[jumpIndex - 36]?.piece === null
-        ) {
-          if (path.hasOwnProperty(jumpIndex)) {
-            path[jumpIndex].push(jumpIndex - 36)
-          } else {
-            path[jumpIndex] = [jumpIndex - 36]
-          }
-          
-        }
-        if (
-          boardData[jumpIndex - 9]?.playable && boardData[jumpIndex - 9]?.piece === null &&
-          boardData[jumpIndex - 18]?.playable && boardData[jumpIndex - 18]?.piece === null &&
-          boardData[jumpIndex - 27]?.playable && boardData[jumpIndex - 27]?.piece === null &&
-          boardData[jumpIndex - 36]?.piece !== null && boardData[jumpIndex - 36]?.piece !== arrThatJumped[index].piece &&
-          boardData[jumpIndex - 45]?.playable && boardData[jumpIndex - 45]?.piece === null
-        ) {
-          if (path.hasOwnProperty(jumpIndex)) {
-            path[jumpIndex].push(jumpIndex - 45)
-          } else {
-            path[jumpIndex] = [jumpIndex - 45]
-          }
-          
-        }
-        if (
-          boardData[jumpIndex - 9]?.playable && boardData[jumpIndex - 9]?.piece === null &&
-          boardData[jumpIndex - 18]?.playable && boardData[jumpIndex - 18]?.piece === null &&
-          boardData[jumpIndex - 27]?.playable && boardData[jumpIndex - 27]?.piece === null &&
-          boardData[jumpIndex - 36]?.playable && boardData[jumpIndex - 36]?.piece === null &&
-          boardData[jumpIndex - 45]?.piece !== null && boardData[jumpIndex - 45]?.piece !== arrThatJumped[index].piece &&
-          boardData[jumpIndex - 54]?.playable && boardData[jumpIndex - 54]?.piece === null
-        ) {
-          if (path.hasOwnProperty(jumpIndex)) {
-            path[jumpIndex].push(jumpIndex - 54)
-          } else {
-            path[jumpIndex] = [jumpIndex - 54]
-          }
-          
-        }
-        if (
-          boardData[jumpIndex - 9]?.playable && boardData[jumpIndex - 9]?.piece === null &&
-          boardData[jumpIndex - 18]?.playable && boardData[jumpIndex - 18]?.piece === null &&
-          boardData[jumpIndex - 27]?.playable && boardData[jumpIndex - 27]?.piece === null &&
-          boardData[jumpIndex - 36]?.playable && boardData[jumpIndex - 36]?.piece === null &&
-          boardData[jumpIndex - 45]?.playable && boardData[jumpIndex - 45]?.piece === null &&
-          boardData[jumpIndex - 54]?.piece !== null && boardData[jumpIndex - 54]?.piece !== arrThatJumped[index].piece &&
-          boardData[jumpIndex - 63]?.playable && boardData[jumpIndex - 63]?.piece === null
-        ) {
-          if (path.hasOwnProperty(jumpIndex)) {
-            path[jumpIndex].push(jumpIndex - 63)
-          } else {
-            path[jumpIndex] = [jumpIndex - 63]
-          }
-          
-        }
-          }      
-        // bot right
-          function botRight() {
-            if (
-          boardData[jumpIndex + 9]?.piece !== null && boardData[jumpIndex + 9]?.piece !== arrThatJumped[index].piece &&
-          boardData[jumpIndex + 18]?.playable && boardData[jumpIndex + 18]?.piece === null
-        ) {
-          if (path.hasOwnProperty(jumpIndex)) {
-            path[jumpIndex].push(jumpIndex + 18)
-          } else {
-            path[jumpIndex] = [jumpIndex + 18]
-          }
-          
-        }
-        if (
-          boardData[jumpIndex + 9]?.playable && boardData[jumpIndex + 9]?.piece === null &&
-          boardData[jumpIndex + 18]?.piece !== null && boardData[jumpIndex + 18]?.piece !== arrThatJumped[index].piece &&
-          boardData[jumpIndex + 27]?.playable && boardData[jumpIndex + 27]?.piece === null
-        ) {
-          if (path.hasOwnProperty(jumpIndex)) {
-            path[jumpIndex].push(jumpIndex + 27)
-          } else {
-            path[jumpIndex] = [jumpIndex + 27]
-          }
-          
-        }
-        if (
-          boardData[jumpIndex + 9]?.playable && boardData[jumpIndex + 9]?.piece === null &&
-          boardData[jumpIndex + 18]?.playable && boardData[jumpIndex + 18]?.piece === null &&
-          boardData[jumpIndex + 27]?.piece !== null && boardData[jumpIndex + 27]?.piece !== arrThatJumped[index].piece &&
-          boardData[jumpIndex + 36]?.playable && boardData[jumpIndex + 36]?.piece === null
-        ) {
-          if (path.hasOwnProperty(jumpIndex)) {
-            path[jumpIndex].push(jumpIndex + 36)
-          } else {
-            path[jumpIndex] = [jumpIndex + 36]
-          }
-          
-        }
-        if (
-          boardData[jumpIndex + 9]?.playable && boardData[jumpIndex + 9]?.piece === null &&
-          boardData[jumpIndex + 18]?.playable && boardData[jumpIndex + 18]?.piece === null &&
-          boardData[jumpIndex + 27]?.playable && boardData[jumpIndex + 27]?.piece === null &&
-          boardData[jumpIndex + 36]?.piece !== null && boardData[jumpIndex + 36]?.piece !== arrThatJumped[index].piece &&
-          boardData[jumpIndex + 45]?.playable && boardData[jumpIndex + 45]?.piece === null
-        ) {
-          if (path.hasOwnProperty(jumpIndex)) {
-            path[jumpIndex].push(jumpIndex + 45)
-          } else {
-            path[jumpIndex] = [jumpIndex + 45]
-          }
-          
-        }
-        if (
-          boardData[jumpIndex + 9]?.playable && boardData[jumpIndex + 9]?.piece === null &&
-          boardData[jumpIndex + 18]?.playable && boardData[jumpIndex + 18]?.piece === null &&
-          boardData[jumpIndex + 27]?.playable && boardData[jumpIndex + 27]?.piece === null &&
-          boardData[jumpIndex + 36]?.playable && boardData[jumpIndex + 36]?.piece === null &&
-          boardData[jumpIndex + 45]?.piece !== null && boardData[jumpIndex + 45]?.piece !== arrThatJumped[index].piece &&
-          boardData[jumpIndex + 54]?.playable && boardData[jumpIndex + 54]?.piece === null
-        ) {
-          if (path.hasOwnProperty(jumpIndex)) {
-            path[jumpIndex].push(jumpIndex + 54)
-          } else {
-            path[jumpIndex] = [jumpIndex + 54]
-          }
-          
-        }
-        if (
-          boardData[jumpIndex + 9]?.playable && boardData[jumpIndex + 9]?.piece === null &&
-          boardData[jumpIndex + 18]?.playable && boardData[jumpIndex + 18]?.piece === null &&
-          boardData[jumpIndex + 27]?.playable && boardData[jumpIndex + 27]?.piece === null &&
-          boardData[jumpIndex + 36]?.playable && boardData[jumpIndex + 36]?.piece === null &&
-          boardData[jumpIndex + 45]?.playable && boardData[jumpIndex + 45]?.piece === null &&
-          boardData[jumpIndex + 54]?.piece !== null && boardData[jumpIndex + 54]?.piece !== arrThatJumped[index].piece &&
-          boardData[jumpIndex + 63]?.playable && boardData[jumpIndex + 63]?.piece === null
-        ) {
-          if (path.hasOwnProperty(jumpIndex)) {
-            path[jumpIndex].push(jumpIndex + 63)
-          } else {
-            path[jumpIndex] = [jumpIndex + 63]
-          }
-          
-        }
-          }
-          topRight();topLeft();botRight();botLeft()
-          console.log(path)
-        }
-        jumpChecker()
+  
+console.log(jumpIndices, 'jump indices')
+console.log(arrToJump, 'arrTojump')
+console.log(jumpDirection2nd, 'jump direction 2nd')
+  arrToJump.forEach((item, index) => {
+    const jumpIndex = jumpIndices[index]
+    if (itemToMove.king) {
+      function topLeft() {
+      
+      if (
+        jumpDirection2nd[index] !== 'bot right' &&
+        board[jumpIndex - 9]?.piece !== itemToMove?.piece &&
+        board[jumpIndex - 9]?.piece !== null &&
+        board[jumpIndex - 18]?.playable &&
+        board[jumpIndex - 18]?.piece === null
+      ) {
+        tripleTakeArr.push(tempArrForJumps[index])
         
+      }
+      if (
+        jumpDirection2nd[index] !== 'bot right' &&
+        board[jumpIndex - 9]?.playable &&
+        board[jumpIndex - 9]?.piece === null &&
+        board[jumpIndex - 18]?.piece !== itemToMove?.piece &&
+        board[jumpIndex - 18]?.piece !== null &&
+        board[jumpIndex - 27]?.playable &&
+        board[jumpIndex - 27]?.piece === null 
+      ) {
+        tripleTakeArr.push(tempArrForJumps[index])
         
+      }
+      if (
+        jumpDirection2nd[index] !== 'bot right' &&
+        board[jumpIndex - 9]?.playable &&
+        board[jumpIndex - 9]?.piece === null &&
+        board[jumpIndex - 18]?.playable &&
+        board[jumpIndex - 18]?.piece === null &&
+        board[jumpIndex - 27]?.piece !== itemToMove?.piece &&
+        board[jumpIndex - 27]?.piece !== null &&
+        board[jumpIndex - 36]?.playable &&
+        board[jumpIndex - 36]?.piece === null 
+      ) {
+        tripleTakeArr.push(tempArrForJumps[index])
+        
+      }
+      if (
+        jumpDirection2nd[index] !== 'bot right' &&
+        board[jumpIndex - 9]?.playable &&
+        board[jumpIndex - 9]?.piece === null &&
+        board[jumpIndex - 18]?.playable &&
+        board[jumpIndex - 18]?.piece === null &&
+        board[jumpIndex - 27]?.playable &&
+        board[jumpIndex - 27]?.piece === null &&
+        board[jumpIndex - 36]?.piece !== itemToMove?.piece &&
+        board[jumpIndex - 36]?.piece !== null &&
+        board[jumpIndex - 45]?.playable &&
+        board[jumpIndex - 45]?.piece === null 
+      ) {
+        tripleTakeArr.push(tempArrForJumps[index])
+        
+      }
+      if (
+        jumpDirection2nd[index] !== 'bot right' &&
+        board[jumpIndex - 9]?.playable &&
+        board[jumpIndex - 9]?.piece === null &&
+        board[jumpIndex - 18]?.playable &&
+        board[jumpIndex - 18]?.piece === null &&
+        board[jumpIndex - 27]?.playable &&
+        board[jumpIndex - 27]?.piece === null &&
+        board[jumpIndex - 36]?.playable &&
+        board[jumpIndex - 36]?.piece === null &&
+        board[jumpIndex - 45]?.piece !== itemToMove?.piece &&
+        board[jumpIndex - 45]?.piece !== null &&
+        board[jumpIndex - 54]?.playable &&
+        board[jumpIndex - 54]?.piece === null 
+      ) {
+        tripleTakeArr.push(tempArrForJumps[index])
+        
+      }
+      if (
+        jumpDirection2nd[index] !== 'bot right' &&
+        board[jumpIndex - 9]?.playable &&
+        board[jumpIndex - 9]?.piece === null &&
+        board[jumpIndex - 18]?.playable &&
+        board[jumpIndex - 18]?.piece === null &&
+        board[jumpIndex - 27]?.playable &&
+        board[jumpIndex - 27]?.piece === null &&
+        board[jumpIndex - 36]?.playable &&
+        board[jumpIndex - 36]?.piece === null &&
+        board[jumpIndex - 45]?.playable &&
+        board[jumpIndex - 45]?.piece === null &&
+        board[jumpIndex - 54]?.piece !== itemToMove?.piece &&
+        board[jumpIndex - 54]?.piece !== null &&
+        board[jumpIndex - 63]?.playable &&
+        board[jumpIndex - 63]?.piece === null 
+      ) {
+        tripleTakeArr.push(tempArrForJumps[index])
+        
+      }
+      }
+      function topRight() {
+      if (
+        jumpDirection2nd[index] !== 'bot left' &&
+        board[jumpIndex - 7]?.piece !== itemToMove?.piece &&
+        board[jumpIndex - 7]?.piece !== null &&
+        board[jumpIndex - 14]?.playable &&
+        board[jumpIndex - 14]?.piece === null
+      ) {
 
-
-      })
-
+        tripleTakeArr.push(tempArrForJumps[index])
+        
+      }
+      if (
+        jumpDirection2nd[index] !== 'bot left' &&
+        board[jumpIndex - 7]?.playable &&
+        board[jumpIndex - 7]?.piece === null &&
+        board[jumpIndex - 14]?.piece !== itemToMove?.piece &&
+        board[jumpIndex - 14]?.piece !== null &&
+        board[jumpIndex - 21]?.playable &&
+        board[jumpIndex - 21]?.piece === null 
+      ) {
+        tripleTakeArr.push(tempArrForJumps[index])
+        
+      }
+      if (
+        jumpDirection2nd[index] !== 'bot left' &&
+        board[jumpIndex - 7]?.playable &&
+        board[jumpIndex - 7]?.piece === null &&
+        board[jumpIndex - 14]?.playable &&
+        board[jumpIndex - 14]?.piece === null &&
+        board[jumpIndex - 21]?.piece !== itemToMove?.piece &&
+        board[jumpIndex - 21]?.piece !== null &&
+        board[jumpIndex - 28]?.playable &&
+        board[jumpIndex - 28]?.piece === null 
+      ) {
+        tripleTakeArr.push(tempArrForJumps[index])
+        
+      }
+      if (
+        jumpDirection2nd[index] !== 'bot left' &&
+        board[jumpIndex - 7]?.playable &&
+        board[jumpIndex - 7]?.piece === null &&
+        board[jumpIndex - 14]?.playable &&
+        board[jumpIndex - 14]?.piece === null &&
+        board[jumpIndex - 21]?.playable &&
+        board[jumpIndex - 21]?.piece === null &&
+        board[jumpIndex - 28]?.piece !== itemToMove?.piece &&
+        board[jumpIndex - 28]?.piece !== null &&
+        board[jumpIndex - 35]?.playable &&
+        board[jumpIndex - 35]?.piece === null 
+      ) {
+        tripleTakeArr.push(tempArrForJumps[index])
+        
+      }
+      if (
+        jumpDirection2nd[index] !== 'bot left' &&
+        board[jumpIndex - 7]?.playable &&
+        board[jumpIndex - 7]?.piece === null &&
+        board[jumpIndex - 14]?.playable &&
+        board[jumpIndex - 14]?.piece === null &&
+        board[jumpIndex - 21]?.playable &&
+        board[jumpIndex - 21]?.piece === null &&
+        board[jumpIndex - 28]?.playable &&
+        board[jumpIndex - 28]?.piece === null &&
+        board[jumpIndex - 35]?.piece !== itemToMove?.piece &&
+        board[jumpIndex - 35]?.piece !== null &&
+        board[jumpIndex - 42]?.playable &&
+        board[jumpIndex - 42]?.piece === null 
+      ) {
+        tripleTakeArr.push(tempArrForJumps[index])
+        
+      }
+      }
+      function botLeft () {
+      if (
+        jumpDirection2nd[index] !== 'top right' &&
+        board[jumpIndex + 7]?.piece !== itemToMove?.piece &&
+        board[jumpIndex + 7]?.piece !== null &&
+        board[jumpIndex + 14]?.playable &&
+        board[jumpIndex + 14]?.piece === null
+      ) {
+        tripleTakeArr.push(tempArrForJumps[index])
+        
+      }
+      if (
+        jumpDirection2nd[index] !== 'top right' &&
+        board[jumpIndex + 7]?.playable &&
+        board[jumpIndex + 7]?.piece === null &&
+        board[jumpIndex + 14]?.piece !== itemToMove?.piece &&
+        board[jumpIndex + 14]?.piece !== null &&
+        board[jumpIndex + 21]?.playable &&
+        board[jumpIndex + 21]?.piece === null 
+      ) {
+        tripleTakeArr.push(tempArrForJumps[index])
+        
+      }
+      if (
+        jumpDirection2nd[index] !== 'top right' &&
+        board[jumpIndex + 7]?.playable &&
+        board[jumpIndex + 7]?.piece === null &&
+        board[jumpIndex + 14]?.playable &&
+        board[jumpIndex + 14]?.piece === null &&
+        board[jumpIndex + 21]?.piece !== itemToMove?.piece &&
+        board[jumpIndex + 21]?.piece !== null &&
+        board[jumpIndex + 28]?.playable &&
+        board[jumpIndex + 28]?.piece === null 
+      ) {
+        tripleTakeArr.push(tempArrForJumps[index])
+        
+      }
+      if (
+        jumpDirection2nd[index] !== 'top right' &&
+        board[jumpIndex + 7]?.playable &&
+        board[jumpIndex + 7]?.piece === null &&
+        board[jumpIndex + 14]?.playable &&
+        board[jumpIndex + 14]?.piece === null &&
+        board[jumpIndex + 21]?.playable &&
+        board[jumpIndex + 21]?.piece === null &&
+        board[jumpIndex + 28]?.piece !== itemToMove?.piece &&
+        board[jumpIndex + 28]?.piece !== null &&
+        board[jumpIndex + 35]?.playable &&
+        board[jumpIndex + 35]?.piece === null 
+      ) {
+        tripleTakeArr.push(tempArrForJumps[index])
+        
+      }
+      if (
+        jumpDirection2nd[index] !== 'top right' &&
+        board[jumpIndex + 7]?.playable &&
+        board[jumpIndex + 7]?.piece === null &&
+        board[jumpIndex + 14]?.playable &&
+        board[jumpIndex + 14]?.piece === null &&
+        board[jumpIndex + 21]?.playable &&
+        board[jumpIndex + 21]?.piece === null &&
+        board[jumpIndex + 28]?.playable &&
+        board[jumpIndex + 28]?.piece === null &&
+        board[jumpIndex + 35]?.piece !== itemToMove?.piece &&
+        board[jumpIndex + 35]?.piece !== null &&
+        board[jumpIndex + 42]?.playable &&
+        board[jumpIndex + 42]?.piece === null 
+      ) {
+        tripleTakeArr.push(tempArrForJumps[index])
+        
+      }
+      }
+      
+      function botRight() {
+      if (
+        jumpDirection2nd[index] !== 'top left' &&
+        board[jumpIndex + 9]?.piece !== itemToMove?.piece &&
+        board[jumpIndex + 9]?.piece !== null &&
+        board[jumpIndex + 18]?.playable &&
+        board[jumpIndex + 18]?.piece === null
+      ) {
+        tripleTakeArr.push(tempArrForJumps[index])
+        
+      }
+      if (
+        jumpDirection2nd[index] !== 'top left' &&
+        board[jumpIndex + 9]?.playable &&
+        board[jumpIndex + 9]?.piece === null &&
+        board[jumpIndex + 18]?.piece !== itemToMove?.piece &&
+        board[jumpIndex + 18]?.piece !== null &&
+        board[jumpIndex + 27]?.playable &&
+        board[jumpIndex + 27]?.piece === null 
+      ) {
+        tripleTakeArr.push(tempArrForJumps[index])
+        
+      }
+      if (
+        jumpDirection2nd[index] !== 'top left' &&
+        board[jumpIndex + 9]?.playable &&
+        board[jumpIndex + 9]?.piece === null &&
+        board[jumpIndex + 18]?.playable &&
+        board[jumpIndex + 18]?.piece === null &&
+        board[jumpIndex + 27]?.piece !== itemToMove?.piece &&
+        board[jumpIndex + 27]?.piece !== null &&
+        board[jumpIndex + 36]?.playable &&
+        board[jumpIndex + 36]?.piece === null 
+      ) {
+        tripleTakeArr.push(tempArrForJumps[index])
+        
+      }
+      if (
+        jumpDirection2nd[index] !== 'top left' &&
+        board[jumpIndex + 9]?.playable &&
+        board[jumpIndex + 9]?.piece === null &&
+        board[jumpIndex + 18]?.playable &&
+        board[jumpIndex + 18]?.piece === null &&
+        board[jumpIndex + 27]?.playable &&
+        board[jumpIndex + 27]?.piece === null &&
+        board[jumpIndex + 36]?.piece !== itemToMove?.piece &&
+        board[jumpIndex + 36]?.piece !== null &&
+        board[jumpIndex + 45]?.playable &&
+        board[jumpIndex + 45]?.piece === null 
+      ) {
+        tripleTakeArr.push(tempArrForJumps[index])
+        
+      }
+      if (
+        jumpDirection2nd[index] !== 'top left' &&
+        board[jumpIndex + 9]?.playable &&
+        board[jumpIndex + 9]?.piece === null &&
+        board[jumpIndex + 18]?.playable &&
+        board[jumpIndex + 18]?.piece === null &&
+        board[jumpIndex + 27]?.playable &&
+        board[jumpIndex + 27]?.piece === null &&
+        board[jumpIndex + 36]?.playable &&
+        board[jumpIndex + 36]?.piece === null &&
+        board[jumpIndex + 45]?.piece !== itemToMove?.piece &&
+        board[jumpIndex + 45]?.piece !== null &&
+        board[jumpIndex + 54]?.playable &&
+        board[jumpIndex + 54]?.piece === null 
+      ) {
+        tripleTakeArr.push(tempArrForJumps[index])
+        
+      }
+      if (
+        jumpDirection2nd[index] !== 'top left' &&
+        board[jumpIndex + 9]?.playable &&
+        board[jumpIndex + 9]?.piece === null &&
+        board[jumpIndex + 18]?.playable &&
+        board[jumpIndex + 18]?.piece === null &&
+        board[jumpIndex + 27]?.playable &&
+        board[jumpIndex + 27]?.piece === null &&
+        board[jumpIndex + 36]?.playable &&
+        board[jumpIndex + 36]?.piece === null &&
+        board[jumpIndex + 45]?.playable &&
+        board[jumpIndex + 45]?.piece === null &&
+        board[jumpIndex + 54]?.piece !== itemToMove?.piece &&
+        board[jumpIndex + 54]?.piece !== null &&
+        board[jumpIndex + 63]?.playable &&
+        board[jumpIndex + 63]?.piece === null 
+      ) {
+        tripleTakeArr.push(tempArrForJumps[index])
+        
+      }
+      }
+      
+      
+      
+      
+      
+    topRight()
+    botLeft()
+    topLeft()
+    botRight()
     }
+  })
 
-    filterJumps()
+  console.log(tripleTakeArr, 'tripleTakeArr')
+}
 
+console.log(doubleTakeLanding, 'landing')
 
-
-    console.log(tempArrForJumps, 'jumps')
-    // console.log(tempArrForMoves, 'moves')
+tripleTake()
+// ----------------------------------------------------
+if (doubleTakeArr.length) tempArrForJumps = doubleTakeArr
+if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
     
     const tempboard = board.map((item, index) => {
       if (!item.playable) return item
@@ -1616,17 +2157,13 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
 
     // if no additional piece to be take this will end the turn of the player
     if (!forceFeed.length) {
-      'tihs worked piece to move is now null'
+  
     }
     setPieceToMove(null)
     // setPlayerOneTurn(!playerOneTurn)
     setForceCapture(false)
   }
 
-
-  useEffect(() => {
-    console.log(pieceToMove)
-  }, [pieceToMove])
 
 
   // player chips counter
