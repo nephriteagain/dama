@@ -131,8 +131,9 @@ function Gameboard() {
       }
       firstJump()
       
-      
-      }
+    }
+
+
       else if (item.king) {
         // top right ----------------------
         if (
@@ -395,7 +396,12 @@ function Gameboard() {
           
       }
       
+      
       })
+
+      console.log(jumpedArr, 'first')
+      console.log(jumpDirection, 'direction')
+
 // second jump --------------------------------------------------------------------
     function doubleTake() {
       if (!jumpedArr.length) return
@@ -440,36 +446,34 @@ function Gameboard() {
             }
           // bot right
           if (
-            boardData[jumpIndex + 14]?.playable &&
-            boardData[jumpIndex + 14]?.piece === null &&
-            boardData[jumpIndex + 7]?.piece !== null &&
-            boardData[jumpIndex + 7]?.piece !== itemToMove?.piece &&
+            boardData[jumpIndex + 18]?.playable &&
+            boardData[jumpIndex + 18]?.piece === null &&
+            boardData[jumpIndex + 9]?.piece !== null &&
+            boardData[jumpIndex + 9]?.piece !== itemToMove?.piece &&
             jumpDirection[index] !== 'top left'
             ) {
-              jumpedArr2nd.push(boardData[boardData[jumpIndex + 14]])
+              jumpedArr2nd.push(boardData[jumpIndex + 18])
               jumpDirection2nd.push('bot right')
               forceFeed2nd.push(forceFeed[index])
             } 
           // bot left
           if (
-            boardData[jumpIndex + 18]?.playable &&
-            boardData[jumpIndex + 18]?.piece === null &&
-            boardData[jumpIndex + 9]?.piece !== null &&
-            boardData[jumpIndex + 9]?.piece !== itemToMove?.piece &&
+            boardData[jumpIndex + 14]?.playable &&
+            boardData[jumpIndex + 14]?.piece === null &&
+            boardData[jumpIndex + 7]?.piece !== null &&
+            boardData[jumpIndex + 7]?.piece !== itemToMove?.piece &&
             jumpDirection[index] !== 'top right'
             ) {
-              jumpedArr2nd.push(boardData[jumpIndex + 18])
+              jumpedArr2nd.push(boardData[jumpIndex + 14])
               jumpDirection2nd.push('bot left')
               forceFeed2nd.push(forceFeed[index])
-
             }
       }
       })
     }
     doubleTake()
+    console.log(jumpedArr2nd, 'second')
 
-    console.log(jumpDirection2nd)
-    
     if (forceFeed2nd.length) forceFeed = forceFeed2nd
     
     // -----------------------------------------------------------------------------------
@@ -527,10 +531,10 @@ function tripleTake() {
           }
           // bot right
           else if (
-            boardData[jumpIndex - 9].piece !== null &&
-            boardData[jumpIndex - 9] !== item.piece &&
-            boardData[jumpIndex - 18].playable &&
-            boardData[jumpIndex - 18].piece === null &&
+            boardData[jumpIndex + 9].piece !== null &&
+            boardData[jumpIndex + 9] !== item.piece &&
+            boardData[jumpIndex + 18].playable &&
+            boardData[jumpIndex + 18].piece === null &&
             jumpDirection2nd[index] !== 'top left'
           ) {
             forceFeed3rd.push(forceFeed2nd[index])
