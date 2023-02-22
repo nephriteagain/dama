@@ -64,13 +64,24 @@ function Gameboard() {
     if (pieceToMove === null) setPlayerOneTurn(!playerOneTurn)
     if (forceCapture) return //this wont rerun again multiple times
     let forceFeed = []
+    let forceFeed2nd = []
+    let forceFeed3rd = []
+    let jumpedArr = []
+    let jumpDirection = []
+    let jumpedArr2nd = []
+    let jumpDirection2nd = []
+    let jumpedArr3rd = []
+
+    
+
 
     boardData.forEach((item, index) => {
       if (!item.playable) return
       // regular pawn only
       else if (!item.king) {
+      function firstJump() {
         // top right jump
-      if (
+        if (
         item.piece !== null &&
         boardData[index - 14]?.playable &&
         boardData[index - 7]?.piece !== null &&
@@ -78,6 +89,8 @@ function Gameboard() {
         boardData[index - 14]?.piece === null
         ) {
           forceFeed.push(item)
+          jumpDirection.push('top right')
+          jumpedArr.push(boardData[index - 14])
         }
       // top left jump
       if (
@@ -88,6 +101,8 @@ function Gameboard() {
         boardData[index - 18]?.piece === null
         ) {
           forceFeed.push(item)
+          jumpDirection.push('top left')
+          jumpedArr.push(boardData[index - 18])
         }
       // bot left jump
       if (
@@ -98,7 +113,8 @@ function Gameboard() {
         boardData[index + 14]?.piece === null
         ) {
           forceFeed.push(item)
-
+          jumpDirection.push('bot left')
+          jumpedArr.push(boardData[index +14])
         }
       // bot right jump
       if (
@@ -109,7 +125,13 @@ function Gameboard() {
         boardData[index + 18]?.piece === null
         ) {
           forceFeed.push(item)
+          jumpDirection.push('bot right')
+          jumpedArr.push(boardData[index + 14])
         }
+      }
+      firstJump()
+      
+      
       }
       else if (item.king) {
         // top right ----------------------
@@ -374,9 +396,154 @@ function Gameboard() {
       }
       
       })
-    
-    
+// second jump --------------------------------------------------------------------
+    function doubleTake() {
+      if (!jumpedArr.length) return
+      const arrToJump = jumpedArr.map((item, index) => {
+      return {
+        ...item,
+        piece: forceFeed[index].piece,
+        highlighted: false,
+        king:  forceFeed[index].king
+      }
+    })
+    const arrToJumpIndices = jumpedArr.map((item, index) => {
+      return boardData.indexOf(item)
+    })
+    arrToJump.forEach((itemToMove, index) => {
+        const jumpIndex = arrToJumpIndices[index]
+          if (!itemToMove.king) {
+          // top right jump
+          if (
+            boardData[jumpIndex - 14]?.playable &&
+            boardData[jumpIndex - 14]?.piece === null &&
+            boardData[jumpIndex - 7]?.piece !== null &&
+            boardData[jumpIndex - 7]?.piece !== itemToMove?.piece &&
+            jumpDirection[index] !== 'bot left'
+            ) {
+              jumpedArr2nd.push(boardData[jumpIndex - 14])
+              jumpDirection2nd.push('top right')
+              forceFeed2nd.push(forceFeed[index])
+            }
+          // top left
+          if (
+            boardData[jumpIndex - 18]?.playable &&
+            boardData[jumpIndex - 18]?.piece === null &&
+            boardData[jumpIndex - 9]?.piece !== null &&
+            boardData[jumpIndex - 9]?.piece !== itemToMove?.piece &&
+            jumpDirection[index] !== 'bot right'
+            ) {
+              jumpedArr2nd.push(boardData[jumpIndex - 18])
+              jumpDirection2nd.push('top left')
+              forceFeed2nd.push(forceFeed[index])
 
+            }
+          // bot right
+          if (
+            boardData[jumpIndex + 14]?.playable &&
+            boardData[jumpIndex + 14]?.piece === null &&
+            boardData[jumpIndex + 7]?.piece !== null &&
+            boardData[jumpIndex + 7]?.piece !== itemToMove?.piece &&
+            jumpDirection[index] !== 'top left'
+            ) {
+              jumpedArr2nd.push(boardData[boardData[jumpIndex + 14]])
+              jumpDirection2nd.push('bot right')
+              forceFeed2nd.push(forceFeed[index])
+            } 
+          // bot left
+          if (
+            boardData[jumpIndex + 18]?.playable &&
+            boardData[jumpIndex + 18]?.piece === null &&
+            boardData[jumpIndex + 9]?.piece !== null &&
+            boardData[jumpIndex + 9]?.piece !== itemToMove?.piece &&
+            jumpDirection[index] !== 'top right'
+            ) {
+              jumpedArr2nd.push(boardData[jumpIndex + 18])
+              jumpDirection2nd.push('bot left')
+              forceFeed2nd.push(forceFeed[index])
+
+            }
+      }
+      })
+    }
+    doubleTake()
+
+    console.log(jumpDirection2nd)
+    
+    if (forceFeed2nd.length) forceFeed = forceFeed2nd
+    
+    // -----------------------------------------------------------------------------------
+
+// third jump ---------------------------------------------------------------------------
+function tripleTake() {
+  if (!forceFeed2nd.length) return
+  const arrToJump3rd = jumpedArr2nd.map((item, index) => {
+    return {
+      ...item,
+        piece: forceFeed[index].piece,
+        highlighted: false,
+        king:  forceFeed[index].king
+    }
+  })
+  const arrToJumpIndices = jumpedArr2nd.map((item, index) => {
+      return boardData.indexOf(item)
+    })
+  
+  arrToJump3rd.forEach((item, index) => {
+    const jumpIndex = arrToJumpIndices[index]
+    if (!item.king) {
+          // top right jump
+          if (
+            boardData[jumpIndex - 7].piece !== null &&
+            boardData[jumpIndex - 7] !== item.piece &&
+            boardData[jumpIndex - 14].playable &&
+            boardData[jumpIndex - 14].piece === null &&
+            jumpDirection2nd[index] !== 'bot left'
+          ) {
+            forceFeed3rd.push(forceFeed2nd[index])
+
+          }
+          // top left
+          else if (
+            boardData[jumpIndex - 9].piece !== null &&
+            boardData[jumpIndex - 9] !== item.piece &&
+            boardData[jumpIndex - 18].playable &&
+            boardData[jumpIndex - 18].piece === null &&
+            jumpDirection2nd[index] !== 'bot right'
+          ) {
+            forceFeed3rd.push(forceFeed2nd[index])
+
+          }
+          // bot left
+          else if (
+            boardData[jumpIndex + 7].piece !== null &&
+            boardData[jumpIndex + 7] !== item.piece &&
+            boardData[jumpIndex + 14].playable &&
+            boardData[jumpIndex + 14].piece === null &&
+            jumpDirection2nd[index] !== 'top right'
+          ) {
+            forceFeed3rd.push(forceFeed2nd[index])
+
+          }
+          // bot right
+          else if (
+            boardData[jumpIndex - 9].piece !== null &&
+            boardData[jumpIndex - 9] !== item.piece &&
+            boardData[jumpIndex - 18].playable &&
+            boardData[jumpIndex - 18].piece === null &&
+            jumpDirection2nd[index] !== 'top left'
+          ) {
+            forceFeed3rd.push(forceFeed2nd[index])
+          }
+}
+  })
+
+}
+tripleTake()
+if (forceFeed3rd.length) forceFeed = forceFeed3rd
+
+//---------------------------------------------------------------------------------------
+    
 
     if (forceFeed.length) {
       forceFeed = forceFeed.filter((force) => {
@@ -384,9 +551,8 @@ function Gameboard() {
       if (!playerOneTurn) return force.piece === 'z'
     })
     }
-    // console.log('forcefeed arr', forceFeed)
-    // console.log(forceFeed.length)
-    
+
+
     if (forceFeed.length) {
       setForceCapture(true)
       const boardDataCopy = boardData.map((item, index) => {

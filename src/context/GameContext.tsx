@@ -147,8 +147,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
         return boardData.indexOf(item)
       })
       // total number of jumps
-      const jumpNum = tempArrForJumps.map((item, index) => 0)
-      // console.log(arrToJump);console.log(arrToJumpIndices);console.log(jumpNum)
+
       arrToJump.forEach((itemToMove, index) => {
         const jumpIndex = arrToJumpIndices[index]
         if (!itemToMove.king) {
@@ -298,8 +297,8 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
     }
 
     tripleTake()
-    console.log(doubleTakeArr, 'double take')
-    console.log(tripleTakeArr, 'triple take')
+    // console.log(doubleTakeArr, 'double take')
+    // console.log(tripleTakeArr, 'triple take')
 
 
 //-----------------------------------------------------
@@ -1306,7 +1305,7 @@ function doubleTake() {
     }
     topRight();topLeft();botLeft();botRight()
   })
-  console.log(doubleTakeArr, 'doubletakearr')
+  // console.log(doubleTakeArr, 'doubletakearr')
 
 }
 
@@ -1328,9 +1327,9 @@ function tripleTake() {
         }
       })
   
-console.log(jumpIndices, 'jump indices')
-console.log(arrToJump, 'arrTojump')
-console.log(jumpDirection2nd, 'jump direction 2nd')
+// console.log(jumpIndices, 'jump indices')
+// console.log(arrToJump, 'arrTojump')
+// console.log(jumpDirection2nd, 'jump direction 2nd')
   arrToJump.forEach((item, index) => {
     const jumpIndex = jumpIndices[index]
     if (itemToMove.king) {
@@ -1677,10 +1676,10 @@ console.log(jumpDirection2nd, 'jump direction 2nd')
     }
   })
 
-  console.log(tripleTakeArr, 'tripleTakeArr')
+  // console.log(tripleTakeArr, 'tripleTakeArr')
 }
 
-console.log(doubleTakeLanding, 'landing')
+// console.log(doubleTakeLanding, 'landing')
 
 tripleTake()
 // ----------------------------------------------------
@@ -2125,7 +2124,7 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
         }
       }
       if (forceFeed.length) {
-        console.log(forceFeed, 'you must eat this again')
+        // console.log(forceFeed, 'you must eat this again')
         setPieceToMove(pieceToJump)
         setMultipleCapture(true)
         
