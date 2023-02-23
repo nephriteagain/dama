@@ -1,4 +1,5 @@
 import { useContext, createContext, useState, useEffect, ReactNode } from "react"
+import { compileString } from "sass"
 import Gameboard from "../components/Gameboard"
 
 import { arrayData } from "../data/arrayData"
@@ -36,11 +37,11 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
     const { x: xPosition, y: yPosition, piece, player, selected } = itemToMove;
     let tempArrForMoves = [] // stores non capturing moves
     let tempArrForJumps = [] // stores capturing moves
+    let tempArrForJumps2 = []
     let jumpDirection = [] // stores direction of jumps
     const doubleTakeArr : number[] = [] // stores jumps from double captures
     let tripleTakeArr : number[] = []
     const jumpDirection2nd : string[] = [] // stores direction jumps from double captures
-    
     
     if (piece === null) return
     if (itemToMove.king) return
@@ -107,7 +108,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
         tempArrForJumps.push(board[position - 18])
         jumpDirection.push('top left')
       }
-    // bot right
+    // bot left
     if (
       board[position + 14]?.playable &&
       board[position + 14]?.piece === null &&
@@ -115,10 +116,10 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
       board[position + 7]?.piece !== itemToMove?.piece
       ) {
         tempArrForJumps.push(board[position + 14])
-        jumpDirection.push('bot right')
+        jumpDirection.push('bot left')
 
       }
-    // bot left
+    // bot right
     if (
       board[position + 18]?.playable &&
       board[position + 18]?.piece === null &&
@@ -162,6 +163,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
             ) {
               doubleTakeArr.push(tempArrForJumps[index])
               jumpDirection2nd.push('top right')
+              tempArrForJumps2.push(board[jumpIndex - 14])
             }
           // top left
           if (
@@ -173,28 +175,33 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
             ) {
               doubleTakeArr.push(tempArrForJumps[index])
               jumpDirection2nd.push('top left')
+              tempArrForJumps2.push(board[jumpIndex - 18])
+
             }
-          // bot right
+          // bot left
           if (
             board[jumpIndex + 14]?.playable &&
             board[jumpIndex + 14]?.piece === null &&
             board[jumpIndex + 7]?.piece !== null &&
             board[jumpIndex + 7]?.piece !== itemToMove?.piece &&
-            jumpDirection[index] !== 'top left'
+            jumpDirection[index] !== 'top right'
             ) {
-              doubleTakeArr.push(board[tempArrForJumps[index]])
-              jumpDirection2nd.push('bot right')
+              doubleTakeArr.push(tempArrForJumps[index])
+              jumpDirection2nd.push('bot left')
+              tempArrForJumps2.push(board[jumpIndex + 14])
+
             } 
-          // bot left
+          // bot right
           if (
             board[jumpIndex + 18]?.playable &&
             board[jumpIndex + 18]?.piece === null &&
             board[jumpIndex + 9]?.piece !== null &&
             board[jumpIndex + 9]?.piece !== itemToMove?.piece &&
-            jumpDirection[index] !== 'top right'
+            jumpDirection[index] !== 'top left'
             ) {
               doubleTakeArr.push(tempArrForJumps[index])
-              jumpDirection2nd.push('bot left')
+              jumpDirection2nd.push('bot right')
+              tempArrForJumps2.push(board[jumpIndex + 18])
             }
       }
       })
@@ -202,50 +209,23 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
     doubleTake()
     
     
-    
-    // transformed jumped arr
-    // console.log(doubleTakeArr, 'double take')
     // ----------------------------------------------------------------------------------
     
     // tripleTake------------------------------------------
-    
     function tripleTake() {
       if (!doubleTakeArr.length) return
-      const jumpIndices = doubleTakeArr.map((item, index) => {
-        if (
-          jumpDirection2nd[index] === 'top right' &&
-          board[board.indexOf(item) - 14]?.playable &&
-          board[board.indexOf(item) - 14]?.piece === null
-        ) return board.indexOf(item) - 14
-        else if (
-          jumpDirection2nd[index] === 'top left' &&
-          board[board.indexOf(item) - 18]?.playable &&
-          board[board.indexOf(item) - 18]?.piece === null
-        ) return board.indexOf(item) - 18
-        else if (
-          jumpDirection2nd[index] === 'bot right' &&
-          board[board.indexOf(item) + 18]?.playable &&
-          board[board.indexOf(item) + 18]?.piece === null
-        ) return board.indexOf(item) + 18
-        else if (
-          jumpDirection2nd[index] === 'bot left' &&
-          board[board.indexOf(item) + 14]?.playable &&
-          board[board.indexOf(item) + 14]?.piece === null
-        ) return board.indexOf(item) + 14
+      const jumpIndices = tempArrForJumps2.map((item, index) => {
+        return board.indexOf(item)
       })
-      const arrToJump = doubleTakeArr.map((item, index) => {
+      const arrToJump = tempArrForJumps2.map((item, index) => {
         return {
           ...item,
           piece: itemToMove.piece,
           king: itemToMove.king,
           highlighted: false,
-
         }
       })
-    
 
-    // console.log(arrToJump, 'arrToJumps')
-    // console.log(jumpIndices, 'triple')
     arrToJump.forEach((item, index) => {
       if (!itemToMove.king) {
         // top right
@@ -269,23 +249,23 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
             ) {
               tripleTakeArr.push(tempArrForJumps[index])
             }
-          // bot right
+          // bot left
           if (
             board[jumpIndices[index] + 14]?.playable &&
             board[jumpIndices[index] + 14]?.piece === null &&
             board[jumpIndices[index] + 7]?.piece !== null &&
             board[jumpIndices[index] + 7]?.piece !== itemToMove?.piece &&
-            jumpDirection2nd[index] !== 'top left'
+            jumpDirection2nd[index] !== 'top right'
             ) {
-              tripleTakeArr.push(board[tempArrForJumps[index]])
+              tripleTakeArr.push(tempArrForJumps[index])
             } 
-          // bot left
+          // bot right
           if (
             board[jumpIndices[index] + 18]?.playable &&
             board[jumpIndices[index] + 18]?.piece === null &&
             board[jumpIndices[index] + 9]?.piece !== null &&
             board[jumpIndices[index] + 9]?.piece !== itemToMove?.piece &&
-            jumpDirection2nd[index] !== 'top right'
+            jumpDirection2nd[index] !== 'top left'
             ) {
               tripleTakeArr.push(tempArrForJumps[index])
             }
@@ -298,14 +278,10 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
     }
 
     tripleTake()
-    // console.log(doubleTakeArr, 'double take')
-    // console.log(tripleTakeArr, 'triple take')
-
 
 //-----------------------------------------------------
 if (doubleTakeArr.length) tempArrForJumps = doubleTakeArr
 if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
-
 
     const boardCopy = board.map((item, index) => {
       if (!item.playable) return item
@@ -1867,8 +1843,9 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
     let forceFeed = []
     function eatMoreChips(pieceToJump, index: number, board, pieceJumped: boolean) {
       if (!pieceJumped) return // only when a piece do a capture that this will run
+      console.log(pieceToJump, 'ptj')
       forceFeed = []
-
+      console.log('eat more chips')
       if (!pieceToJump.king) {
         // top right
         if (
@@ -2205,7 +2182,7 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
     
 
 
-    // eatMoreChips(multipleJumpSearcher, jumpSearcherIndex, newBoardData, jumped)
+    eatMoreChips(multipleJumpSearcher, jumpSearcherIndex, newBoardData, jumped)
     setBoardData([...newBoardData])
   
     

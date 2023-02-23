@@ -406,9 +406,7 @@ function Gameboard() {
       
       
       })
-      console.log(forceFeed, ';a;dasasdasd')
-      console.log(jumpedArr, 'first')
-      console.log(jumpDirection, 'direction')
+
 
 // second jump --------------------------------------------------------------------
     function doubleTake() {
@@ -840,8 +838,7 @@ function Gameboard() {
       })
     }
     doubleTake()
-    console.log(jumpedArr2nd, 'second')
-    console.log(forceFeed2nd, 'force 2nd')
+
 
     if (forceFeed2nd.length) forceFeed = forceFeed2nd
     
@@ -910,7 +907,7 @@ function tripleTake() {
           }
 }
     else if (item.king) {
-            console.log('test')
+
             function topRightKing() {
             if (
             boardData[jumpIndex - 14]?.playable &&
