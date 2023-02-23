@@ -26,18 +26,13 @@ function Gameboard() {
     setMultipleCapture,
     forceCapture,
     setForceCapture,
-    setKingJumpDirection
+    setKingJumpDirection,
+    handleRestart
     
   } = useGlobalContext()
 
 
-  function handleRestart() {
-    setPlayerOneTurn(true)
-    setPossibleMoves([])
-    setBoardData(arrayData)
-    setJumpedChip(null)
-    setForceCapture(false)
-  }
+  
   
  
 
@@ -46,16 +41,10 @@ function Gameboard() {
     if (gameOver) console.log('game over')
   }) 
 
-    // player turn handler
-  // useEffect(() => {
-  //   if (pieceToMove === null) {
-  //     setPlayerOneTurn(!playerOneTurn)
-  //   }
-  // }, [pieceToMove])
-
-  // force eat
-  // regular chips NOTE: THIS USEFFECT HAS A BUG!
+  // player turn handler and force capture handler
   useEffect(() => {
+    
+
     if (multipleCapture) {
       setMultipleCapture(false)
       return
@@ -1303,7 +1292,7 @@ if (forceFeed3rd.length) forceFeed = forceFeed3rd
   
   }, [pieceToMove])
 
-  
+
 
   return (
     <>

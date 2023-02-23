@@ -24,7 +24,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
   const [ pieceToMove, setPieceToMove ] = useState(null)
   const [ possibleMoves, setPossibleMoves ] = useState([])
 
-  const [ playerOneTurn, setPlayerOneTurn ] = useState(true) // player one will still be first to move regardless
+  const [ playerOneTurn, setPlayerOneTurn ] = useState(false) // player one will still be first to move regardless
   const [ playerChipsCount, setPlayerChipsCount ] = useState({p1: 12, p2: 12})
   const [ gameOver, setGameOver ] = useState(false)
   const [ jumpedChip, setJumpedChip ] = useState(null)
@@ -37,7 +37,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
     const { x: xPosition, y: yPosition, piece, player, selected } = itemToMove;
     let tempArrForMoves = [] // stores non capturing moves
     let tempArrForJumps = [] // stores capturing moves
-    let tempArrForJumps2 = []
+    let tempArrForJumps2 = []                                         
     let jumpDirection = [] // stores direction of jumps
     const doubleTakeArr : number[] = [] // stores jumps from double captures
     let tripleTakeArr : number[] = []
@@ -1712,7 +1712,6 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
 
     let newBoardData = boardData.map((item, index) => {
       if (!item.playable) return item
-
       const indexStart = boardData.indexOf(chipToMove)
       const indexLand = boardData.indexOf(placeToLand)
 
@@ -2152,12 +2151,11 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       }
       if (forceFeed.length) {
         // console.log(forceFeed, 'you must eat this again')
-        additionalEat = true
         movingPiece = pieceToJump
         setMultipleCapture(true)
         forceFeed = forceFeed.filter((force) => {
-      if (playerOneTurn) return force.piece === 'x'
-      if (!playerOneTurn) return force.piece === 'z'
+      if (playerOneTurn) return force.piece === 'z'
+      if (!playerOneTurn) return force.piece === 'x'
     })
 
       newBoardData = board.map((item, sameIndex) => {
@@ -2174,29 +2172,59 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
         return {...item, movable: false}
         })
       
-      
-    
     // setBoardData([...boardForceEat])
       }
     }
     
 
-
     eatMoreChips(multipleJumpSearcher, jumpSearcherIndex, newBoardData, jumped)
+
+    function kingPromotionChecker() {
+      if (forceFeed.length) return
+      newBoardData = newBoardData.map((item) => {
+        if (!item.playable) return item
+
+        else if (item.piece === 'z' && !item.king && item.y === 7) {
+          console.log('player 1 king awakened')
+          return {...item, king: true}
+        }
+        
+        else if (item.piece === 'x' && !item.king && item.y === 0) {
+          console.log('player 2 king awakened')
+          return {...item, king: true}
+        }
+        return item
+      })
+    }
+
+    kingPromotionChecker()
+
     setBoardData([...newBoardData])
   
     
 
     // if no additional piece to be take this will end the turn of the player
-    if (!forceFeed.length) {
-  
-    }
+    
+
     setPieceToMove(null)
     // setPlayerOneTurn(!playerOneTurn)
     setForceCapture(false)
   }
 
+  function handleRestart() {
+    setBoardData(arrayData)
+    setPieceToMove(null)
+    setPossibleMoves([])
+    setPlayerOneTurn(false)
+    setPlayerChipsCount({p1: 12, p2: 12})
+    setGameOver(false)
+    setJumpedChip(null)
+    setMultipleCapture(false)
+    setForceCapture(false)
+    setKingJumpDirection(null)
+  }
 
+  
 
   // player chips counter
   useEffect(() => {
@@ -2244,7 +2272,8 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       setMultipleCapture,
       forceCapture,
       setForceCapture,
-      setKingJumpDirection
+      setKingJumpDirection,
+      handleRestart
     }}
     >
       {children}
