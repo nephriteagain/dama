@@ -39,7 +39,7 @@ function Gameboard() {
   // game over handler
   useEffect(() => {
     if (gameOver) console.log('game over')
-  }) 
+  }, [gameOver])
 
   // player turn handler and force capture handler
   useEffect(() => {
@@ -63,7 +63,7 @@ function Gameboard() {
     let jumpDirection = []
     let jumpedArr2nd = []
     let jumpDirection2nd = []
-    let jumpedArr3rd = []
+    let jumpedArr3rd = []   
 
     
 
@@ -466,7 +466,6 @@ function Gameboard() {
             }
       }
           else if (itemToMove.king) {
-            console.log('test')
             function topRightKing() {
             if (
             boardData[jumpIndex - 14]?.playable &&
@@ -839,9 +838,9 @@ function tripleTake() {
   const arrToJump3rd = jumpedArr2nd.map((item, index) => {
     return {
       ...item,
-        piece: forceFeed[index].piece,
+        piece: forceFeed2nd[index].piece,
         highlighted: false,
-        king:  forceFeed[index].king
+        king:  forceFeed2nd[index].king
     }
   })
   const arrToJumpIndices = jumpedArr2nd.map((item, index) => {
@@ -855,7 +854,7 @@ function tripleTake() {
           if (
             boardData[jumpIndex - 7].piece !== null &&
             boardData[jumpIndex - 7] !== item.piece &&
-            boardData[jumpIndex - 14].playable &&
+            boardData[jumpIndex - 14]?.playable &&
             boardData[jumpIndex - 14].piece === null &&
             jumpDirection2nd[index] !== 'bot left'
           ) {
@@ -866,7 +865,7 @@ function tripleTake() {
           else if (
             boardData[jumpIndex - 9].piece !== null &&
             boardData[jumpIndex - 9] !== item.piece &&
-            boardData[jumpIndex - 18].playable &&
+            boardData[jumpIndex - 18]?.playable &&
             boardData[jumpIndex - 18].piece === null &&
             jumpDirection2nd[index] !== 'bot right'
           ) {
@@ -877,7 +876,7 @@ function tripleTake() {
           else if (
             boardData[jumpIndex + 7].piece !== null &&
             boardData[jumpIndex + 7] !== item.piece &&
-            boardData[jumpIndex + 14].playable &&
+            boardData[jumpIndex + 14]?.playable &&
             boardData[jumpIndex + 14].piece === null &&
             jumpDirection2nd[index] !== 'top right'
           ) {
@@ -888,7 +887,7 @@ function tripleTake() {
           else if (
             boardData[jumpIndex + 9].piece !== null &&
             boardData[jumpIndex + 9] !== item.piece &&
-            boardData[jumpIndex + 18].playable &&
+            boardData[jumpIndex + 18]?.playable &&
             boardData[jumpIndex + 18].piece === null &&
             jumpDirection2nd[index] !== 'top left'
           ) {
