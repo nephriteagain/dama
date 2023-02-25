@@ -109,8 +109,24 @@
   transition-delay: 0.5s;
 }
 
+.mode-dama::after {
+  position: absolute;
+  bottom: 105%;
+  right: 7%;
+  content: '';
+  width: 0;
+  height: 0;
+  border-left: 0.44rem solid transparent;
+  border-right: 0.44rem solid transparent;
+  border-top: 1.5rem solid white;
+  opacity: 0;
+  transition: all 0.1s ease-in-out;
+  transition-delay: 0.5s;
+}
+
+
 .mode-perdigana::before {
-  content: "(reverse of dama) win by FEEDING all your chips or making yourself unable to move";
+  content: "(reverse of dama) win by FEEDING all your chips or making YOURSELF unable to move";
   position: absolute;
   color: grey;
   font-size: 0.9rem;
@@ -124,15 +140,56 @@
   transition-delay: 0.5s;
 }
 
+.mode-perdigana::after {
+  position: absolute;
+  bottom: 105%;
+  right: 7%;
+  content: '';
+  width: 0;
+  height: 0;
+  border-left: 0.44rem solid transparent;
+  border-right: 0.44rem solid transparent;
+  border-top: 1.5rem solid white;
+  opacity: 0;
+  transition: all 0.1s ease-in-out;
+  transition-delay: 0.5s;
+}
 
-.mode-dama:hover::before {
+.mode-dama:hover::before, .mode-dama:hover::after {
   opacity: 1;
 }
 
-.mode-perdigana:hover::before {
+
+.mode-perdigana:hover::before, .mode-perdigana:hover::after {
   opacity: 1;
 }
 
 .selected-mode {
   border: 0.25rem solid whitesmoke;
+}
+
+.notification {
+  position: absolute;
+  top: 2rem;
+  left: 50%;
+  background-color: #dc3545;
+  color: #fff;
+  border-radius: 1rem;
+  width: 15rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 2rem 0.3rem rgba(0, 0, 0, 0.8);
+  -webkit-transition: all 0.4s ease;
+  -moz-transition: all 0.4s ease;
+  -o-transition: all 0.4s ease;
+  -ms-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+  transform: translate(-50%, -500%);
+}
+
+.notification > p {
+  font-size: 1.2rem;
+
 }

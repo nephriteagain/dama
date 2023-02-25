@@ -11,6 +11,7 @@ const GameModeModal = () => {
   const damaRef = useRef()
   const perdiganaRef = useRef()
   const gameModeRef = useRef('')
+  const alertRef = useRef()
 
   function selectDamaMode() {
     perdiganaRef.current.classList.remove('selected-mode')
@@ -31,7 +32,10 @@ const GameModeModal = () => {
     if (gameModeRef.current === 'dama' || gameModeRef.current === 'perdigana') {
       setGameMode(gameModeRef.current)
     } else {
-      alert('PICK A GAME MODE FIRST!!!')
+      alertRef.current.style.transform = 'translate(-50%, 0%)'
+      setTimeout(() => {
+        alertRef.current.style.transform = 'translate(-50%, -500%)'
+      }, 3000)
     }
   }
 
@@ -60,6 +64,11 @@ const GameModeModal = () => {
         >
           Start Game
         </button>
+      </div>
+      <div className='notification' ref={alertRef}>
+        <p>
+        Pick a Game Mode First!
+        </p>
       </div>
     </div> 
   )
