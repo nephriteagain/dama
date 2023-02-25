@@ -31,6 +31,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
   const [multipleCapture, setMultipleCapture] = useState(false)
   const [forceCapture, setForceCapture] = useState(false)
   const [ kingJumpDirection, setKingJumpDirection ] = useState(null)
+  const [ gameMode, setGameMode ] = useState('')
 
 
   function highlightMoves(itemToMove, position: number, playerTurn: boolean, board) {
@@ -2714,7 +2715,9 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       forceCapture,
       setForceCapture,
       setKingJumpDirection,
-      handleRestart
+      handleRestart,
+      gameMode,
+      setGameMode
     }}
     >
       {children}

@@ -21,11 +21,14 @@ function Gameboard() {
     forceCapture,
     setForceCapture,
     setKingJumpDirection,
-    handleRestart
+    handleRestart,
+    setGameMode
     
   } = useGlobalContext()
 
-
+  function changeGameMode() {
+    setGameMode('')
+  }
   
   
  
@@ -1307,6 +1310,18 @@ if (forceFeed3rd.length) forceFeed = forceFeed3rd
 
     <div className="restart-game">
       <button className="btn-restart" onClick={handleRestart}>Restart Game</button>
+    </div>
+    <div className="change-mode">
+      <button className="btn-mode"
+        onClick = {
+          () => {
+            handleRestart()
+            changeGameMode()
+          }
+        }
+      >
+        Change Game Mode
+      </button>
     </div>
 
     <div className='board'>

@@ -1,19 +1,20 @@
 import { useGlobalContext } from "../context/GameContext"
 
-
 import '../sass/WinnerModal.scss'
 
 
 function WinnerModal() {
 
-  const { playerOneTurn, handleRestart } = useGlobalContext()
+  const { playerOneTurn, handleRestart, gameMode } = useGlobalContext()
 
-  return (
+
+  if (gameMode === 'dama') {
+    return (
     <div className='modal-background'>
       <div className='winner-modal'>
         <p>
-        {!newGame && playerOneTurn ? 'PLAYER 1 WIN!' : 'PLAYER 2 WIN!'}
-        </p>  
+        {playerOneTurn ? 'PLAYER TWO WIN!' : 'PLAYER ONE WIN!'} 
+        </p>
         <button className="btn-new-game"
           onClick={handleRestart}
         >
@@ -21,7 +22,25 @@ function WinnerModal() {
         </button>
       </div>
     </div>  
-  )
+    )
+  }
+  if (gameMode === 'perdigana') {
+    return (
+    <div className='modal-background'>
+      <div className='winner-modal'>
+        <p>
+        {!playerOneTurn ? 'PLAYER TWO WIN!' : 'PLAYER ONE WIN!'} 
+        </p>
+        <button className="btn-new-game"
+          onClick={handleRestart}
+        >
+          New Game
+        </button>
+      </div>
+    </div>  
+    )
+  }
+  
 }
 
 export default WinnerModal

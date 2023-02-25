@@ -1,0 +1,138 @@
+
+
+.game-mode-modal-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba($color: #000000, $alpha: 0.3);
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.game-mode-modal {
+  width: 60%;
+  text-align: center;
+  background-color: #ccccff;
+  padding-block: 2rem;
+  margin-bottom: 10rem;
+  border-radius: 2rem;
+  box-shadow: 0 0 2rem 0.3rem rgba(0, 0, 0, 0.25);
+}
+
+.game-mode-header {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  font-weight: bold;
+}
+
+.btn-start-game {
+  display: block;
+  margin-inline: auto;
+  margin-top: 3rem;
+}
+
+.btn-start-game {
+  display: block;
+  margin-inline: auto;
+  font-size: 2rem;
+  padding-block: 0.8rem;
+  padding-inline: 1rem;
+  margin-top: 2rem;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #7cf199;
+  box-shadow: 0 0 1rem 0.15rem rgba(0, 0, 0, 0.25);
+  transition: all 0.3s ease-in-out;
+}
+
+.btn-start-game:hover {
+  background-color: green;
+  color: #fff;
+}
+
+.mode-dama, .mode-perdigana {
+  width: 12rem;
+  height: 3.2rem;
+  font-size: 1.7rem;
+  padding-block: 0.3rem;
+  border: none;
+  box-shadow: 0 0 0.7rem 0.12rem rgba(0, 0, 0, 0.25);
+  position: relative;
+  transition: all 0.1s ease-in-out;
+}
+
+.mode-dama {
+  text-align: left;
+  padding-left: 1rem;
+  margin-right: 0.5rem;
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+  background-color: rgba(255, 0, 0, 0.65);
+}
+
+.mode-perdigana {
+  text-align: left;
+  padding-left: 1rem;
+  margin-left: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  background-color: rgba(0, 0, 255, 0.65);
+}
+
+.more-info-dama, .more-info-perdigana {
+  font-size: 1.5rem;
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+
+
+.mode-dama::before {
+  content: "win by CAPTURING all of  the OPPONENTS chips or making the OPPONENT unable to move";
+  position: absolute;
+  color: grey;
+  font-size: 0.9rem;
+  background-color: #fff;
+  padding: 0.5rem;
+  right: 0px;
+  bottom: 130%;
+  border-radius: 0.5rem;
+  opacity: 0;
+  transition: all 0.1s ease-in-out;
+  transition-delay: 0.5s;
+}
+
+.mode-perdigana::before {
+  content: "(reverse of dama) win by FEEDING all your chips or making yourself unable to move";
+  position: absolute;
+  color: grey;
+  font-size: 0.9rem;
+  background-color: #fff;
+  padding: 0.5rem;
+  right: 0px;
+  bottom: 130%;
+  border-radius: 0.5rem;
+  opacity: 0;
+  transition: all 0.1s ease-in;
+  transition-delay: 0.5s;
+}
+
+
+.mode-dama:hover::before {
+  opacity: 1;
+}
+
+.mode-perdigana:hover::before {
+  opacity: 1;
+}
+
+.selected-mode {
+  border: 0.25rem solid whitesmoke;
+}
