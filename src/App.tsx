@@ -1,17 +1,19 @@
-import { useState, useContext } from 'react'
+import { useGlobalContext } from './context/GameContext'
 
 import './App.css'
 import Gameboard from './components/Gameboard'
-
+import WinnerModal from './components/WinnerModal'
 
 
 function App() {
 
+  const {gameOver} = useGlobalContext()
+  
   return (
     <div className="App">
-      <Gameboard 
-
-      />
+      { gameOver &&
+      <WinnerModal /> }
+      <Gameboard />
     </div>
   )
 }

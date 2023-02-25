@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react"
+import { useEffect, useLayoutEffect } from "react"
 
 import { useGlobalContext } from "../context/GameContext"
-import { arrayData } from "../data/arrayData"
 
+import '../sass/Gameboard.scss'
 
 function Gameboard() {
 
@@ -12,16 +12,10 @@ function Gameboard() {
     highlightMoves, 
     movePiece, 
     pieceToMove,
-    setPieceToMove,
     highlightMovesKing, 
     playerOneTurn,
     setPlayerOneTurn,
     gameOver,
-    setPossibleMoves,
-    setGameOver,
-    playerChipsCount,
-    jumpedChip,
-    setJumpedChip,
     multipleCapture,
     setMultipleCapture,
     forceCapture,
@@ -1291,12 +1285,22 @@ if (forceFeed3rd.length) forceFeed = forceFeed3rd
   
   }, [pieceToMove])
 
+  const playerTurnStyle = {}
+  if (playerOneTurn) {
+    playerTurnStyle.color = 'red'
+    playerTurnStyle.backgroundColor = 'rgb(255, 220, 220)'
+  }
+  else if (!playerOneTurn) {
+    playerTurnStyle.color = 'blue'
+    playerTurnStyle.backgroundColor = 'rgb(220, 220, 255)'
+  }
+  
 
 
   return (
     <>
     <div className="player-turn"
-    style={playerOneTurn? {color: 'red'} : {color: 'blue'}}
+    style={playerTurnStyle}
     >
       Player {playerOneTurn? 'One' : 'Two'}'s Turn
     </div>
@@ -1316,6 +1320,10 @@ if (forceFeed3rd.length) forceFeed = forceFeed3rd
           boardStyle.backgroundColor = '#ccccff'
         } else if (item?.selected) {
           boardStyle.backgroundColor = '#6CD486'
+        } else if (playerOneTurn) {
+          boardStyle.backgroundColor = 'rgba(255, 0, 0, 0.08)'
+        } else if (!playerOneTurn) {
+          boardStyle.backgroundColor = 'rgba(0,0,255, 0.08)'
         }
 
         const chipStyle = {}
@@ -1327,20 +1335,18 @@ if (forceFeed3rd.length) forceFeed = forceFeed3rd
         
 
         return ( 
-          <div className="square"
+          <div className='square'
             key={index}
             style={boardStyle}
             onClick={
               () => {
                 if (!item.highlighted) return
                 movePiece(pieceToMove, item, index)
+                
               }
             }
           >
-          <div className="temp-position">
-            {`${index} ${item.king? 'K' : ''} ${item.x} ${item.y}`}
-            
-          </div>
+
           {item.piece !== null && 
           <div className="piece" 
             style={chipStyle}

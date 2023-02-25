@@ -1718,7 +1718,7 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
             
 
       if (item === chipToMove) {
-        return {...item, piece: null, selected: false, king:false}
+        return {...item, piece: null, selected: true, king:false}
       }
 
       if (
@@ -1728,7 +1728,7 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
           piece: movingPiece.piece,
           highlighted: false, 
           king: movingPiece.king, 
-          selected: false
+          selected: true
         }
         jumpSearcherIndex = index
 
@@ -2212,7 +2212,7 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
     setBoardData(arrayData)
     setPieceToMove(null)
     setPossibleMoves([])
-    setPlayerOneTurn(false)
+    setPlayerOneTurn(true)
     setPlayerChipsCount({p1: 12, p2: 12})
     setGameOver(false)
     setJumpedChip(null)
@@ -2683,24 +2683,13 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       return playerOneTurn && item?.piece === 'z' || !playerOneTurn && item?.piece === 'x'
     })
 
-    console.log(playerOneTurn? 'player 1' : 'player 2', playerMoveArr)
     // if a player has no moves left the game is over
     if (!playerMoveArr.length) {
       setGameOver(true)
     }
   }, [playerOneTurn])
 
-  // gameover checker
-  useEffect(() => {
-    const {p1, p2} = playerChipsCount
-    if (p1 === 0 || p2 === 0) setGameOver(true)
-  })
 
-  // useEffect(() => {
-  //   playerOneTurn ? 
-  //   console.log('p1'):
-  //   console.log('p2')
-  // }, [boardData])
 
 
   return (

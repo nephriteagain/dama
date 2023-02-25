@@ -1,0 +1,108 @@
+
+
+.board {
+  position: relative;
+  height: 600px;
+  aspect-ratio: 1/1;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: auto;
+  margin: auto;
+  margin-top: 1rem;
+}
+
+.board::before {
+  content: '';
+  position: absolute;
+  background: url("../assets/dama-num-vertical.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 600px;
+  width: 2rem;
+  left: -3rem;
+}
+
+.board::after {
+  content: '';
+  position: absolute;
+  background: url("../assets/dama-num-horizontal.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 600px;
+  height: 2.4rem;
+  bottom: -3rem;
+}
+
+.square {
+  width: 75px;
+  height: 75px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.piece {
+  width: 60px;
+  height: 60px;
+  font-weight: bold;
+  font-size: 32px;
+  text-align: center;
+  border-radius: 50%;
+  transition: all 0.2s ease-in-out;
+}
+
+.piece:hover {
+  scale: 1.05;
+}
+
+.odd {
+  background-color: #fff;
+}
+
+.even {
+  background-color: #bbb;
+}
+
+.player-turn {
+  margin-top: 1rem;
+  font-size: 2rem;
+  text-align: center;
+  font-weight: bold;
+  padding-inline: 2rem;
+  transition: all 0.4s ease-in-out;
+  width: 600px;
+  margin-inline: auto;
+  border-top-right-radius: 0.7rem;
+  border-top-left-radius: 0.7rem;
+}
+
+.move {
+  position: relative;
+}
+
+.restart-game {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+}
+
+.btn-restart {
+  font-size: 1.5rem;
+  background-color: greenyellow;
+  border: none;
+  padding-inline: 1rem;
+  padding-block: 0.5rem;
+  border-radius: 0.5rem;
+  color: rgba(0, 0, 0, 0.65);
+  transition: all 0.1s ease-in-out;
+}
+
+.btn-restart:hover {
+  font-size: 1.7rem;
+  background-color: aquamarine;
+  color: black;
+}
+
+
+
