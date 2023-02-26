@@ -1,0 +1,72 @@
+.rule-popup {
+  position: absolute;
+  width: 500px;
+  height: 75vh;
+  overflow: auto;
+  border: 0.5rem solid #aaa;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 0.8rem 0.2rem rgba(0, 0, 0, 0.35);
+  padding-block: 1.5rem;
+  padding-left: 0.3rem;
+  padding-right: 1rem;
+  border-radius: 0.25rem;
+  background: linear-gradient(to right, #e8dcc6 5%, #FFF 95%);
+  z-index: 20;
+  cursor: grab;
+}
+
+.close-rule {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.close-rule:hover {
+  scale: 1.3;
+  color: red;
+}
+
+.close-rule > svg {
+  font-size: 1.5rem;
+}
+
+.rule-header {
+  margin-top: -0.5rem;
+  margin-bottom: 2rem;  
+  margin-left: 1.4rem;
+}
+
+.rule-header h2 {
+  font-size: 1.5rem;
+}
+
+.rule-header h3 {
+  margin-top: 0.5rem;
+  font-size: 1.2rem;
+  opacity: 0.6;
+}
+
+.rule-lists li {
+  text-align: justify;
+  font-size: 0.9rem;
+}
+
+.perdigana-rule {
+  text-align: justify;
+  opacity: 0.9;
+  font-size: 0.9rem;
+  padding-left: 1.2rem;
+}
+
+.source {
+  font-size: 0.8rem;
+  padding-left: 1.2rem;
+  font-style: italic;
+}
+
+.source a {
+  font-size: 0.8rem;
+}

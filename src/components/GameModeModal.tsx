@@ -1,11 +1,12 @@
-import { useRef, useEffect } from 'react'
+import { useRef } from 'react'
 import {AiOutlineInfoCircle} from 'react-icons/ai'
+import { BsFillFileRuledFill } from 'react-icons/bs'
 
 import { useGlobalContext } from "../context/GameContext"
 import '../sass/GameModeModal.scss'
 
 
-const GameModeModal = () => {
+const GameModeModal = ({ showRules }) => {
   const {gameMode, setGameMode} = useGlobalContext()
 
   const damaRef = useRef()
@@ -50,15 +51,23 @@ const GameModeModal = () => {
           <button className="mode-dama" ref={damaRef}
             onClick={selectDamaMode}
           >Dama
+            <span className='span-info-dama'>
               <AiOutlineInfoCircle className='more-info-dama' />
+            </span>
           </button>
           <button className="mode-perdigana" ref={perdiganaRef}
             onClick={selectPerdiganaMode}
-          >Perdigana 
+          >Perdigana
+            <span className='span-info-perdigana'>
             <AiOutlineInfoCircle className='more-info-perdigana' />
+            </span> 
           </button> 
         </div>
-        
+        <span className='rule-icon'
+          onClick={showRules}
+        >
+          <BsFillFileRuledFill />
+        </span>
         <button className="btn-start-game"
           onClick={startGame}
         >

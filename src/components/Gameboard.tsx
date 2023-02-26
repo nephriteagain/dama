@@ -4,7 +4,7 @@ import { useGlobalContext } from "../context/GameContext"
 
 import '../sass/Gameboard.scss'
 
-function Gameboard() {
+function Gameboard({showRules}) {
 
   const { 
     boardData,
@@ -1316,12 +1316,18 @@ if (forceFeed3rd.length) forceFeed = forceFeed3rd
         onClick = {
           () => {
             handleRestart()
+
             changeGameMode()
           }
         }
       >
         Change Game Mode
       </button>
+    </div>
+    <div className="show-rules">
+        <button className="btn-show-rules" onClick={showRules}>
+          Show Rules
+        </button>
     </div>
 
     <div className='board'>
@@ -1344,7 +1350,7 @@ if (forceFeed3rd.length) forceFeed = forceFeed3rd
         const chipStyle = {}
         if (item?.piece === 'z') chipStyle.backgroundColor = 'red'
         if (item?.piece === 'x') chipStyle.backgroundColor = 'blue'
-        if (item?.king) chipStyle.border = '6px solid #111'
+        if (item?.king) chipStyle.border = '0.4rem dashed #111'
         if (item?.movable) chipStyle.opacity = '1'
         if (!item?.movable) chipStyle.opacity = '0.4'
         

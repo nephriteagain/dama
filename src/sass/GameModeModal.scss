@@ -6,7 +6,7 @@
   left: 0;
   background-color: rgba($color: #000000, $alpha: 0.3);
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   overflow: hidden;
   display: flex;
   justify-content: center;
@@ -15,6 +15,7 @@
 }
 
 .game-mode-modal {
+  position: relative;
   width: 60%;
   text-align: center;
   background-color: #ccccff;
@@ -53,9 +54,11 @@
 .btn-start-game:hover {
   background-color: green;
   color: #fff;
+  padding-inline: 3rem; 
 }
 
-.mode-dama, .mode-perdigana {
+.mode-dama, 
+.mode-perdigana {
   width: 12rem;
   height: 3.2rem;
   font-size: 1.7rem;
@@ -84,7 +87,13 @@
   background-color: rgba(0, 0, 255, 0.65);
 }
 
-.more-info-dama, .more-info-perdigana {
+.mode-dama:hover,
+.mode-perdigana:hover {
+  box-shadow: 0 0 0.7rem 0.12rem rgba(255, 255, 255, 0.7);
+}
+
+.more-info-dama, 
+.more-info-perdigana {
   font-size: 1.5rem;
   position: absolute;
   right: 0.5rem;
@@ -92,11 +101,19 @@
   transform: translateY(-50%);
 }
 
+.more-info-dama:hover,
+.more-info-perdigana:hover {
+  color: #fff;
+}
 
 
-.mode-dama::before {
+.span-info-dama::before, 
+.span-info-perdigana::before {
   content: "win by CAPTURING all of  the OPPONENTS chips or making the OPPONENT unable to move";
   position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
   color: grey;
   font-size: 0.9rem;
   background-color: #fff;
@@ -105,64 +122,35 @@
   bottom: 130%;
   border-radius: 0.5rem;
   opacity: 0;
-  transition: all 0.1s ease-in-out;
-  transition-delay: 0.5s;
+
 }
 
-.mode-dama::after {
+.span-info-dama::after, 
+.span-info-perdigana::after {
   position: absolute;
-  bottom: 105%;
-  right: 7%;
-  content: '';
   width: 0;
   height: 0;
+  bottom: 107%;
+  right: 7%;
+  content: '';
   border-left: 0.44rem solid transparent;
   border-right: 0.44rem solid transparent;
   border-top: 1.5rem solid white;
   opacity: 0;
-  transition: all 0.1s ease-in-out;
-  transition-delay: 0.5s;
 }
 
 
-.mode-perdigana::before {
-  content: "(reverse of dama) win by FEEDING all your chips or making YOURSELF unable to move";
-  position: absolute;
-  color: grey;
-  font-size: 0.9rem;
-  background-color: #fff;
-  padding: 0.5rem;
-  right: 0px;
-  bottom: 130%;
-  border-radius: 0.5rem;
-  opacity: 0;
-  transition: all 0.1s ease-in;
-  transition-delay: 0.5s;
-}
 
-.mode-perdigana::after {
-  position: absolute;
-  bottom: 105%;
-  right: 7%;
-  content: '';
-  width: 0;
-  height: 0;
-  border-left: 0.44rem solid transparent;
-  border-right: 0.44rem solid transparent;
-  border-top: 1.5rem solid white;
-  opacity: 0;
-  transition: all 0.1s ease-in-out;
-  transition-delay: 0.5s;
-}
-
-.mode-dama:hover::before, .mode-dama:hover::after {
+.span-info-dama:hover::before,
+.span-info-dama:hover::after,
+.span-info-perdigana:hover::before,
+.span-info-perdigana:hover::after {
   opacity: 1;
+  height: auto;
+  width: auto;
 }
 
 
-.mode-perdigana:hover::before, .mode-perdigana:hover::after {
-  opacity: 1;
-}
 
 .selected-mode {
   border: 0.25rem solid whitesmoke;
@@ -191,5 +179,25 @@
 
 .notification > p {
   font-size: 1.2rem;
+}
 
+.rule-icon {
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  padding: 0.7rem;
+  border: 0.25rem solid rgb(217, 159, 83);;
+  border-radius: 50%;
+  transition: all 0.2s ease-in-out;
+}
+
+.rule-icon > svg {
+  font-size: 2rem;
+  color: rgb(217, 159, 83);
+}
+
+.rule-icon:hover {
+  scale: 1.2;
+  border: 0.25rem solid #fff;
+    ;
 }
