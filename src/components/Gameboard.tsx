@@ -22,7 +22,8 @@ function Gameboard({showRules}) {
     setForceCapture,
     setKingJumpDirection,
     handleRestart,
-    setGameMode
+    setGameMode,
+    gameMode
     
   } = useGlobalContext()
 
@@ -1329,6 +1330,9 @@ if (forceFeed3rd.length) forceFeed = forceFeed3rd
           Show Rules
         </button>
     </div>
+    { gameMode && <div className="current-game-mode">
+        Game Mode: <span>{gameMode.toUpperCase()}</span>
+    </div> }
 
     <div className='board'>
       { boardData.map((item: [], index: number) => {

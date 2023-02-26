@@ -1,0 +1,28 @@
+// !=========================================================
+// !                    MIXINS
+// !=========================================================
+
+@mixin media-xsm {
+  @media screen and (max-width: 576px) {
+    @content;
+  }
+}
+
+@mixin media-sm {
+  @media screen and (max-width: 768px) {
+    @content;
+  }
+}
+
+//  i change this resolution a bit
+@mixin media-md {
+  @media screen and (max-width: 1200px) {
+    @content;
+  }
+}
+
+@mixin media-lg {
+  @media screen and (min-width: 1025px) {
+    @content;
+  }
+}

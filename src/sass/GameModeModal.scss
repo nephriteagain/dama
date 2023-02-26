@@ -1,3 +1,4 @@
+@import './mixins';
 
 
 .game-mode-modal-background {
@@ -16,7 +17,7 @@
 
 .game-mode-modal {
   position: relative;
-  width: 60%;
+  width: 600px;
   text-align: center;
   background-color: #ccccff;
   padding-block: 2rem;
@@ -109,7 +110,6 @@
 
 .span-info-dama::before, 
 .span-info-perdigana::before {
-  content: "win by CAPTURING all of  the OPPONENTS chips or making the OPPONENT unable to move";
   position: absolute;
   width: 0;
   height: 0;
@@ -122,8 +122,16 @@
   bottom: 130%;
   border-radius: 0.5rem;
   opacity: 0;
-
 }
+
+.span-info-dama::before {
+  content: "win by CAPTURING all of the OPPONENTS chips or making your OPPONENT's chips UNABLE00 to move";
+}
+
+.span-info-perdigana::before {
+  content: 'win by FEEDING all of your chips or trapping your chips in a position it is UNABLE to move';
+}
+
 
 .span-info-dama::after, 
 .span-info-perdigana::after {
@@ -153,7 +161,7 @@
 
 
 .selected-mode {
-  border: 0.25rem solid whitesmoke;
+  border: 0.25rem solid gold;
 }
 
 .notification {
@@ -200,4 +208,48 @@
   scale: 1.2;
   border: 0.25rem solid #fff;
     ;
+}
+
+@include media-sm {
+  .game-mode-modal {
+    width: 500px;
+  }
+  
+  .rule-icon > svg {
+      font-size: 1.3rem;
+    }
+}
+
+
+@include media-xsm {
+  .game-mode-modal {
+    width: 90%;
+
+  }
+
+    .mode-dama {
+      margin-right: 0px;
+      display: block;
+      margin: 1rem auto;
+      border-radius: 0.5rem;
+    }
+
+    .mode-perdigana {
+      margin-left: 0px;
+      display: block;
+      margin: 1rem auto;
+      border-radius: 0.5rem;
+    }
+
+  .btn-start-game:hover {
+  padding-inline: 1.5rem;
+  }
+
+  .rule-icon {
+    right: 1rem;
+  }
+
+  .rule-icon > svg {
+    font-size: 1.5rem;
+  }
 }

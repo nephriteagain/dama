@@ -1,4 +1,4 @@
-
+@import './mixins';
 
 .modal-background {
   position: absolute;
@@ -47,4 +47,16 @@
 .btn-new-game:hover {
   background-color: green;
   color: #fff;
+}
+
+
+@include media-xsm {
+  .winner-modal {
+    width: 80%;
+    max-width: 400px;
+  }
+
+  .winner-modal p {
+    font-size: 2rem;
+  }
 }

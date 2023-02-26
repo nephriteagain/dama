@@ -120,7 +120,7 @@ function Rules({ setOpenRules, openRules }) {
       <br/>
       <br/>
       <p className='perdigana-rule'>
-        *** For Perdigana rules of winning are reversed, a player wins when all of the player's pieces are captured or all of the player's remaining pieces are blocked and unable to move. ***
+        *** For Perdigana, the rules of winning are reversed, a player wins when all of the player's pieces are captured or all of the player's remaining pieces are blocked and unable to move. ***
       </p>
       <br/>
       <p className='source'>Rules was sourced <span>

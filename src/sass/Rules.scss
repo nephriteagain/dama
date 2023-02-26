@@ -1,3 +1,5 @@
+@import './mixins';
+
 .rule-popup {
   position: absolute;
   width: 500px;
@@ -12,7 +14,7 @@
   padding-left: 0.3rem;
   padding-right: 1rem;
   border-radius: 0.25rem;
-  background: linear-gradient(to right, #e8dcc6 5%, #FFF 95%);
+  background: linear-gradient(to right, #e8dcc6 0%, #FFF 95%);
   z-index: 20;
   cursor: grab;
 }
@@ -65,8 +67,49 @@
   font-size: 0.8rem;
   padding-left: 1.2rem;
   font-style: italic;
+  margin-bottom: 0.5rem;
 }
 
 .source a {
   font-size: 0.8rem;
 }
+
+@include media-sm {
+  .rule-popup {
+    max-width: 400px;
+    width: 80%;
+    height: 65vh;
+  }
+}
+
+
+@include media-xsm {
+  .rule-popup {
+    max-width: 300px;
+    width: 90%;
+    height: 60vh;
+  }
+
+  .rule-header h2 {
+    font-size: 1.2rem;
+  }
+
+  .rule-header h2 {
+    font-size: 1.1rem;
+  }
+
+  .rule-lists li {
+    font-size: 1rem;
+    margin-left: -1rem;
+  }
+
+  .perdigana-rule {
+    font-size: 1rem;
+  }
+
+  .source, .source a {
+    font-size: 0.9rem;
+  }
+
+}
+
