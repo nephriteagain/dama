@@ -1339,6 +1339,7 @@ if (forceFeed3rd.length) forceFeed = forceFeed3rd
           boardStyle.backgroundColor = '#111'
         } else if (item?.highlighted) {
           boardStyle.backgroundColor = '#ccccff'
+          boardStyle.cursor = 'pointer'
         } else if (item?.selected) {
           boardStyle.backgroundColor = '#6CD486'
         } else if (playerOneTurn) {
@@ -1348,12 +1349,21 @@ if (forceFeed3rd.length) forceFeed = forceFeed3rd
         }
 
         const chipStyle = {}
-        if (item?.piece === 'z') chipStyle.backgroundColor = 'red'
-        if (item?.piece === 'x') chipStyle.backgroundColor = 'blue'
+        if (item?.piece === 'z') chipStyle.background = 'linear-gradient(to right, red 0%, rgb(255, 90, 90) 70%)'
+        if (item?.piece === 'x') chipStyle.background = 'linear-gradient(to right, blue 0%, rgb(90, 90, 255) 70%)'
         if (item?.king) chipStyle.border = '0.4rem dashed #111'
         if (item?.movable) chipStyle.opacity = '1'
         if (!item?.movable) chipStyle.opacity = '0.4'
         
+        // cursor pointers
+        if (playerOneTurn && item?.piece === 'z' && item?.movable) chipStyle.cursor = 'grab'
+        if (playerOneTurn && item?.piece === 'x' && item?.movable) chipStyle.cursor = 'not-allowed'
+        if (!playerOneTurn && item?.piece === 'x' && item?.movable) chipStyle.cursor = 'grab'
+        if (!playerOneTurn && item?.piece === 'z' && item?.movable) chipStyle.cursor = 'not-allowed'
+        if (playerOneTurn && item?.piece === 'z' && !item?.movable) chipStyle.cursor = 'not-allowed'
+        if (!playerOneTurn && item?.piece === 'x' && !item?.movable) chipStyle.cursor = 'not-allowed'
+
+
 
         return ( 
           <div className='square'
