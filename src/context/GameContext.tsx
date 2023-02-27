@@ -32,12 +32,13 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
   const [forceCapture, setForceCapture] = useState(false)
   const [ kingJumpDirection, setKingJumpDirection ] = useState(null)
   const [ gameMode, setGameMode ] = useState('')
-  const [ timeLimit, setTimeLimit ] = useState(3000)
+  const [ timeLimit, setTimeLimit ] = useState(300)
   const [timerOne, setTimerOne] = useState(timeLimit);
   const [timerTwo, setTimerTwo] = useState(timeLimit);
   const [isActive, setIsActive] = useState(false);
   const [currentTimer, setCurrentTimer] = useState(2);
   const [ isFirstMove, setIsFirstMove ] = useState(true)
+  const [ timeSup, setTimesUp ] = useState(false)
 
 
 
@@ -2228,7 +2229,10 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
     setForceCapture(false)
     setKingJumpDirection(null)
     setIsFirstMove(true)
-  }
+    setTimesUp(false)
+
+    handleReset()
+  } 
 
   function handleReset() {
     setIsActive(false);
@@ -2742,7 +2746,9 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       currentTimer,
       setCurrentTimer,
       isFirstMove,
-      handleReset
+      handleReset,
+      setTimesUp,
+      timeSup
     }}
     >
       {children}

@@ -38,7 +38,11 @@ function Gameboard({showRules}) {
     setCurrentTimer,
     isFirstMove,
     setIsFirstMove,
-    handleReset
+    handleReset,
+    setGameOver,
+    setTimesUp,
+    timeSup
+
     
   } = useGlobalContext()
 
@@ -51,8 +55,8 @@ function Gameboard({showRules}) {
   };
 
   const handleNext = () => {
-    if (playerOneTurn) setCurrentTimer(2)
-    if (!playerOneTurn) setCurrentTimer(1)
+    if (!playerOneTurn) setCurrentTimer(2)
+    if (playerOneTurn) setCurrentTimer(1)
   };
 
 
@@ -67,6 +71,7 @@ function Gameboard({showRules}) {
 
   useEffect(() => {
     let interval = null;
+    if  (isActive && getCurrentTimer() === 0) setTimesUp(true)
     if (isActive && getCurrentTimer() > 0) {
       interval = setInterval(() => {
         if (currentTimer === 1) {
@@ -88,8 +93,8 @@ function Gameboard({showRules}) {
 
   // game over handler
   useEffect(() => {
-    if (gameOver) console.log('game over')
-  }, [gameOver])
+    if (timeSup) setGameOver(true)
+  }, [timeSup])
 
   // player turn handler and force capture handler
   useEffect(() => {
