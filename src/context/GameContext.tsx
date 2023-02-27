@@ -32,6 +32,13 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
   const [forceCapture, setForceCapture] = useState(false)
   const [ kingJumpDirection, setKingJumpDirection ] = useState(null)
   const [ gameMode, setGameMode ] = useState('')
+  const [ timeLimit, setTimeLimit ] = useState(3000)
+  const [timerOne, setTimerOne] = useState(timeLimit);
+  const [timerTwo, setTimerTwo] = useState(timeLimit);
+  const [isActive, setIsActive] = useState(false);
+  const [currentTimer, setCurrentTimer] = useState(2);
+  const [ isFirstMove, setIsFirstMove ] = useState(true)
+
 
 
   function highlightMoves(itemToMove, position: number, playerTurn: boolean, board) {
@@ -2196,17 +2203,17 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
     }
 
     kingPromotionChecker()
-
+  
     setBoardData([...newBoardData])
   
     
 
     // if no additional piece to be take this will end the turn of the player
     
-
     setPieceToMove(null)
     // setPlayerOneTurn(!playerOneTurn)
     setForceCapture(false)
+    setIsFirstMove(false)
   }
 
   function handleRestart() {
@@ -2220,7 +2227,15 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
     setMultipleCapture(false)
     setForceCapture(false)
     setKingJumpDirection(null)
+    setIsFirstMove(true)
   }
+
+  function handleReset() {
+    setIsActive(false);
+    setTimerOne(timeLimit);
+    setTimerTwo(timeLimit);
+    setCurrentTimer(1);
+  };
 
   
 
@@ -2717,7 +2732,17 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       setKingJumpDirection,
       handleRestart,
       gameMode,
-      setGameMode
+      setGameMode,
+      timerOne,
+      setTimerOne,
+      timerTwo,
+      setTimerTwo,
+      isActive,
+      setIsActive,
+      currentTimer,
+      setCurrentTimer,
+      isFirstMove,
+      handleReset
     }}
     >
       {children}

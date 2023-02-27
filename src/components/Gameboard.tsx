@@ -1,10 +1,14 @@
-import { useEffect, useLayoutEffect } from "react"
+import { useEffect, useRef } from "react"
 
 import { useGlobalContext } from "../context/GameContext"
+import Timer from './Timer'
+import TimerTwo from "./TimerTwo"
 
 import '../sass/Gameboard.scss'
 
 function Gameboard({showRules}) {
+  
+
 
   const { 
     boardData,
@@ -23,7 +27,18 @@ function Gameboard({showRules}) {
     setKingJumpDirection,
     handleRestart,
     setGameMode,
-    gameMode
+    gameMode,
+    timerOne,
+    setTimerOne,
+    timerTwo,
+    setTimerTwo,
+    isActive,
+    setIsActive,
+    currentTimer,
+    setCurrentTimer,
+    isFirstMove,
+    setIsFirstMove,
+    handleReset
     
   } = useGlobalContext()
 
@@ -31,8 +46,45 @@ function Gameboard({showRules}) {
     setGameMode('')
   }
   
-  
+  const handleStart = () => {
+    setIsActive(true);
+  };
+
+  const handleNext = () => {
+    if (playerOneTurn) setCurrentTimer(2)
+    if (!playerOneTurn) setCurrentTimer(1)
+  };
+
+
  
+
+    useEffect(() => {
+    if (isFirstMove) return
+    handleNext()
+    console.log('handle next ran')
+  }, [playerOneTurn])
+
+
+  useEffect(() => {
+    let interval = null;
+    if (isActive && getCurrentTimer() > 0) {
+      interval = setInterval(() => {
+        if (currentTimer === 1) {
+          setTimerOne(timerOne => timerOne - 1);
+        } else {
+          setTimerTwo(timerTwo => timerTwo - 1);
+        } 
+      }, 100);
+    } else {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [isActive, timerOne, timerTwo, currentTimer]);
+
+  const getCurrentTimer = () => {
+    return currentTimer === 1 ? timerOne : timerTwo;
+  };
+
 
   // game over handler
   useEffect(() => {
@@ -1310,14 +1362,19 @@ if (forceFeed3rd.length) forceFeed = forceFeed3rd
     </div>
 
     <div className="restart-game">
-      <button className="btn-restart" onClick={handleRestart}>Restart Game</button>
+      <button className="btn-restart"
+        onClick={() => {
+          handleRestart()
+          handleReset()
+        }}
+      >Restart Game</button>
     </div>
     <div className="change-mode">
       <button className="btn-mode"
         onClick = {
           () => {
             handleRestart()
-
+            handleReset()
             changeGameMode()
           }
         }
@@ -1333,12 +1390,13 @@ if (forceFeed3rd.length) forceFeed = forceFeed3rd
     { gameMode && <div className="current-game-mode">
         Game Mode: <span>{gameMode.toUpperCase()}</span>
     </div> }
+    <TimerTwo timerTwo={timerTwo} currentTimer={currentTimer} />
 
     <div className='board'>
       { boardData.map((item: [], index: number) => {
 
-
         const boardStyle  = {}
+        function boardStyling() {
         if (!item.playable) {
           boardStyle.backgroundColor = '#111'
         } else if (item?.highlighted) {
@@ -1351,21 +1409,30 @@ if (forceFeed3rd.length) forceFeed = forceFeed3rd
         } else if (!playerOneTurn) {
           boardStyle.backgroundColor = 'rgba(0,0,255, 0.08)'
         }
-
+        }
+        boardStyling()
+        
         const chipStyle = {}
+        function chipStyling() {
         if (item?.piece === 'z') chipStyle.background = 'linear-gradient(to right, red 0%, rgb(255, 90, 90) 70%)'
         if (item?.piece === 'x') chipStyle.background = 'linear-gradient(to right, blue 0%, rgb(90, 90, 255) 70%)'
         if (item?.king) chipStyle.border = '0.4rem dashed #111'
         if (item?.movable) chipStyle.opacity = '1'
         if (!item?.movable) chipStyle.opacity = '0.4'
+        }
+        chipStyling()
         
         // cursor pointers
-        if (playerOneTurn && item?.piece === 'z' && item?.movable) chipStyle.cursor = 'grab'
+        function cursorPointers() {
+          if (playerOneTurn && item?.piece === 'z' && item?.movable) chipStyle.cursor = 'grab'
         if (playerOneTurn && item?.piece === 'x' && item?.movable) chipStyle.cursor = 'not-allowed'
         if (!playerOneTurn && item?.piece === 'x' && item?.movable) chipStyle.cursor = 'grab'
         if (!playerOneTurn && item?.piece === 'z' && item?.movable) chipStyle.cursor = 'not-allowed'
         if (playerOneTurn && item?.piece === 'z' && !item?.movable) chipStyle.cursor = 'not-allowed'
         if (!playerOneTurn && item?.piece === 'x' && !item?.movable) chipStyle.cursor = 'not-allowed'
+        }
+        cursorPointers()
+        
 
 
 
@@ -1376,6 +1443,7 @@ if (forceFeed3rd.length) forceFeed = forceFeed3rd
             onClick={
               () => {
                 if (!item.highlighted) return
+                isFirstMove && handleStart()
                 movePiece(pieceToMove, item, index)
                 
               }
@@ -1383,7 +1451,8 @@ if (forceFeed3rd.length) forceFeed = forceFeed3rd
           >
 
           {item.piece !== null && 
-          <div className="piece" 
+          <div className="piece"
+            draggable='true'
             style={chipStyle}
             onClick={() => {
               if (!item.movable) return
@@ -1396,7 +1465,7 @@ if (forceFeed3rd.length) forceFeed = forceFeed3rd
         </div> )
       }) }
     </div>
-    
+    <Timer timerOne={timerOne} currentTimer={currentTimer}/>
     </>
   )
 }

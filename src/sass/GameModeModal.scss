@@ -33,6 +33,7 @@
 }
 
 .btn-start-game {
+  cursor: pointer;
   display: block;
   margin-inline: auto;
   margin-top: 3rem;
@@ -60,6 +61,7 @@
 
 .mode-dama, 
 .mode-perdigana {
+  cursor: pointer;
   width: 12rem;
   height: 3.2rem;
   font-size: 1.7rem;
@@ -190,6 +192,7 @@
 }
 
 .rule-icon {
+  cursor: help;
   position: absolute;
   bottom: 2rem;
   right: 2rem;

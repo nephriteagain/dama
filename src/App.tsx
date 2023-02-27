@@ -9,6 +9,7 @@ import WinnerModal from './components/WinnerModal'
 import GameModeModal from './components/GameModeModal'
 import Rules from './components/Rules'
 
+
 function App() {
   const [ openRules, setOpenRules ] = useState(false)
 

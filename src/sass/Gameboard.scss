@@ -9,7 +9,6 @@
   grid-template-columns: repeat(8, 1fr);
   grid-template-rows: auto;
   margin: auto;
-  margin-top: 1rem;
 }
 
 .board::before {
@@ -31,7 +30,7 @@
   background-size: cover;
   width: 600px;
   height: 2.4rem;
-  bottom: -3rem;
+  bottom: -4.2rem;
 }
 
 .square {
@@ -89,6 +88,7 @@
 }
 
 .btn-restart {
+  cursor: pointer;
   font-size: 1.2rem;
   background-color: greenyellow;
   border: none;
@@ -112,6 +112,7 @@
 }
 
 .btn-mode {
+  cursor: pointer;
   font-size: 1.2rem;
   background-color: greenyellow;
   border: none;
@@ -135,6 +136,7 @@
 }
 
 .btn-show-rules {
+  cursor: pointer;
   font-size: 1.2rem;
   background-color: greenyellow;
   border: none;
@@ -172,7 +174,6 @@
 @include media-md {
   .board {
       width: 500px;
-      margin-top: 1rem;
     }
   
     .board::before {
@@ -184,7 +185,7 @@
     .board::after {
       height: 2rem;
       width: 500px;
-      bottom: -1.9rem;
+      bottom: -3.7rem;
     }
   
     .square {
@@ -208,7 +209,6 @@
 @include media-sm {
   .board {
     width: 400px;
-    margin-top: 1rem;
   }
 
   .board::before {
@@ -220,7 +220,7 @@
   .board::after {
     height: 1.8rem;
     width: 400px;
-    bottom: -1.7rem;
+    bottom: -3.5rem;
   }
 
   .square {
@@ -252,7 +252,6 @@
 @include media-xsm {
   .board {
     width: 300px;
-    margin-top: 1rem;
     transform: translateX(3%);
   }
 
@@ -265,7 +264,7 @@
   .board::after {
     height: 1.5rem;
     width: 300px;
-    bottom: -1.5rem;
+    bottom: -3.2rem;
   }
 
   .square {
