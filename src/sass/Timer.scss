@@ -1,6 +1,7 @@
 @import './mixins';
 
-.timer-one, .timer-two {
+.timer-one, 
+.timer-two {
   display: flex;
   flex-direction: column;
   align-items: end;
@@ -13,7 +14,8 @@
   margin-block: 0.2rem;
 }
 
-.timer-counter-one, .timer-counter-two {
+.timer-counter-one, 
+.timer-counter-two {
   text-align: center;
   width: 5rem;
   border-radius: 0.25rem;

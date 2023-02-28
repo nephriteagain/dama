@@ -1359,7 +1359,7 @@ if (forceFeed3rd.length) forceFeed = forceFeed3rd
 
 
   return (
-    <>
+    <div className="container">
     <div className="player-turn"
     style={playerTurnStyle}
     >
@@ -1471,7 +1471,7 @@ if (forceFeed3rd.length) forceFeed = forceFeed3rd
       }) }
     </div>
     <Timer timerOne={timerOne} currentTimer={currentTimer}/>
-    </>
+    </div>
   )
 }
 

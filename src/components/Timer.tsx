@@ -17,6 +17,8 @@ function Timer({ timerOne, currentTimer }) {
   const timerRef = useRef()
 
   const formatTime = (deciseconds) => {
+    if (deciseconds === Infinity) return 'Unlimited'
+
     const minutes = Math.floor(deciseconds / 600);
     const seconds = Math.floor((deciseconds % 600) / 10);
     const deci = deciseconds % 10;

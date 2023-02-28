@@ -16,13 +16,13 @@
 
 //  i change this resolution a bit
 @mixin media-md {
-  @media screen and (max-width: 1200px) {
+  @media screen and (max-width: 1300px) {
     @content;
   }
 }
 
 @mixin media-lg {
-  @media screen and (min-width: 1025px) {
+  @media screen and (min-width: 1201px) {
     @content;
   }
 }
