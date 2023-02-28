@@ -27,3 +27,28 @@
 .timer-counter-two {
   border: 1px solid blue;
 }
+
+@include media-md {
+  .timer-one,
+  .timer-two {
+    width: 500px;
+  }
+}
+
+@include media-sm {
+  .timer-one,
+  .timer-two {
+    width: 400px;
+  }
+}
+
+@include media-xsm {
+  .timer-one,
+  .timer-two {
+    width: 300px;
+    transform: translateX(3%);
+  }
+}
+
+
+
