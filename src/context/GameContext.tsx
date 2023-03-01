@@ -234,20 +234,20 @@ function doubleTake() {
   arrToJump.forEach((itemToMove, index) => {
     const jumpIndex = arrToJumpIndices[index]
 
-    kingBotLeftMulti(itemToMove,index, jumpDirection, board, jumpIndex, doubleTakeArr, jumpDirection2nd, doubleTakeLanding, tempArrForJumps, 7)
+    kingBotLeftMulti(itemToMove,index, jumpDirection, board, jumpIndex, doubleTakeArr,  tempArrForJumps, 7, jumpDirection2nd, doubleTakeLanding)
 
-    kingBotRightMulti(itemToMove,index, jumpDirection, board, jumpIndex, doubleTakeArr, jumpDirection2nd, doubleTakeLanding, tempArrForJumps, 9)
+    kingBotRightMulti(itemToMove,index, jumpDirection, board, jumpIndex, doubleTakeArr,  tempArrForJumps, 9, jumpDirection2nd, doubleTakeLanding)
 
-    kingTopLeftMulti(itemToMove,index, jumpDirection, board, jumpIndex, doubleTakeArr, jumpDirection2nd, doubleTakeLanding, tempArrForJumps, -9)
+    kingTopLeftMulti(itemToMove,index, jumpDirection, board, jumpIndex, doubleTakeArr,  tempArrForJumps, -9, jumpDirection2nd, doubleTakeLanding)
 
-    kingTopRightMulti(itemToMove,index, jumpDirection, board, jumpIndex, doubleTakeArr, jumpDirection2nd, doubleTakeLanding, tempArrForJumps, -7)
+    kingTopRightMulti(itemToMove,index, jumpDirection, board, jumpIndex, doubleTakeArr,  tempArrForJumps, -7, jumpDirection2nd, doubleTakeLanding)
     
   })
 
 }
 
 doubleTake()
-console.log(doubleTakeArr, 'double')
+
 // ----------------------------------------------------
 // triple take checker
 function tripleTake() {
@@ -269,6 +269,9 @@ function tripleTake() {
   arrToJump.forEach((item, index) => {
     const jumpIndex = jumpIndices[index]
     if (itemToMove.king) {
+      
+
+
       function topLeft() {
       
       if (

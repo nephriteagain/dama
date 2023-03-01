@@ -29,8 +29,8 @@ export function kingTopLeftMulti(
         moveTwo?.piece === null
       ) {
         doubleTakeArr.push(tempArrForJumps[index])
-        jumpDirection2nd.push('top left')
-        doubleTakeLanding.push(moveTwo)
+        jumpDirection2nd && jumpDirection2nd.push('top left')
+        doubleTakeLanding && doubleTakeLanding.push(moveTwo)
       }
       if (
         jumpDirection[index] !== 'bot right' &&
@@ -42,8 +42,8 @@ export function kingTopLeftMulti(
         moveThree?.piece === null 
       ) {
         doubleTakeArr.push(tempArrForJumps[index])
-        jumpDirection2nd.push('top left')
-        doubleTakeLanding.push(moveThree)
+        jumpDirection2nd && jumpDirection2nd.push('top left')
+        doubleTakeLanding && doubleTakeLanding.push(moveThree)
       }
       if (
         jumpDirection[index] !== 'bot right' &&
@@ -57,8 +57,8 @@ export function kingTopLeftMulti(
         moveFour?.piece === null 
       ) {
         doubleTakeArr.push(tempArrForJumps[index])
-        jumpDirection2nd.push('top left')
-        doubleTakeLanding.push(moveFour)
+        jumpDirection2nd && jumpDirection2nd.push('top left')
+        doubleTakeLanding && doubleTakeLanding.push(moveFour)
       }
       if (
         jumpDirection[index] !== 'bot right' &&
@@ -74,8 +74,8 @@ export function kingTopLeftMulti(
         moveFive?.piece === null 
       ) {
         doubleTakeArr.push(tempArrForJumps[index])
-        jumpDirection2nd.push('top left')
-        doubleTakeLanding.push(moveFive)
+        jumpDirection2nd && jumpDirection2nd.push('top left')
+        doubleTakeLanding && doubleTakeLanding.push(moveFive)
       }
       if (
         jumpDirection[index] !== 'bot right' &&
@@ -93,8 +93,8 @@ export function kingTopLeftMulti(
         moveSix?.piece === null 
       ) {
         doubleTakeArr.push(tempArrForJumps[index])
-        jumpDirection2nd.push('top left')
-        doubleTakeLanding.push(moveSix)
+        jumpDirection2nd && jumpDirection2nd.push('top left')
+        doubleTakeLanding && doubleTakeLanding.push(moveSix)
       }
       if (
         jumpDirection[index] !== 'bot right' &&
@@ -114,8 +114,8 @@ export function kingTopLeftMulti(
         moveSeven?.piece === null 
       ) {
         doubleTakeArr.push(tempArrForJumps[index])
-        jumpDirection2nd.push('top left')
-        doubleTakeLanding.push(moveSeven)
+        jumpDirection2nd && jumpDirection2nd.push('top left')
+        doubleTakeLanding && doubleTakeLanding.push(moveSeven)
       }
     
 
