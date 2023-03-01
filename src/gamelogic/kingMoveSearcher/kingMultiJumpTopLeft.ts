@@ -5,10 +5,10 @@ export function kingTopLeftMulti(
   board: any [],
   jumpIndex: number,
   doubleTakeArr: [],
+  tempArrForJumps: [],
+  number: number,
   jumpDirection2nd: string [],
   doubleTakeLanding: any [],
-  tempArrForJumps: [],
-  number: number
 ) {
   if (number === -9) {
 
