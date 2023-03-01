@@ -4,6 +4,8 @@ import Gameboard from "../components/Gameboard"
 
 import { arrayData } from "../data/arrayData"
 import { POSSIBLEJUMPS } from "../data/possibleJumps"
+import { checkForMoves } from '../gamelogic/moveChecker'
+import { checkForJumps } from "../gamelogic/jumpChecker"
 
 type GlobalContextProviderProps = {
   children: ReactNode
@@ -59,86 +61,24 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
     // console.log(position)   
 
     if (!itemToMove.king) {
-     // p1 man left move
-    if (
-      itemToMove?.piece === 'z' &&
-      board[position - 9]?.piece === null &&
-      board[position - 9]?.playable
-      ) {
-      tempArrForMoves.push(board[position - 9])
+      // p1 right move
+      checkForMoves(itemToMove, position, board, tempArrForMoves, -7)
+      // p1 left move
+      checkForMoves(itemToMove, position, board, tempArrForMoves, -9)
+      // p2 left move
+      checkForMoves(itemToMove, position, board, tempArrForMoves, 7)
+      // p2 right move
+      checkForMoves(itemToMove, position, board, tempArrForMoves, 9)
 
-    }
-    // p1 man right move
-    if (
-      itemToMove?.piece === 'z' &&
-      board[position - 7]?.piece === null &&
-      board[position - 7]?.playable
-      ) {
-      tempArrForMoves.push(board[position - 7])
+      // top right jump
+      checkForJumps(itemToMove, position, board, tempArrForJumps, -7, jumpDirection)
+      // top left jump
+      checkForJumps(itemToMove, position, board, tempArrForJumps, -9, jumpDirection)
+      // bot left jump
+      checkForJumps(itemToMove, position, board, tempArrForJumps, 7, jumpDirection)
+      // bot right jump
+      checkForJumps(itemToMove, position, board, tempArrForJumps, 9, jumpDirection)
 
-    }
-    // p2 man left move
-    if (
-      itemToMove?.piece === 'x' &&
-      board[position + 9]?.piece === null &&
-      board[position + 9]?.playable
-      ) {
-      tempArrForMoves.push(board[position + 9])
-
-    }
-    // p2 man right move
-    if (
-      itemToMove?.piece === 'x' &&
-      board[position + 7]?.piece === null &&
-      board[position + 7]?.playable
-
-      ) {
-      tempArrForMoves.push(board[position + 7])
-
-    }
-
-    // top right jump
-    if (
-      board[position - 14]?.playable &&
-      board[position - 14]?.piece === null &&
-      board[position - 7]?.piece !== null &&
-      board[position - 7]?.piece !== itemToMove?.piece
-      ) {
-        tempArrForJumps.push(board[position - 14])
-        jumpDirection.push('top right')
-      }
-    // top left
-    if (
-      board[position - 18]?.playable &&
-      board[position - 18]?.piece === null &&
-      board[position - 9]?.piece !== null &&
-      board[position - 9]?.piece !== itemToMove?.piece
-      ) {
-        tempArrForJumps.push(board[position - 18])
-        jumpDirection.push('top left')
-      }
-    // bot left
-    if (
-      board[position + 14]?.playable &&
-      board[position + 14]?.piece === null &&
-      board[position + 7]?.piece !== null &&
-      board[position + 7]?.piece !== itemToMove?.piece
-      ) {
-        tempArrForJumps.push(board[position + 14])
-        jumpDirection.push('bot left')
-
-      }
-    // bot right
-    if (
-      board[position + 18]?.playable &&
-      board[position + 18]?.piece === null &&
-      board[position + 9]?.piece !== null &&
-      board[position + 9]?.piece !== itemToMove?.piece
-      ) {
-        tempArrForJumps.push(board[position + 18])
-        jumpDirection.push('bot right')
-
-      }
     }
 //--------this area check if there is a double take opportunity
     
