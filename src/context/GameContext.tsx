@@ -6,6 +6,7 @@ import { arrayData } from "../data/arrayData"
 import { POSSIBLEJUMPS } from "../data/possibleJumps"
 import { checkForMoves } from '../gamelogic/moveChecker'
 import { checkForJumps } from "../gamelogic/jumpChecker"
+import { checkForMultiJumps } from "../gamelogic/multiJumpChecker"
 
 type GlobalContextProviderProps = {
   children: ReactNode
@@ -84,6 +85,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
     
     function doubleTake() {
       if (!tempArrForJumps.length) return
+
       const arrToJump = tempArrForJumps.map(item => {
         return {
           ...item,
@@ -99,64 +101,19 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
       })
       // total number of jumps
 
+      
       arrToJump.forEach((itemToMove, index) => {
-        const jumpIndex = arrToJumpIndices[index]
         if (!itemToMove.king) {
-          // top right jump
-          if (
-            board[jumpIndex - 14]?.playable &&
-            board[jumpIndex - 14]?.piece === null &&
-            board[jumpIndex - 7]?.piece !== null &&
-            board[jumpIndex - 7]?.piece !== itemToMove?.piece &&
-            jumpDirection[index] !== 'bot left'
-            ) {
-              doubleTakeArr.push(tempArrForJumps[index])
-              jumpDirection2nd.push('top right')
-              tempArrForJumps2.push(board[jumpIndex - 14])
-            }
-          // top left
-          if (
-            board[jumpIndex - 18]?.playable &&
-            board[jumpIndex - 18]?.piece === null &&
-            board[jumpIndex - 9]?.piece !== null &&
-            board[jumpIndex - 9]?.piece !== itemToMove?.piece &&
-            jumpDirection[index] !== 'bot right'
-            ) {
-              doubleTakeArr.push(tempArrForJumps[index])
-              jumpDirection2nd.push('top left')
-              tempArrForJumps2.push(board[jumpIndex - 18])
+            checkForMultiJumps( itemToMove, index, arrToJumpIndices, board, jumpDirection, doubleTakeArr,  -7, tempArrForJumps, jumpDirection2nd, tempArrForJumps2,)
+            checkForMultiJumps( itemToMove, index, arrToJumpIndices, board, jumpDirection, doubleTakeArr,  -9, tempArrForJumps, jumpDirection2nd, tempArrForJumps2,)
+            checkForMultiJumps( itemToMove, index, arrToJumpIndices, board, jumpDirection, doubleTakeArr,  7, tempArrForJumps, jumpDirection2nd, tempArrForJumps2,)
+            checkForMultiJumps( itemToMove, index, arrToJumpIndices, board, jumpDirection, doubleTakeArr,  9, tempArrForJumps, jumpDirection2nd, tempArrForJumps2,)
 
-            }
-          // bot left
-          if (
-            board[jumpIndex + 14]?.playable &&
-            board[jumpIndex + 14]?.piece === null &&
-            board[jumpIndex + 7]?.piece !== null &&
-            board[jumpIndex + 7]?.piece !== itemToMove?.piece &&
-            jumpDirection[index] !== 'top right'
-            ) {
-              doubleTakeArr.push(tempArrForJumps[index])
-              jumpDirection2nd.push('bot left')
-              tempArrForJumps2.push(board[jumpIndex + 14])
-
-            } 
-          // bot right
-          if (
-            board[jumpIndex + 18]?.playable &&
-            board[jumpIndex + 18]?.piece === null &&
-            board[jumpIndex + 9]?.piece !== null &&
-            board[jumpIndex + 9]?.piece !== itemToMove?.piece &&
-            jumpDirection[index] !== 'top left'
-            ) {
-              doubleTakeArr.push(tempArrForJumps[index])
-              jumpDirection2nd.push('bot right')
-              tempArrForJumps2.push(board[jumpIndex + 18])
-            }
-      }
+        }
       })
     }
     doubleTake()
-    
+    console.log(doubleTakeArr, 'double take')
     
     // ----------------------------------------------------------------------------------
     
@@ -177,47 +134,10 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
 
     arrToJump.forEach((item, index) => {
       if (!itemToMove.king) {
-        // top right
-        if (
-            board[jumpIndices[index] - 14]?.playable &&
-            board[jumpIndices[index] - 14]?.piece === null &&
-            board[jumpIndices[index] - 7]?.piece !== null &&
-            board[jumpIndices[index] - 7]?.piece !== itemToMove?.piece &&
-            jumpDirection2nd[index] !== 'bot left'
-            ) {
-              tripleTakeArr.push(tempArrForJumps[index])
-
-            }
-          // top left
-          if (
-            board[jumpIndices[index] - 18]?.playable &&
-            board[jumpIndices[index] - 18]?.piece === null &&
-            board[jumpIndices[index] - 9]?.piece !== null &&
-            board[jumpIndices[index] - 9]?.piece !== itemToMove?.piece &&
-            jumpDirection2nd[index] !== 'bot right'
-            ) {
-              tripleTakeArr.push(tempArrForJumps[index])
-            }
-          // bot left
-          if (
-            board[jumpIndices[index] + 14]?.playable &&
-            board[jumpIndices[index] + 14]?.piece === null &&
-            board[jumpIndices[index] + 7]?.piece !== null &&
-            board[jumpIndices[index] + 7]?.piece !== itemToMove?.piece &&
-            jumpDirection2nd[index] !== 'top right'
-            ) {
-              tripleTakeArr.push(tempArrForJumps[index])
-            } 
-          // bot right
-          if (
-            board[jumpIndices[index] + 18]?.playable &&
-            board[jumpIndices[index] + 18]?.piece === null &&
-            board[jumpIndices[index] + 9]?.piece !== null &&
-            board[jumpIndices[index] + 9]?.piece !== itemToMove?.piece &&
-            jumpDirection2nd[index] !== 'top left'
-            ) {
-              tripleTakeArr.push(tempArrForJumps[index])
-            }
+        checkForMultiJumps(itemToMove, index, jumpIndices, board, jumpDirection2nd, tripleTakeArr, -7, tempArrForJumps)
+        checkForMultiJumps(itemToMove, index, jumpIndices, board, jumpDirection2nd, tripleTakeArr, -9, tempArrForJumps)
+        checkForMultiJumps(itemToMove, index, jumpIndices, board, jumpDirection2nd, tripleTakeArr, 7, tempArrForJumps)
+        checkForMultiJumps(itemToMove, index, jumpIndices, board, jumpDirection2nd, tripleTakeArr, 9, tempArrForJumps)
       }
     })
 
@@ -227,7 +147,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
     }
 
     tripleTake()
-
+    console.log(tripleTakeArr, 'triple take')
 //-----------------------------------------------------
 if (doubleTakeArr.length) tempArrForJumps = doubleTakeArr
 if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
