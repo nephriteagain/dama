@@ -3,7 +3,7 @@
 .timer-one, 
 .timer-two {
   display: flex;
-  flex-direction: column;
+  flex-direction: row-reverse;
   align-items: end;
   padding-block: 0.15rem;
   padding-inline: 0.25rem;
@@ -29,6 +29,23 @@
 .timer-counter-two {
   border: 1px solid blue;
 }
+
+.flip-time {
+  width: 1.3rem;
+  height: 1.3rem;
+  position: relative;
+  margin-right: 0.5rem;
+  border: 1px solid;
+  border-radius: 4px;
+}
+
+.flip-time > svg {
+  position: absolute;
+  font-size: 1rem;
+  transform: translate(10%,10%);
+}
+
+
 
 @include media-md {
   .timer-one,
