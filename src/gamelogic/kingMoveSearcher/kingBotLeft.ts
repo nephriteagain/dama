@@ -40,7 +40,7 @@ export function kingBotLeft(
       moveSeven?.piece === null
     ) {
                 tempArrForJumps.push(moveSeven)
-                jumpDirection.push('bot left')
+                jumpDirection && jumpDirection.push('bot left')
 
               }
             } else if (
@@ -50,11 +50,11 @@ export function kingBotLeft(
       moveSix?.piece === null
     ) {
                 tempArrForJumps.push(moveSix)
-                jumpDirection.push('bot left')
+                jumpDirection && jumpDirection.push('bot left')
 
                 if (moveSeven?.piece === null && moveSeven.playable === true) {
                 tempArrForJumps.push(moveSeven)
-                jumpDirection.push('bot left')
+                jumpDirection && jumpDirection.push('bot left')
 
                 }
               }
@@ -66,15 +66,15 @@ export function kingBotLeft(
       moveFive?.piece === null
     ) {
               tempArrForJumps.push(moveFive)
-              jumpDirection.push('bot left')
+              jumpDirection && jumpDirection.push('bot left')
 
               if (moveSix?.piece === null && moveSix.playable === true) {
                 tempArrForJumps.push(moveSix)
-                jumpDirection.push('bot left')
+                jumpDirection && jumpDirection.push('bot left')
 
                 if (moveSeven?.piece === null && moveSeven.playable === true) {
                 tempArrForJumps.push(moveSeven)
-                jumpDirection.push('bot left')
+                jumpDirection && jumpDirection.push('bot left')
 
                 }
               }
@@ -87,19 +87,19 @@ export function kingBotLeft(
       moveFour?.piece === null
     ) {
             tempArrForJumps.push(moveFour)
-            jumpDirection.push('bot left')
+            jumpDirection && jumpDirection.push('bot left')
 
             if (moveFive?.piece === null && moveFive.playable === true) {
               tempArrForJumps.push(moveFive)
-              jumpDirection.push('bot left')
+              jumpDirection && jumpDirection.push('bot left')
 
               if (moveSix?.piece === null && moveSix.playable === true) {
                 tempArrForJumps.push(moveSix)
-                jumpDirection.push('bot left')
+                jumpDirection && jumpDirection.push('bot left')
 
                 if (moveSeven?.piece === null && moveSeven.playable === true) {
                 tempArrForJumps.push(moveSeven)
-                jumpDirection.push('bot left')
+                jumpDirection && jumpDirection.push('bot left')
 
                 }
               }
@@ -113,23 +113,23 @@ export function kingBotLeft(
       moveThree?.piece === null
     ) {
           tempArrForJumps.push(moveThree)
-          jumpDirection.push('bot left')
+          jumpDirection && jumpDirection.push('bot left')
 
           if (moveFour?.piece === null && moveFour.playable === true) {
             tempArrForJumps.push(moveFour)
-            jumpDirection.push('bot left')
+            jumpDirection && jumpDirection.push('bot left')
 
             if (moveFive?.piece === null && moveFive.playable === true) {
               tempArrForJumps.push(moveFive)
-              jumpDirection.push('bot left')
+              jumpDirection && jumpDirection.push('bot left')
 
               if (moveSix?.piece === null && moveSix.playable === true) {
                 tempArrForJumps.push(moveSix)
-                jumpDirection.push('bot left')
+                jumpDirection && jumpDirection.push('bot left')
 
                 if (moveSeven?.piece === null && moveSeven.playable === true) {
                 tempArrForJumps.push(moveSeven)
-                jumpDirection.push('bot left')
+                jumpDirection && jumpDirection.push('bot left')
 
                 }
               }
@@ -144,27 +144,27 @@ export function kingBotLeft(
       moveTwo?.piece === null
     ) {
         tempArrForJumps.push(moveTwo)
-        jumpDirection.push('bot left')
+        jumpDirection && jumpDirection.push('bot left')
 
         if (moveThree?.piece === null && moveThree.playable === true) {
           tempArrForJumps.push(moveThree)
-          jumpDirection.push('bot left')
+          jumpDirection && jumpDirection.push('bot left')
 
           if (moveFour?.piece === null && moveFour.playable === true) {
             tempArrForJumps.push(moveFour)
-            jumpDirection.push('bot left')
+            jumpDirection && jumpDirection.push('bot left')
 
             if (moveFive?.piece === null && moveFive.playable === true) {
               tempArrForJumps.push(moveFive)
-              jumpDirection.push('bot left')
+              jumpDirection && jumpDirection.push('bot left')
 
               if (moveSix?.piece === null && moveSix.playable === true) {
                 tempArrForJumps.push(moveSix)
-                jumpDirection.push('bot left')
+                jumpDirection && jumpDirection.push('bot left')
 
                 if (moveSeven?.piece === null && moveSeven.playable === true) {
                 tempArrForJumps.push(moveSeven)
-                jumpDirection.push('bot left')
+                jumpDirection && jumpDirection.push('bot left')
 
                 }
               }

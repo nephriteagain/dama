@@ -40,7 +40,7 @@ export function kingTopRight(
       moveSeven?.piece === null
     ) {
                 tempArrForJumps.push(moveSeven)
-                jumpDirection.push('top right')
+                jumpDirection && jumpDirection.push('top right')
 
               }
             } else if (
@@ -50,11 +50,11 @@ export function kingTopRight(
       moveSix?.piece === null
     ) {
                 tempArrForJumps.push(moveSix)
-                jumpDirection.push('top right')
+                jumpDirection && jumpDirection.push('top right')
 
                 if (moveSeven?.piece === null && moveSeven.playable === true) {
                 tempArrForJumps.push(moveSeven)
-                jumpDirection.push('top right')
+                jumpDirection && jumpDirection.push('top right')
 
                 }
               }
@@ -66,15 +66,15 @@ export function kingTopRight(
       moveFive?.piece === null
     ) {
               tempArrForJumps.push(moveFive)
-              jumpDirection.push('top right')
+              jumpDirection && jumpDirection.push('top right')
 
               if (moveSix?.piece === null && moveSix.playable === true) {
                 tempArrForJumps.push(moveSix)
-                jumpDirection.push('top right')
+                jumpDirection && jumpDirection.push('top right')
 
                 if (moveSeven?.piece === null && moveSeven.playable === true) {
                 tempArrForJumps.push(moveSeven)
-                jumpDirection.push('top right')
+                jumpDirection && jumpDirection.push('top right')
 
                 }
               }
@@ -87,19 +87,19 @@ export function kingTopRight(
       moveFour?.piece === null
     ) {
             tempArrForJumps.push(moveFour)
-            jumpDirection.push('top right')
+            jumpDirection && jumpDirection.push('top right')
 
             if (moveFive?.piece === null && moveFive.playable === true) {
               tempArrForJumps.push(moveFive)
-              jumpDirection.push('top right')
+              jumpDirection && jumpDirection.push('top right')
 
               if (moveSix?.piece === null && moveSix.playable === true) {
                 tempArrForJumps.push(moveSix)
-                jumpDirection.push('top right')
+                jumpDirection && jumpDirection.push('top right')
 
                 if (moveSeven?.piece === null && moveSeven.playable === true) {
                 tempArrForJumps.push(moveSeven)
-                jumpDirection.push('top right')
+                jumpDirection && jumpDirection.push('top right')
 
                 }
               }
@@ -113,23 +113,23 @@ export function kingTopRight(
       moveThree?.piece === null
     ) {
           tempArrForJumps.push(moveThree)
-          jumpDirection.push('top right')
+          jumpDirection && jumpDirection.push('top right')
 
           if (moveFour?.piece === null && moveFour.playable === true) {
             tempArrForJumps.push(moveFour)
-            jumpDirection.push('top right')
+            jumpDirection && jumpDirection.push('top right')
 
             if (moveFive?.piece === null && moveFive.playable === true) {
               tempArrForJumps.push(moveFive)
-              jumpDirection.push('top right')
+              jumpDirection && jumpDirection.push('top right')
 
               if (moveSix?.piece === null && moveSix.playable === true) {
                 tempArrForJumps.push(moveSix)
-                jumpDirection.push('top right')
+                jumpDirection && jumpDirection.push('top right')
 
                 if (moveSeven?.piece === null && moveSeven.playable === true) {
                 tempArrForJumps.push(moveSeven)
-                jumpDirection.push('top right')
+                jumpDirection && jumpDirection.push('top right')
 
                 }
               }
@@ -144,27 +144,27 @@ export function kingTopRight(
       moveTwo?.piece === null
     ) {
         tempArrForJumps.push(moveTwo)
-        jumpDirection.push('top right')
+        jumpDirection && jumpDirection.push('top right')
 
         if (moveThree?.piece === null && moveThree.playable === true) {
           tempArrForJumps.push(moveThree)
-          jumpDirection.push('top right')
+          jumpDirection && jumpDirection.push('top right')
 
           if (moveFour?.piece === null && moveFour.playable === true) {
             tempArrForJumps.push(moveFour)
-            jumpDirection.push('top right')
+            jumpDirection && jumpDirection.push('top right')
 
             if (moveFive?.piece === null && moveFive.playable === true) {
               tempArrForJumps.push(moveFive)
-              jumpDirection.push('top right')
+              jumpDirection && jumpDirection.push('top right')
 
               if (moveSix?.piece === null && moveSix.playable === true) {
                 tempArrForJumps.push(moveSix)
-                jumpDirection.push('top right')
+                jumpDirection && jumpDirection.push('top right')
 
                 if (moveSeven?.piece === null && moveSeven.playable === true) {
                 tempArrForJumps.push(moveSeven)
-                jumpDirection.push('top right')
+                jumpDirection && jumpDirection.push('top right')
 
                 }
               }
