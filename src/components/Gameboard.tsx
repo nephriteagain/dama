@@ -21,6 +21,12 @@ import { forceKingThirdBotRight } from "../gamelogic/forceCapture/kingForceCaptu
 import { forceKingThirdTopLeft } from "../gamelogic/forceCapture/kingForceCapture/forceKingThird/forceKingThirdTopLeft"
 import { forceKingThirdTopRight } from "../gamelogic/forceCapture/kingForceCapture/forceKingThird/forceKingThirdTopRight"
 
+// gameboard style
+import { boardStyling } from "../tsStyle/boardGameStyle"
+import { chipStyling } from "../tsStyle/chipStyling"
+import { playerTurnStyling } from "../tsStyle/playerTurnStyling"
+
+
 function Gameboard({showRules}) {
   
 
@@ -271,14 +277,7 @@ if (forceFeed3rd.length) forceFeed = forceFeed3rd
   }, [pieceToMove])
 
   const playerTurnStyle = {}
-  if (playerOneTurn) {
-    playerTurnStyle.color = 'red'
-    playerTurnStyle.backgroundColor = 'rgb(255, 220, 220)'
-  }
-  else if (!playerOneTurn) {
-    playerTurnStyle.color = 'blue'
-    playerTurnStyle.backgroundColor = 'rgb(220, 220, 255)'
-  }
+  playerTurnStyling(playerOneTurn, playerTurnStyle)
   
 
 
@@ -325,31 +324,10 @@ if (forceFeed3rd.length) forceFeed = forceFeed3rd
       { boardData.map((item: [], index: number) => {
 
         const boardStyle  = {}
-        function boardStyling() {
-        if (!item.playable) {
-          boardStyle.backgroundColor = '#111'
-        } else if (item?.highlighted) {
-          boardStyle.backgroundColor = '#ccccff'
-          boardStyle.cursor = 'pointer'
-        } else if (item?.selected) {
-          boardStyle.backgroundColor = '#6CD486'
-        } else if (playerOneTurn) {
-          boardStyle.backgroundColor = 'rgba(255, 0, 0, 0.08)'
-        } else if (!playerOneTurn) {
-          boardStyle.backgroundColor = 'rgba(0,0,255, 0.08)'
-        }
-        }
-        boardStyling()
+        boardStyling(item, boardStyle, playerOneTurn)
         
         const chipStyle = {}
-        function chipStyling() {
-        if (item?.piece === 'z') chipStyle.background = 'linear-gradient(to right, red 0%, rgb(255, 90, 90) 70%)'
-        if (item?.piece === 'x') chipStyle.background = 'linear-gradient(to right, blue 0%, rgb(90, 90, 255) 70%)'
-        if (item?.king) chipStyle.border = '0.4rem dashed #111'
-        if (item?.movable) chipStyle.opacity = '1'
-        if (!item?.movable) chipStyle.opacity = '0.4'
-        }
-        chipStyling()
+        chipStyling(item, chipStyle)
         
         // cursor pointers
         function cursorPointers() {
