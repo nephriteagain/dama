@@ -66,8 +66,8 @@ export function checkForMultiJumps(
     direction !== 'top left'
     ) {
       doubleTakeArr.push(tempArrForJumps[index])
-      jumpDirection2nd.push('bot right')
-      tempArrForJumps2.push(jumpSquare)
+      jumpDirection2nd && jumpDirection2nd.push('bot right')
+      tempArrForJumps2 && tempArrForJumps2.push(jumpSquare)
     }
   }
   

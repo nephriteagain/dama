@@ -16,6 +16,7 @@ export function kingBotRight(
       const moveSix = board[position + (number * 6)]
       const moveSeven = board[position + (number * 7)]
 
+
       if (number === 9) {
         if (kingJumpDirection ===  'top left') return
       if (moveOne?.piece === null && moveOne.playable === true) {

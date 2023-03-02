@@ -1,10 +1,12 @@
-export function checkForMoves(
+export function checkForMovesPlayerOne(
   itemToCheck: {},
   position: number,
   board: {},
   storeArr: [], 
   number: number
   ) {
+  if (number === 9) return
+  if (number === 7) return
 
   const moveSquare = board[position + number]
   // p1 move
@@ -15,7 +17,20 @@ export function checkForMoves(
   ) {
     storeArr.push(moveSquare)
   }
-  // p2 move
+}
+
+export function checkForMovesPlayerTwo(
+  itemToCheck: {},
+  position: number,
+  board: {},
+  storeArr: [], 
+  number: number
+  ) {
+  if (number === -9) return
+  if (number === -7) return
+
+  const moveSquare = board[position + number]
+  // p1 move
   if (
     itemToCheck?.piece === 'x' &&
     moveSquare?.piece === null &&
@@ -23,5 +38,4 @@ export function checkForMoves(
   ) {
     storeArr.push(moveSquare)
   }
-
 }
