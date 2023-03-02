@@ -4,9 +4,12 @@ import Gameboard from "../components/Gameboard"
 
 import { arrayData } from "../data/arrayData"
 import { POSSIBLEJUMPS } from "../data/possibleJumps"
+// regular chips logic
 import { checkForMovesPlayerOne, checkForMovesPlayerTwo } from '../gamelogic/moveSearcher/moveChecker'
 import { checkForJumps } from "../gamelogic/moveSearcher/jumpChecker"
 import { checkForMultiJumps } from "../gamelogic/moveSearcher/multiJumpChecker"
+import { regularCapture } from "../gamelogic/additionalCapture/capture/regularCapture"
+// king logic
 import { kingBotLeft } from "../gamelogic/kingMoveSearcher/kingBotLeft"
 import { kingBotRight } from "../gamelogic/kingMoveSearcher/kingBotRight"
 import { kingTopLeft } from "../gamelogic/kingMoveSearcher/kingTopLeft"
@@ -19,17 +22,13 @@ import { kingBotLeftCapture } from "../gamelogic/additionalCapture/kingCapture/b
 import { kingBotRightCapture } from "../gamelogic/additionalCapture/kingCapture/botRightKingCapture"
 import { kingTopLeftCapture } from "../gamelogic/additionalCapture/kingCapture/topLeftKingCapture"
 import { kingTopRightCapture } from "../gamelogic/additionalCapture/kingCapture/topRightKingCapture"
-import { regularCapture } from "../gamelogic/additionalCapture/capture/regularCapture"
+
 
 
 type GlobalContextProviderProps = {
   children: ReactNode
 }
 
-// type GlobalContext = {
-//   highlightMoves : (itemToMove: [], position: number) => []
-//   movePiece : ()
-// }
 
 
 const GlobalContext = createContext()
@@ -41,7 +40,7 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
   const [ pieceToMove, setPieceToMove ] = useState(null)
   const [ possibleMoves, setPossibleMoves ] = useState([])
 
-  const [ playerOneTurn, setPlayerOneTurn ] = useState(false) // player one will still be first to move regardless
+  const [ playerOneTurn, setPlayerOneTurn ] = useState(true) // player one will still be first to move regardless
   const [ playerChipsCount, setPlayerChipsCount ] = useState({p1: 12, p2: 12})
   const [ gameOver, setGameOver ] = useState(false)
   const [ jumpedChip, setJumpedChip ] = useState(null)
@@ -510,8 +509,7 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
     
 
     eatMoreChips(multipleJumpSearcher, jumpSearcherIndex, newBoardData, jumped, jumpDirection)
-    console.log(forceFeed, 'forcefeed')
-    console.log(multipleJumpSearcher, 'mulitjumpsearcher')
+
 
 
     function kingPromotionChecker() {
@@ -617,8 +615,6 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
     if (!playerMoveArr.length) {
       setGameOver(true)
     }
-
-    console.log(playerMoveArr, playerOneTurn? 'player 1': 'player 2')
   }, [playerOneTurn])
 
 
