@@ -106,6 +106,7 @@
   padding-block: 0.5rem;
   border-radius: 0.5rem;
   color: rgba(0, 0, 0, 0.65);
+  box-shadow: 0.1rem 0.1rem 0.15rem rgba(0, 0, 0, 0.4);
   transition: all 0.1s ease-in-out;
 }
 
@@ -130,6 +131,7 @@
   padding-block: 0.5rem;
   border-radius: 0.5rem;
   color: rgba(0, 0, 0, 0.65);
+  box-shadow: 0.1rem 0.1rem 0.15rem rgba(0, 0, 0, 0.4);
   transition: all 0.1s ease-in-out;
 }
 
@@ -154,6 +156,7 @@
   padding-block: 0.5rem;
   border-radius: 0.5rem;
   color: rgba(0, 0, 0, 0.65);
+  box-shadow: 0.1rem 0.1rem 0.15rem rgba(0, 0, 0, 0.4);
   transition: all 0.1s ease-in-out;
 }
 
@@ -172,8 +175,8 @@
   padding-block: 0.5rem;
   background-color: rgb(64, 255, 47);
   border-radius: 0.5rem;
-  border: 0.25rem solid rgb(234, 0, 255);
-  box-shadow: 0 0 0.5rem 0.2rem rgba(0, 0, 0, 0.25);
+  border: 0.25rem solid rgb(208, 255, 0);
+  box-shadow: 0.2rem 0.2rem 0.3rem rgba(0, 0, 0, 0.4);
 }
 
 .current-game-mode > span {
