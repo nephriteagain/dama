@@ -4,7 +4,7 @@ export function boardStyling(
   playerOneTurn
 ) {
   if (!item.playable) {
-    boardStyle.backgroundColor = '#111'
+    boardStyle.background = 'linear-gradient(to top left, #111 0%, rgba(0, 0, 0, 0.80) 75%' 
   } else if (item?.highlighted) {
     boardStyle.backgroundColor = '#ccccff'
     boardStyle.cursor = 'pointer'

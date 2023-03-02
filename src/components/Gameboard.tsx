@@ -3,6 +3,10 @@ import { useEffect, useRef } from "react"
 import { useGlobalContext } from "../context/GameContext"
 import Timer from './Timer'
 import TimerTwo from "./TimerTwo"
+import PlayerTurnBar from "./PlayerTurnBar"
+import RestartButton from "./RestartButton"
+import ChangeModeButton from "./ChangeModeButton"
+import ShowRuleButton from "./ShowRuleButton"
 
 import '../sass/Gameboard.scss'
 // regular chips
@@ -24,8 +28,7 @@ import { forceKingThirdTopRight } from "../gamelogic/forceCapture/kingForceCaptu
 // gameboard style
 import { boardStyling } from "../tsStyle/boardGameStyle"
 import { chipStyling } from "../tsStyle/chipStyling"
-import { playerTurnStyling } from "../tsStyle/playerTurnStyling"
-
+import { cursorPointers } from "../tsStyle/cursorPointers"
 
 function Gameboard({showRules}) {
   
@@ -67,9 +70,6 @@ function Gameboard({showRules}) {
     
   } = useGlobalContext()
 
-  function changeGameMode() {
-    setGameMode('')
-  }
   
   const handleStart = () => {
     setIsActive(true);
@@ -276,49 +276,20 @@ if (forceFeed3rd.length) forceFeed = forceFeed3rd
   
   }, [pieceToMove])
 
-  const playerTurnStyle = {}
-  playerTurnStyling(playerOneTurn, playerTurnStyle)
   
 
 
   return (
     <div className="container">
-    <div className="player-turn"
-    style={playerTurnStyle}
-    >
-      Player {playerOneTurn? 'One' : 'Two'}'s Turn
-    </div>
+    <PlayerTurnBar />
+    <RestartButton />
+    <ChangeModeButton />
+    <ShowRuleButton showRules={showRules}/>
+    <TimerTwo timerTwo={timerTwo} currentTimer={currentTimer} />
 
-    <div className="restart-game">
-      <button className="btn-restart"
-        onClick={() => {
-          handleRestart()
-          handleReset()
-        }}
-      >Restart Game</button>
-    </div>
-    <div className="change-mode">
-      <button className="btn-mode"
-        onClick = {
-          () => {
-            handleRestart()
-            handleReset()
-            changeGameMode()
-          }
-        }
-      >
-        Change Game Mode
-      </button>
-    </div>
-    <div className="show-rules">
-        <button className="btn-show-rules" onClick={showRules}>
-          Show Rules
-        </button>
-    </div>
     { gameMode && <div className="current-game-mode">
         Game Mode: <span>{gameMode.toUpperCase()}</span>
     </div> }
-    <TimerTwo timerTwo={timerTwo} currentTimer={currentTimer} />
 
     <div className='board'>
       { boardData.map((item: [], index: number) => {
@@ -330,18 +301,8 @@ if (forceFeed3rd.length) forceFeed = forceFeed3rd
         chipStyling(item, chipStyle)
         
         // cursor pointers
-        function cursorPointers() {
-          if (playerOneTurn && item?.piece === 'z' && item?.movable) chipStyle.cursor = 'grab'
-        if (playerOneTurn && item?.piece === 'x' && item?.movable) chipStyle.cursor = 'not-allowed'
-        if (!playerOneTurn && item?.piece === 'x' && item?.movable) chipStyle.cursor = 'grab'
-        if (!playerOneTurn && item?.piece === 'z' && item?.movable) chipStyle.cursor = 'not-allowed'
-        if (playerOneTurn && item?.piece === 'z' && !item?.movable) chipStyle.cursor = 'not-allowed'
-        if (!playerOneTurn && item?.piece === 'x' && !item?.movable) chipStyle.cursor = 'not-allowed'
-        }
-        cursorPointers()
+        cursorPointers(playerOneTurn, item, chipStyle)
         
-
-
 
         return ( 
           <div className='square'
