@@ -1,8 +1,10 @@
+import { data } from "../../data/arrayData"
+
 export function checkForJumps(
-  itemToCheck: {},
+  itemToCheck: data,
   position: number,
-  board: {},
-  storeArr: [], 
+  board: data[],
+  storeArr: data[], 
   number: number,
   directionArr: string []
 ) {

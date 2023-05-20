@@ -1,11 +1,13 @@
+import { data } from "../../../../data/arrayData"
+
 export function forceKingCapture(
-  item,
-  index,
-  boardData,
-  forceFeed,
-  jumpDirection,
-  jumpedArr,
-  number
+  item : data,
+  index : number,
+  boardData : data[],
+  forceFeed : data[],
+  jumpDirection : string[],
+  jumpedArr : data[],
+  number : number
 ) {
   if (!item.king) return
 

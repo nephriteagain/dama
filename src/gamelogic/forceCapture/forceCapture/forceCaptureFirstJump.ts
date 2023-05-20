@@ -1,11 +1,13 @@
+import { data } from "../../../data/arrayData"
+
 export function forceCaptureRegular(
-  item,
-  index,
-  boardData,
-  forceFeed,
-  jumpDirection,
-  jumpedArr,
-  number
+  item : data,
+  index : number,
+  boardData : data[],
+  forceFeed : data[],
+  jumpDirection : string[],
+  jumpedArr : data[],
+  number : number
 ) {
     const itemToCapture = boardData[index + number]
     const squareToLand = boardData[index + (number * 2)]

@@ -1,10 +1,12 @@
+import { data } from "../../../data/arrayData"
+
 export function kingTopRightCapture(
-  pieceToJump,
-  index,
-  board,
-  kingJumpDirection,
-  forceFeed,
-  number
+  pieceToJump : data,
+  index : number,
+  board : data[],
+  kingJumpDirection : string,
+  forceFeed : data[],
+  number: number
 ) {
   if (number === -7) {
         const moveOne = board[index + number]      

@@ -1,20 +1,24 @@
+import { data } from "../../data/arrayData"
+import { move } from "./kingBotLeft"
+
+
 export function kingBotRight(
-  itemToMove: {},
+  itemToMove: data,
   position: number,
   kingJumpDirection: string,
-  board: any [],
-  tempArrForMoves: [],
-  tempArrForJumps: [],
-  jumpDirection: [],
+  board: data[],
+  tempArrForMoves: data[],
+  tempArrForJumps: data[],
+  jumpDirection: string[],
   number: number
 ) {
-      const moveOne = board[position + number]
-      const moveTwo = board[position + (number * 2)]
-      const moveThree = board[position + (number * 3)]
-      const moveFour = board[position + (number * 4)]
-      const moveFive = board[position + (number * 5)]
-      const moveSix = board[position + (number * 6)]
-      const moveSeven = board[position + (number * 7)]
+      const moveOne : move = board[position + number]
+      const moveTwo : move = board[position + (number * 2)]
+      const moveThree : move = board[position + (number * 3)]
+      const moveFour : move = board[position + (number * 4)]
+      const moveFive : move = board[position + (number * 5)]
+      const moveSix : move = board[position + (number * 6)]
+      const moveSeven : move = board[position + (number * 7)]
 
 
       if (number === 9) {

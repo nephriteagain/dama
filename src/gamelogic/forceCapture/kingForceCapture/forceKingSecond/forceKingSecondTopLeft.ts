@@ -1,14 +1,16 @@
+import { data } from "../../../../data/arrayData"
+
 export function forceKingTopLeft(
-  itemToMove,
-  index,
-  boardData,
-  jumpIndex,
-  jumpDirection,
-  jumpedArr2nd,
-  jumpDirection2nd,
-  forceFeed2nd,
-  forceFeed,
-  number
+  itemToMove : data,
+  index : number,
+  boardData : data[],
+  jumpIndex : number,
+  jumpDirection : string[],
+  jumpedArr2nd : data[],
+  jumpDirection2nd : string[],
+  forceFeed2nd : data[],
+  forceFeed : data[],
+  number : number
 ) {
 
   if (!itemToMove.king) return

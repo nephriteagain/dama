@@ -23,42 +23,48 @@ import { kingBotRightCapture } from "../gamelogic/additionalCapture/kingCapture/
 import { kingTopLeftCapture } from "../gamelogic/additionalCapture/kingCapture/topLeftKingCapture"
 import { kingTopRightCapture } from "../gamelogic/additionalCapture/kingCapture/topRightKingCapture"
 
-
+import { data, piece } from "../data/arrayData"
 
 type GlobalContextProviderProps = {
   children: ReactNode
 }
 
+export type playerChipsCount = {
+  p1: number, p2: number
+}
 
+export type kingJumpDirection = ('top left'|'top right'|'bot left'|'bot right'|null)
+
+export type gameMode = ('dama'|'perdigana'|'')
 
 const GlobalContext = createContext()
 
 export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
 
   
-  const [ boardData, setBoardData ] = useState(arrayData)
-  const [ pieceToMove, setPieceToMove ] = useState(null)
-  const [ possibleMoves, setPossibleMoves ] = useState([])
+  const [ boardData, setBoardData ] = useState<data[]>(arrayData)
+  const [ pieceToMove, setPieceToMove ] = useState<data|null>(null)
+  // const [ possibleMoves, setPossibleMoves ] = useState([])
 
-  const [ playerOneTurn, setPlayerOneTurn ] = useState(false) // player one will still be first to move regardless
-  const [ playerChipsCount, setPlayerChipsCount ] = useState({p1: 12, p2: 12})
-  const [ gameOver, setGameOver ] = useState(false)
-  const [ jumpedChip, setJumpedChip ] = useState(null)
-  const [multipleCapture, setMultipleCapture] = useState(false)
-  const [forceCapture, setForceCapture] = useState(false)
-  const [ kingJumpDirection, setKingJumpDirection ] = useState(null)
-  const [ gameMode, setGameMode ] = useState('')
-  const [ timeLimit, setTimeLimit ] = useState(3000)
-  const [timerOne, setTimerOne] = useState(timeLimit);
-  const [timerTwo, setTimerTwo] = useState(timeLimit);
-  const [isActive, setIsActive] = useState(false);
-  const [currentTimer, setCurrentTimer] = useState(2);
-  const [ isFirstMove, setIsFirstMove ] = useState(true)
-  const [ timeSup, setTimesUp ] = useState(false)
+  const [ playerOneTurn, setPlayerOneTurn ] = useState<boolean>(false) // player one will still be first to move regardless
+  const [ playerChipsCount, setPlayerChipsCount ] = useState<playerChipsCount>({p1: 12, p2: 12})
+  const [ gameOver, setGameOver ] = useState<boolean>(false)
+  // const [ jumpedChip, setJumpedChip ] = useState(null)
+  const [multipleCapture, setMultipleCapture] = useState<boolean>(false)
+  const [forceCapture, setForceCapture] = useState<boolean>(false)
+  const [ kingJumpDirection, setKingJumpDirection ] = useState<kingJumpDirection>(null)
+  const [ gameMode, setGameMode ] = useState<gameMode>('')
+  const [ timeLimit, setTimeLimit ] = useState<number>(3000)
+  const [timerOne, setTimerOne] = useState<number>(timeLimit);
+  const [timerTwo, setTimerTwo] = useState<number>(timeLimit);
+  const [isActive, setIsActive] = useState<boolean>(false);
+  const [currentTimer, setCurrentTimer] = useState<number>(2);
+  const [ isFirstMove, setIsFirstMove ] = useState<boolean>(true)
+  const [ timeSup, setTimesUp ] = useState<boolean>(false)
 
 
 
-  function highlightMoves(itemToMove, position: number, playerTurn: boolean, board) {
+  function highlightMoves(itemToMove : data, position: number, playerTurn: boolean, board: data[]) {
     const { x: xPosition, y: yPosition, piece, player, selected } = itemToMove;
     let tempArrForMoves = [] // stores non capturing moves
     let tempArrForJumps = [] // stores capturing moves
@@ -185,7 +191,7 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
 
   
   setPieceToMove({...itemToMove})
-  setPossibleMoves([...tempArrForMoves])
+  // setPossibleMoves([...tempArrForMoves])
   setBoardData([...boardCopy])
   }
 
@@ -551,7 +557,7 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
     setPlayerOneTurn(true)
     setPlayerChipsCount({p1: 12, p2: 12})
     setGameOver(false)
-    setJumpedChip(null)
+    // setJumpedChip(null)
     setMultipleCapture(false)
     setForceCapture(false)
     setKingJumpDirection(null)
@@ -634,9 +640,9 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       gameOver,
       setGameOver,
       playerChipsCount,
-      setPossibleMoves,
-      jumpedChip,
-      setJumpedChip,
+      // setPossibleMoves,
+      // jumpedChip,
+      // setJumpedChip,
       multipleCapture,
       setMultipleCapture,
       forceCapture,

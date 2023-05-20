@@ -1,9 +1,11 @@
+import { data } from "../../../data/arrayData"
+
 export function regularCapture(
-  pieceToJump,
-  index,
-  board,
-  forceFeed,
-  number
+  pieceToJump : data,
+  index : number,
+  board : data[],
+  forceFeed : data[],
+  number: number
 ) {
 
   const pieceToCapture = board[index + number]

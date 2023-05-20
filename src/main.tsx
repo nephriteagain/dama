@@ -5,9 +5,11 @@ import './index.css'
 import { GlobalProvider } from './context/GameContext'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  // <React.StrictMode>
+  <React.StrictMode>
+
     <GlobalProvider>
       <App />
     </GlobalProvider>
+    
   // </React.StrictMode>,
 )

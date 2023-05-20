@@ -1,14 +1,16 @@
+import { data } from "../../../data/arrayData"
+
 export function foreCaptureSecond(
-  itemToMove,
-  index,
-  boardData,
-  jumpIndex,
-  jumpDirection2nd,
-  forceFeed2nd,
-  jumpDirection,
-  jumpedArr2nd,
-  forceFeed,
-  number
+  itemToMove : data,
+  index : number,
+  boardData : data[],
+  jumpIndex : number,
+  jumpDirection2nd : string[],
+  forceFeed2nd : data[],
+  jumpDirection : string[],
+  jumpedArr2nd : data[],
+  forceFeed : data[],
+  number : number
 ) {
   
     const itemToCapture = boardData[jumpIndex + number]

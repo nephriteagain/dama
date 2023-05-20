@@ -1,8 +1,10 @@
+import { data } from "../../data/arrayData"
+
 export function checkForMovesPlayerOne(
-  itemToCheck: {},
+  itemToCheck: data,
   position: number,
-  board: {},
-  storeArr: [], 
+  board: data[],
+  storeArr: data[], 
   number: number
   ) {
   if (number === 9) return
@@ -20,10 +22,10 @@ export function checkForMovesPlayerOne(
 }
 
 export function checkForMovesPlayerTwo(
-  itemToCheck: {},
+  itemToCheck: data,
   position: number,
-  board: {},
-  storeArr: [], 
+  board: data[],
+  storeArr: data[], 
   number: number
   ) {
   if (number === -9) return

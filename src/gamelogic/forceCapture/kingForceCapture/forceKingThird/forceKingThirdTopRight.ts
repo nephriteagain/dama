@@ -1,12 +1,14 @@
+import { data } from "../../../../data/arrayData"
+
 export function forceKingThirdTopRight(
-  item,
-  index,
-  boardData,
-  jumpIndex,
-  jumpDirection2nd,
-  forceFeed3rd,
-  forceFeed2nd,
-  number
+  item : data,
+  index : number,
+  boardData : data[],
+  jumpIndex : number,
+  jumpDirection2nd : string[],
+  forceFeed3rd : data[],
+  forceFeed2nd : data[],
+  number : number
 ) {                                
   if (!item?.king) return
 

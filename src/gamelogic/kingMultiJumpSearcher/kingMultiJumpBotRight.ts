@@ -1,24 +1,27 @@
+import { data } from "../../data/arrayData"
+import { move } from "../kingMoveSearcher/kingBotLeft"
+
 export function kingBotRightMulti(
-  itemToMove: {},
+  itemToMove: data,
   index: number,
-  jumpDirection: string [],
-  board: any [],
+  jumpDirection: string[],
+  board: data[],
   jumpIndex: number,
-  doubleTakeArr: [],
-  tempArrForJumps: [],
+  doubleTakeArr: data[],
+  tempArrForJumps: data[],
   number: number,
-  jumpDirection2nd: string [],
-  doubleTakeLanding: any [],
+  jumpDirection2nd: string[],
+  doubleTakeLanding: data[],
 ) {
   if (number === 9) {
 
-    const moveOne = board[jumpIndex + number]
-    const moveTwo = board[jumpIndex + (number * 2)]
-    const moveThree = board[jumpIndex + (number * 3)]
-    const moveFour = board[jumpIndex + (number * 4)]
-    const moveFive = board[jumpIndex + (number * 5)]
-    const moveSix = board[jumpIndex + (number * 6)]
-    const moveSeven = board[jumpIndex + (number * 7)]
+    const moveOne : move = board[jumpIndex + number]
+    const moveTwo : move = board[jumpIndex + (number * 2)]
+    const moveThree : move = board[jumpIndex + (number * 3)]
+    const moveFour : move = board[jumpIndex + (number * 4)]
+    const moveFive : move = board[jumpIndex + (number * 5)]
+    const moveSix : move = board[jumpIndex + (number * 6)]
+    const moveSeven : move = board[jumpIndex + (number * 7)]
 
 
     if (
