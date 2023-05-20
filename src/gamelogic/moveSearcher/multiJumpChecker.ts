@@ -10,8 +10,8 @@ export function checkForMultiJumps(
   doubleTakeArr: data[],
   number : number,
   tempArrForJumps : data[],
-  jumpDirection2nd : string[],
-  tempArrForJumps2 : data[]
+  jumpDirection2nd? : string[],
+  tempArrForJumps2? : data[]
 ) {
   const jumpIndex = arrToJumpIndices[index]
   const jumpSquare = board[jumpIndex + (number * 2)]

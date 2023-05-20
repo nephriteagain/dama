@@ -1,7 +1,9 @@
+import { data } from "../data/arrayData"
+
 export function boardStyling(
-  item,
-  boardStyle,
-  playerOneTurn
+  item : data,
+  boardStyle : {[key: string]: string},
+  playerOneTurn : boolean
 ) {
   if (!item.playable) {
     boardStyle.background = 'linear-gradient(to top left, #111 0%, rgba(0, 0, 0, 0.80) 75%' 

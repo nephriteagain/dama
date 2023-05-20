@@ -4,7 +4,7 @@ export function kingTopLeftCapture(
   pieceToJump : data,
   index : number,
   board : data[],
-  kingJumpDirection : string,
+  kingJumpDirection : string|null,
   forceFeed : data[],
   number: number
 ) {

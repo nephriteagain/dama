@@ -37,7 +37,49 @@ export type kingJumpDirection = ('top left'|'top right'|'bot left'|'bot right'|n
 
 export type gameMode = ('dama'|'perdigana'|'')
 
-const GlobalContext = createContext()
+
+type GlobalContextValue = {
+  boardData: data[];
+  setBoardData: React.Dispatch<React.SetStateAction<data[]>>;
+  pieceToMove: data | null;
+  setPieceToMove: React.Dispatch<React.SetStateAction<data | null>>;
+  playerOneTurn: boolean;
+  setPlayerOneTurn: React.Dispatch<React.SetStateAction<boolean>>;
+  playerChipsCount: playerChipsCount;
+  setPlayerChipsCount: React.Dispatch<React.SetStateAction<playerChipsCount>>;
+  gameOver: boolean;
+  setGameOver: React.Dispatch<React.SetStateAction<boolean>>;
+  multipleCapture: boolean;
+  setMultipleCapture: React.Dispatch<React.SetStateAction<boolean>>;
+  forceCapture: boolean;
+  setForceCapture: React.Dispatch<React.SetStateAction<boolean>>;
+  kingJumpDirection: kingJumpDirection | null;
+  setKingJumpDirection: React.Dispatch<React.SetStateAction<kingJumpDirection | null>>;
+  gameMode: gameMode;
+  setGameMode: React.Dispatch<React.SetStateAction<gameMode>>;
+  timeLimit: number;
+  setTimeLimit: React.Dispatch<React.SetStateAction<number>>;
+  timerOne: number;
+  setTimerOne: React.Dispatch<React.SetStateAction<number>>;
+  timerTwo: number;
+  setTimerTwo: React.Dispatch<React.SetStateAction<number>>;
+  isActive: boolean;
+  setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
+  currentTimer: number;
+  setCurrentTimer: React.Dispatch<React.SetStateAction<number>>;
+  isFirstMove: boolean;
+  setIsFirstMove: React.Dispatch<React.SetStateAction<boolean>>;
+  timeSup: boolean;
+  setTimesUp: React.Dispatch<React.SetStateAction<boolean>>;
+  handleRestart: () => void;
+  handleReset: () => void
+  highlightMoves: (itemToMove: data, position: number, playerTurn: boolean, board: data[]) => void;
+  highlightMovesKing: (itemToMove: data, position: number, playerTurn: boolean, board: data[]) => void;
+  movePiece: (pieceToMove: data, placeToLand: data, index: number) => void;
+};
+                      
+
+const GlobalContext = createContext<GlobalContextValue>({} as GlobalContextValue)
 
 export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
 
@@ -65,13 +107,13 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
 
 
   function highlightMoves(itemToMove : data, position: number, playerTurn: boolean, board: data[]) {
-    const { x: xPosition, y: yPosition, piece, player, selected } = itemToMove;
-    let tempArrForMoves = [] // stores non capturing moves
-    let tempArrForJumps = [] // stores capturing moves
-    let tempArrForJumps2 = []                                         
-    let jumpDirection = [] // stores direction of jumps
-    const doubleTakeArr : number[] = [] // stores jumps from double captures
-    let tripleTakeArr : number[] = []
+    const { x: xPosition, y: yPosition, piece, selected } = itemToMove;
+    let tempArrForMoves : data[] = [] // stores non capturing moves
+    let tempArrForJumps : data[] = [] // stores capturing moves
+    let tempArrForJumps2 : data[] = []                                         
+    let jumpDirection : string[] = [] // stores direction of jumps
+    const doubleTakeArr : data[] = [] // stores jumps from double captures
+    let tripleTakeArr : data[] = []
     const jumpDirection2nd : string[] = [] // stores direction jumps from double captures
     
     if (piece === null) return
@@ -195,16 +237,16 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
   setBoardData([...boardCopy])
   }
 
-  function highlightMovesKing(itemToMove, position: number, playerTurn, board) {
-    const { x: xPosition, y: yPosition, piece, player } = itemToMove;
-    let tempArrForMoves = []
-    let tempArrForJumps = []
-    let jumpDirection = []
+  function highlightMovesKing(itemToMove : data, position: number, playerTurn : boolean, board: data[]) {
+    const { x: xPosition, y: yPosition, piece,  } = itemToMove;
+    let tempArrForMoves : data[] = []
+    let tempArrForJumps : data[] = []
+    let jumpDirection : string[] = []
     
-    let doubleTakeArr = []
-    let tripleTakeArr = []
-    let jumpDirection2nd = []
-    let doubleTakeLanding = []
+    let doubleTakeArr : data[] = []
+    let tripleTakeArr : data[] = []
+    let jumpDirection2nd : string[] = []
+    let doubleTakeLanding : data[] = []
 
     if (piece === null) return
     if (!itemToMove.king) return
@@ -314,7 +356,7 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
     })
 
 
-    setPossibleMoves([...tempArrForMoves])
+    // setPossibleMoves([...tempArrForMoves])
     setBoardData([...tempboard])
     setPieceToMove({...itemToMove})
 
@@ -322,7 +364,7 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
 
 
 
-  function movePiece(pieceToMove: [], placeToLand: [], index: number) {
+  function movePiece(pieceToMove: data, placeToLand: data, index: number) {
     let movingPiece = pieceToMove
     let chipToBeTaken = {}
     let multipleJumpSearcher = {}
@@ -337,13 +379,13 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       }
     })
 
+
+
     let newBoardData = boardData.map((item, index) => {
       if (!item.playable) return item
-      const indexStart = boardData.indexOf(chipToMove)
+      const indexStart = boardData.indexOf(chipToMove as data)
       const indexLand = boardData.indexOf(placeToLand)
-
-      
-            
+                
 
       if (item === chipToMove) {
         return {...item, piece: null, selected: true, king:false}
@@ -469,8 +511,14 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
     })
     // setBoardData([...newArr])
     
-    let forceFeed = []
-    function eatMoreChips(pieceToJump, index: number, board, pieceJumped: boolean, kingJumpDirection: string) {
+    let forceFeed : data[] = []
+    function eatMoreChips(
+      pieceToJump : data, 
+      index: number, 
+      board : data[], 
+      pieceJumped: boolean, 
+      kingJumpDirection: string|null
+      ) {
       if (!pieceJumped) return // only when a piece do a capture that this will run
       forceFeed = []
       if (!pieceToJump.king) {
@@ -482,10 +530,10 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
 
       if (pieceToJump.king) {
         // top right
-        kingTopLeftCapture(pieceJumped, index, board, kingJumpDirection, forceFeed, -9)
-        kingTopRightCapture(pieceJumped, index, board, kingJumpDirection, forceFeed, -7)
-        kingBotLeftCapture(pieceJumped, index, board, kingJumpDirection, forceFeed, 7)
-        kingBotRightCapture(pieceJumped, index, board, kingJumpDirection, forceFeed, 9)
+        kingTopLeftCapture(pieceToJump, index, board, kingJumpDirection, forceFeed, -9)
+        kingTopRightCapture(pieceToJump, index, board, kingJumpDirection, forceFeed, -7)
+        kingBotLeftCapture(pieceToJump, index, board, kingJumpDirection, forceFeed, 7)
+        kingBotRightCapture(pieceToJump, index, board, kingJumpDirection, forceFeed, 9)
       }
       if (forceFeed.length) {
         // console.log(forceFeed, 'you must eat this again')
@@ -520,7 +568,7 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
 
     function kingPromotionChecker() {
       if (forceFeed.length) return
-      newBoardData = newBoardData.map((item) => {
+      newBoardData = newBoardData.map((item: data) => {
         if (!item.playable) return item
 
         else if (item.piece === 'z' && !item.king && item.y === 7) {
@@ -553,7 +601,7 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
   function handleRestart() {
     setBoardData(arrayData)
     setPieceToMove(null)
-    setPossibleMoves([])
+    // setPossibleMoves([])
     setPlayerOneTurn(true)
     setPlayerChipsCount({p1: 12, p2: 12})
     setGameOver(false)
@@ -577,9 +625,9 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
 
   // player chips counter
   useEffect(() => {
-    let playerMoveArr  = []
-    let tempArr = []
-    let jumpDirection = []
+    let playerMoveArr : data[]  = []
+    let tempArr : data[] = []
+    let jumpDirection : string[] = []
 
     boardData.forEach((item, index) => {
       if (!item?.playable) return // black squares

@@ -42,7 +42,8 @@ function WinnerModal() {
     </div>  
     )
   }
-  else if (gameMode === 'perdigana') {
+  // else if (gameMode === 'perdigana') {
+  else {
     return (
     <div className='modal-background'>
       <div className='winner-modal'>

@@ -30,7 +30,13 @@ import { boardStyling } from "../tsStyle/boardGameStyle"
 import { chipStyling } from "../tsStyle/chipStyling"
 import { cursorPointers } from "../tsStyle/cursorPointers"
 
-function Gameboard({showRules}) {
+import { data } from "../data/arrayData"
+
+type GameboardProps = {
+  showRules: () => void
+}
+
+function Gameboard({showRules}: GameboardProps) {
   
 
 
@@ -91,7 +97,7 @@ function Gameboard({showRules}) {
 
 
   useEffect(() => {
-    let interval = null;
+    let interval : any = null;
     if  (isActive && getCurrentTimer() === 0) setTimesUp(true)
     if (isActive && getCurrentTimer() > 0) {
       interval = setInterval(() => {
@@ -132,14 +138,14 @@ function Gameboard({showRules}) {
       setKingJumpDirection(null)
     }
     if (forceCapture) return //this wont rerun again multiple times
-    let forceFeed = []
-    let forceFeed2nd = []
-    let forceFeed3rd = []
-    let jumpedArr = []
-    let jumpDirection = []
-    let jumpedArr2nd = []
-    let jumpDirection2nd = []
-    let jumpedArr3rd = []   
+    let forceFeed : data[] = []
+    let forceFeed2nd : data[] = []
+    let forceFeed3rd : data[] = []
+    let jumpedArr : data[] = []
+    let jumpDirection : string[] = []
+    let jumpedArr2nd : data[] = []
+    let jumpDirection2nd : string[] = []
+    let jumpedArr3rd : data[] = []   
 
     
 
@@ -292,7 +298,7 @@ if (forceFeed3rd.length) forceFeed = forceFeed3rd
     </div> }
 
     <div className='board'>
-      { boardData.map((item: [], index: number) => {
+      { boardData.map((item: data, index: number) => {
 
         const boardStyle  = {}
         boardStyling(item, boardStyle, playerOneTurn)
@@ -312,7 +318,7 @@ if (forceFeed3rd.length) forceFeed = forceFeed3rd
               () => {
                 if (!item.highlighted) return
                 isFirstMove && handleStart()
-                movePiece(pieceToMove, item, index)
+                movePiece(pieceToMove as data, item, index)
                 
               }
             }

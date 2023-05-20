@@ -1,6 +1,8 @@
+import { data } from "../data/arrayData"
+
 export function chipStyling(
-  item,
-  chipStyle
+  item : data,
+  chipStyle : {[key: string]: string}
 ) {
   if (item?.piece === 'z') chipStyle.background = 'linear-gradient(to top left, red 0%, rgb(255, 90, 90) 70%)'
   if (item?.piece === 'x') chipStyle.background = 'linear-gradient(to top left, blue 0%, rgb(90, 90, 255) 70%)'

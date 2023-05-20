@@ -4,7 +4,7 @@ import { move } from "./kingBotLeft"
 export function kingTopRight(
   itemToMove: data                          ,
   position: number,
-  kingJumpDirection: string,
+  kingJumpDirection: string|null,
   board: data[],
   tempArrForMoves: data[],
   tempArrForJumps: data[],

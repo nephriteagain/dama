@@ -5,7 +5,7 @@ export type move = (data|null|undefined)
 export function kingBotLeft(
   itemToMove: data,
   position: number,
-  kingJumpDirection: string,
+  kingJumpDirection: string|null,
   board: data[],
   tempArrForMoves: data[],
   tempArrForJumps: data[],

@@ -1,6 +1,10 @@
 import '../sass/Gameboard.scss'
 
-function ShowRuleButton({showRules}) {
+interface ShowRuleButtonProps {
+  showRules: () => void
+}
+
+function ShowRuleButton({showRules} : ShowRuleButtonProps) {
   return (
     <div className="show-rules">
         <button className="btn-show-rules" onClick={showRules}>

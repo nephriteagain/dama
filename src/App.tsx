@@ -11,7 +11,7 @@ import Rules from './components/Rules'
 
 
 function App() {
-  const [ openRules, setOpenRules ] = useState(false)
+  const [ openRules, setOpenRules ] = useState<boolean>(false)
 
   const {gameOver, gameMode} = useGlobalContext()
 

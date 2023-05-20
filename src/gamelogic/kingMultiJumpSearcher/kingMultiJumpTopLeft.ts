@@ -10,8 +10,8 @@ export function kingTopLeftMulti(
   doubleTakeArr: data[],
   tempArrForJumps: data[],
   number: number,
-  jumpDirection2nd: string[],
-  doubleTakeLanding: data[],
+  jumpDirection2nd?: string[],
+  doubleTakeLanding?: data[],
 ) {
   if (number === -9) {
 

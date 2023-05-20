@@ -4,21 +4,25 @@ import { CgCloseR } from 'react-icons/cg'
 
 import '../sass/Rules.scss'
 
+type RuleProps = {
+  setOpenRules: React.Dispatch<React.SetStateAction<boolean>>
+  openRules: boolean
+}
 
+function Rules({ setOpenRules, openRules } : RuleProps) {
 
-function Rules({ setOpenRules, openRules }) {
-
-  const popupRef = useRef()
+  const popupRef = useRef<HTMLDivElement>(null)
 
   function closeRuleSheet() {
     setOpenRules(false)
   }
 
   useEffect(() => {
+
     let x = 0
     let y = 0
 
-    const mouseDownHandler = function (e) {
+    const mouseDownHandler = function (e: MouseEvent) {
     // Get the current mouse position
     x = e.clientX;
     y = e.clientY;
@@ -27,7 +31,10 @@ function Rules({ setOpenRules, openRules }) {
     document.addEventListener('mousemove', mouseMoveHandler);
     document.addEventListener('mouseup', mouseUpHandler);
     };
-    const mouseMoveHandler = function (e) {
+    const mouseMoveHandler = function (e: MouseEvent) {
+    if (!popupRef.current) return
+
+
     // How far the mouse has been moved
     const dx = e.clientX - x;
     const dy = e.clientY - y;
@@ -41,13 +48,15 @@ function Rules({ setOpenRules, openRules }) {
     y = e.clientY;
     };
 
+    if (!popupRef.current) return
     const mouseUpHandler = function () {
+
     // Remove the handlers of `mousemove` and `mouseup`
     document.removeEventListener('mousemove', mouseMoveHandler);
     document.removeEventListener('mouseup', mouseUpHandler);
 };
 
-  popupRef.current.addEventListener('mousedown', mouseDownHandler);
+    popupRef.current.addEventListener('mousedown', mouseDownHandler);
 
   }, [openRules])
 

@@ -1,6 +1,6 @@
 export function playerTurnStyling(
   playerOneTurn: boolean,
-  playerTurnStyle
+  playerTurnStyle : {[key: string] : string}
 ) {
   if (playerOneTurn) {
     playerTurnStyle.color = 'red'
