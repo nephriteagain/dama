@@ -10,7 +10,7 @@
 
 .board {
   position: relative;
-  width: 600px;
+  width: 500px;
   aspect-ratio: 1/1;
   display: grid;
   grid-template-columns: repeat(8, 1fr);
@@ -100,7 +100,7 @@
 .btn-restart {
   cursor: pointer;
   font-size: 1.1rem;
-  background-color: greenyellow;
+  background-color: #7ee7a8;
   border: none;
   padding-inline: 1rem;
   padding-block: 0.5rem;
@@ -125,7 +125,7 @@
 .btn-mode {
   cursor: pointer;
   font-size: 1.1rem;
-  background-color: greenyellow;
+  background-color: #7ee7a8;
   border: none;
   padding-inline: 1rem;
   padding-block: 0.5rem;
@@ -150,7 +150,7 @@
 .btn-show-rules {
   cursor: pointer;
   font-size: 1.1rem;
-  background-color: greenyellow;
+  background-color: #7ee7a8;
   border: none;
   padding-inline: 1rem;
   padding-block: 0.5rem;
@@ -173,9 +173,9 @@
   font-size: 1.1rem;
   padding-inline: 1rem;
   padding-block: 0.5rem;
-  background-color: rgb(64, 255, 47);
+  background-color: #94ebb7;
   border-radius: 0.5rem;
-  border: 0.25rem solid rgb(208, 255, 0);
+  border: 0.25rem solid #7ee7a8;
   box-shadow: 0.2rem 0.2rem 0.3rem rgba(0, 0, 0, 0.4);
 }
 
