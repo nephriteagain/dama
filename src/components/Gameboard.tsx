@@ -71,7 +71,8 @@ function Gameboard({showRules}: GameboardProps) {
     handleReset,
     setGameOver,
     setTimesUp,
-    timeSup
+    timeSup,
+    playWithBot
 
     
   } = useGlobalContext()
@@ -317,9 +318,14 @@ if (forceFeed3rd.length) forceFeed = forceFeed3rd
             onClick={
               () => {
                 if (!item.highlighted) return
-                isFirstMove && handleStart()
-                movePiece(pieceToMove as data, item)
-                
+                  if (!playWithBot) {
+                    isFirstMove && handleStart()
+                    movePiece(pieceToMove as data, item)
+                  }
+                  else if (pieceToMove?.piece === 'z') {
+                    isFirstMove && handleStart()
+                    movePiece(pieceToMove as data, item)
+                  }                               
               }
             }
           >
@@ -330,9 +336,17 @@ if (forceFeed3rd.length) forceFeed = forceFeed3rd
             style={chipStyle}
             onClick={() => {
               if (!item.movable) return
-              item.king === false ?
-              highlightMoves(item, index, playerOneTurn, boardData) : // for normal piece
-              highlightMovesKing(item, index, playerOneTurn, boardData) // for king piece
+                if (!playWithBot) {
+                  item.king === false ?
+                  highlightMoves(item, index, playerOneTurn, boardData) : // for normal piece
+                  highlightMovesKing(item, index, playerOneTurn, boardData) // for king piece
+                }
+                else if (item?.piece === 'z') {
+                  item.king === false ?
+                  highlightMoves(item, index, playerOneTurn, boardData) : // for normal piece
+                  highlightMovesKing(item, index, playerOneTurn, boardData) // for king piece
+                }
+              
             }}
           >
           </div>}
