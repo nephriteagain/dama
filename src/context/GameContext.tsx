@@ -5,7 +5,7 @@ import Gameboard from "../components/Gameboard"
 import { arrayData } from "../data/arrayData"
 import { POSSIBLEJUMPS } from "../data/possibleJumps"
 // regular chips logic
-import { checkForMovesPlayerOne, checkForMovesPlayerTwo } from '../gamelogic/moveSearcher/moveChecker'
+import { checkForMovesPlayerOne, checkForMovesPlayerTwo ,checkForMovesOrJumpsPlayerOne, checkForMovesOrJumpsPlayerTwo } from '../gamelogic/moveSearcher/moveChecker'
 import { checkForJumps } from "../gamelogic/moveSearcher/jumpChecker"
 import { checkForMultiJumps } from "../gamelogic/moveSearcher/multiJumpChecker"
 import { regularCapture } from "../gamelogic/additionalCapture/capture/regularCapture"
@@ -635,17 +635,14 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
 
       if (!item.king) {
         if (playerOneTurn) {
-          checkForMovesPlayerOne(item, index, boardData, playerMoveArr, -7)
-          checkForMovesPlayerOne(item, index, boardData, playerMoveArr, -9)
-
+          checkForMovesOrJumpsPlayerOne(item, index, boardData, playerMoveArr, -7)
+          checkForMovesOrJumpsPlayerOne(item, index, boardData, playerMoveArr, -9)
         } else {
-          checkForMovesPlayerTwo(item, index, boardData, playerMoveArr, 7)
-          checkForMovesPlayerTwo(item, index, boardData, playerMoveArr, 9)
-
-        }
-        
-
+          checkForMovesOrJumpsPlayerTwo(item, index, boardData, playerMoveArr, 7)
+          checkForMovesOrJumpsPlayerTwo(item, index, boardData, playerMoveArr, 9)
+        }       
       }
+      
       if (item.king) {
         if (playerOneTurn && item?.piece ==='x') return
         if (!playerOneTurn && item?.piece === 'z') return
