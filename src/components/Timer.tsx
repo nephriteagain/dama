@@ -3,22 +3,29 @@ import { MdCropRotate } from 'react-icons/md'
 
 import '../sass/Timer.scss';
 
-function Timer({ timerOne, currentTimer }) {
+type TimeProps = {
+  timerOne: number
+  currentTimer: number
+}
 
-  const timerRef = useRef()
+function Timer({ timerOne, currentTimer } : TimeProps) {
+
+  const timerRef = useRef<HTMLDivElement>(null)
 
     function rotateClock() {
-    const timerStyle = window.getComputedStyle(timerRef.current)
-    const rotate = timerStyle.transform
-    if (rotate === 'matrix(-1, 0, 0, -1, 0, 0)') {
-      timerRef.current.style.transform = 'rotate(0deg)'
-    } else {
-      timerRef.current.style.transform = 'rotate(180deg)'
+      if (!timerRef.current) return
+
+      const timerStyle = window.getComputedStyle(timerRef.current)
+      const rotate = timerStyle.transform
+      if (rotate === 'matrix(-1, 0, 0, -1, 0, 0)') {
+        timerRef.current.style.transform = 'rotate(0deg)'
+      } else {
+        timerRef.current.style.transform = 'rotate(180deg)'
+      }
     }
-  }
 
 
-  function formatTime(deciseconds) {
+  function formatTime(deciseconds : number) {
     if (deciseconds === Infinity) return 'Unlimited'
 
     const minutes = Math.floor(deciseconds / 600);
@@ -28,6 +35,8 @@ function Timer({ timerOne, currentTimer }) {
   };
 
   useEffect(() => {
+    if (!timerRef.current) return
+
     if (currentTimer === 1) {
       timerRef.current.style.backgroundColor = 'red'
       timerRef.current.style.color = '#fff'
