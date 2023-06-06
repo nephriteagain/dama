@@ -1,26 +1,105 @@
 import { data } from "../../data/arrayData"
 
-export function checkForJumps(
+export function checkForMovesPlayerOne(
   itemToCheck: data,
   position: number,
   board: data[],
   storeArr: data[], 
-  number: number,
-  directionArr: string []
-) {
-  const pieceToEat = board[position + number]
-  const jumpSquare = board[position + ( number * 2)]
+  number: number
+  ) {
+  if (number === 9) return
+  if (number === 7) return
 
+  const moveSquare = board[position + number]
+  // p1 move
   if (
-    jumpSquare?.playable &&
+    itemToCheck?.piece === 'z' &&
+    moveSquare?.piece === null &&
+    moveSquare?.playable
+  ) {
+    storeArr.push(moveSquare)
+  }
+}
+
+export function checkForMovesPlayerTwo(
+  itemToCheck: data,
+  position: number,
+  board: data[],
+  storeArr: data[], 
+  number: number
+  ) {
+  if (number === -9) return
+  if (number === -7) return
+
+  const moveSquare = board[position + number]
+  // p1 move
+  if (
+    itemToCheck?.piece === 'x' &&
+    moveSquare?.piece === null &&
+    moveSquare?.playable
+  ) {
+    storeArr.push(moveSquare)
+  }
+}
+
+export function checkForMovesOrJumpsPlayerOne(
+  itemToCheck: data,
+  position: number,
+  board: data[],
+  storeArr: data[], 
+  number: number
+) {
+  if (number === 9) return
+  if (number === 7) return
+
+  const moveSquare = board[position + number]
+  const jumpSquare = board[position + (number * 2)]
+  // p1 move
+  if (
+    itemToCheck?.piece === 'z' &&
+    moveSquare?.piece === null &&
+    moveSquare?.playable
+  ) {
+    storeArr.push(moveSquare)
+  }
+
+  else if (
+    itemToCheck?.piece === 'z' &&
+    moveSquare?.piece ==='x' &&
     jumpSquare?.piece === null &&
-    pieceToEat?.piece !== null &&
-    pieceToEat?.piece !== itemToCheck?.piece
+    jumpSquare?.playable
   ) {
     storeArr.push(jumpSquare)
-    if (number === -7 ) directionArr.push('top right')
-    if (number === -9 ) directionArr.push('top left')
-    if (number === 7 ) directionArr.push('bot left')
-    if (number === 9 ) directionArr.push('bot right')
+  }
+}
+
+export function checkForMovesOrJumpsPlayerTwo(
+  itemToCheck: data,
+  position: number,
+  board: data[],
+  storeArr: data[], 
+  number: number
+  ) {
+  if (number === -9) return
+  if (number === -7) return
+
+  const moveSquare = board[position + number]
+  const jumpSquare = board[position + (number * 2) ]
+  // p1 move
+  if (
+    itemToCheck?.piece === 'x' &&
+    moveSquare?.piece === null &&
+    moveSquare?.playable
+  ) {
+    storeArr.push(moveSquare)
+  }
+
+  else if (
+    itemToCheck?.piece === 'x' &&
+    moveSquare?.piece === 'z' &&
+    jumpSquare?.piece === null &&
+    jumpSquare?.playable
+  ) {
+    storeArr.push(jumpSquare)
   }
 }
