@@ -3,6 +3,7 @@ import { useRef, useEffect, ChangeEvent } from 'react'
 import {AiOutlineInfoCircle} from 'react-icons/ai'
 import { BsFillFileRuledFill } from 'react-icons/bs'
 import { RiTimerFlashLine } from 'react-icons/ri'
+import { GrRobot } from 'react-icons/gr'
 
 import { useGlobalContext } from "../context/GameContext"
 import '../sass/GameModeModal.scss'
@@ -21,7 +22,9 @@ const GameModeModal = ({ showRules } : GameModeModalProps) => {
     timeLimit,
     setTimeLimit,
     setTimerOne,
-    setTimerTwo
+    setTimerTwo,
+    playWithBot,
+    setPlayWithBot
   } = useGlobalContext()
 
 
@@ -67,8 +70,11 @@ const GameModeModal = ({ showRules } : GameModeModalProps) => {
     setTimerOne(timeLimit)
     setTimerTwo(timeLimit)
 
-    
   }, [timeLimit])
+
+  useEffect(() => {
+    console.log(playWithBot, 'bot bool')
+  }, [playWithBot])
 
 
 
@@ -150,7 +156,7 @@ const GameModeModal = ({ showRules } : GameModeModalProps) => {
             <AiOutlineInfoCircle className='more-info-perdigana' />
             </span> 
           </button> 
-
+          
           <div className='selected-time'>
             {formatTime(timeLimit)}
           </div> 
@@ -169,6 +175,21 @@ const GameModeModal = ({ showRules } : GameModeModalProps) => {
 
 
         </div>
+
+        <div className='bot-div'>
+          <input type="checkbox" value='bot' name='bot' checked={playWithBot}
+            onChange={(e) => {
+              if (e.currentTarget.checked) {
+                setPlayWithBot(true)
+              } else {
+                setPlayWithBot(false)
+              }
+            }}
+          />
+          <label htmlFor='bot'>Play with a BOT <GrRobot/>
+          </label>
+        </div>        
+
         <span className='rule-icon'
           onClick={showRules}
         >

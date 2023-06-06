@@ -5,7 +5,7 @@ import Gameboard from "../components/Gameboard"
 import { arrayData } from "../data/arrayData"
 import { POSSIBLEJUMPS } from "../data/possibleJumps"
 // regular chips logic
-import { checkForMovesPlayerOne, checkForMovesPlayerTwo } from '../gamelogic/moveSearcher/moveChecker'
+import { checkForMovesPlayerOne, checkForMovesPlayerTwo, checkForMovesOrJumpsPlayerOne, checkForMovesOrJumpsPlayerTwo } from '../gamelogic/moveSearcher/moveChecker'
 import { checkForJumps } from "../gamelogic/moveSearcher/jumpChecker"
 import { checkForMultiJumps } from "../gamelogic/moveSearcher/multiJumpChecker"
 import { regularCapture } from "../gamelogic/additionalCapture/capture/regularCapture"
@@ -76,6 +76,8 @@ type GlobalContextValue = {
   highlightMoves: (itemToMove: data, position: number, playerTurn: boolean, board: data[]) => void;
   highlightMovesKing: (itemToMove: data, position: number, playerTurn: boolean, board: data[]) => void;
   movePiece: (pieceToMove: data, placeToLand: data, index: number) => void;
+  playWithBot: boolean;
+  setPlayWithBot: React.Dispatch<React.SetStateAction<boolean>>;
 };
                       
 
@@ -103,9 +105,9 @@ export const GlobalProvider = ({children}: GlobalContextProviderProps) => {
   const [currentTimer, setCurrentTimer] = useState<number>(2);
   const [ isFirstMove, setIsFirstMove ] = useState<boolean>(true)
   const [ timeSup, setTimesUp ] = useState<boolean>(false)
+  const [ playWithBot, setPlayWithBot ] = useState<boolean>(false)  
 
-
-
+  // DIRECTIONS (-7 === top right) (-9 === top left) (7 === bot left) (9 === bot right)
   function highlightMoves(itemToMove : data, position: number, playerTurn: boolean, board: data[]) {
     const { x: xPosition, y: yPosition, piece, selected } = itemToMove;
     let tempArrForMoves : data[] = [] // stores non capturing moves
@@ -405,7 +407,7 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
         return multipleJumpSearcher
       }
       
-      // removes captured
+      // removes captured piece
       POSSIBLEJUMPS.forEach((possibleMoves) => {
         if (
           possibleMoves.indexOf(index) !== -1 &&
@@ -622,7 +624,7 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
     setCurrentTimer(1);
   };
 
-
+  //Game Over Handler
   // player chips counter
   useEffect(() => {
     let playerMoveArr : data[]  = []
@@ -635,12 +637,12 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
 
       if (!item.king) {
         if (playerOneTurn) {
-          checkForMovesPlayerOne(item, index, boardData, playerMoveArr, -7)
-          checkForMovesPlayerOne(item, index, boardData, playerMoveArr, -9)
+          checkForMovesOrJumpsPlayerOne(item, index, boardData, playerMoveArr, -7)
+          checkForMovesOrJumpsPlayerOne(item, index, boardData, playerMoveArr, -9)
 
         } else {
-          checkForMovesPlayerTwo(item, index, boardData, playerMoveArr, 7)
-          checkForMovesPlayerTwo(item, index, boardData, playerMoveArr, 9)
+          checkForMovesOrJumpsPlayerTwo(item, index, boardData, playerMoveArr, 7)
+          checkForMovesOrJumpsPlayerTwo(item, index, boardData, playerMoveArr, 9)
 
         }
         
@@ -669,7 +671,16 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
     if (!playerMoveArr.length) {
       setGameOver(true)
     }
+
+    // if (playWithBot && !playerOneTurn && playerMoveArr.length) {
+    //   function getRandomItemFromArray(arr: data[]) {
+    //     const randomIndex = Math.floor(Math.random() * arr.length);
+    //     return arr[randomIndex];
+    //   }
+    //   console.log(getRandomItemFromArray(playerMoveArr), 'player moves')
+    // }   
   }, [playerOneTurn])
+
 
 
 
@@ -712,7 +723,9 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
       setTimesUp,
       timeSup,
       timeLimit,
-      setTimeLimit
+      setTimeLimit,
+      playWithBot,
+      setPlayWithBot
     }}
     >
       {children}
