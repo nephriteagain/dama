@@ -9,11 +9,12 @@ import { useGlobalContext } from "../context/GameContext"
 import '../sass/GameModeModal.scss'
 
 type GameModeModalProps = {
-  showRules: () => void
+  showRules: () => void;
+  bodyHeight: number|undefined
 }
 
 
-const GameModeModal = ({ showRules } : GameModeModalProps) => {
+const GameModeModal = ({ showRules, bodyHeight } : GameModeModalProps) => {
 
 
   const {
@@ -134,7 +135,12 @@ const GameModeModal = ({ showRules } : GameModeModalProps) => {
   }
 }
 
-
+// useEffect(() => {
+//   const modalBackground = document.querySelector('game-mode-modal') as HTMLDivElement
+//   if (bodyHeight && modalBackground) {
+//     modalBackground.style.height = `${bodyHeight}px`
+//   }
+// }, [bodyHeight])
   return (
     <div className='game-mode-modal-background'>
       <div className='game-mode-modal'>

@@ -75,7 +75,7 @@ type GlobalContextValue = {
   handleReset: () => void
   highlightMoves: (itemToMove: data, position: number, playerTurn: boolean, board: data[]) => void;
   highlightMovesKing: (itemToMove: data, position: number, playerTurn: boolean, board: data[]) => void;
-  movePiece: (pieceToMove: data, placeToLand: data, index: number) => void;
+  movePiece: (pieceToMove: data, placeToLand: data) => void;
   playWithBot: boolean;
   setPlayWithBot: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -366,7 +366,7 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
 
 
 
-  function movePiece(pieceToMove: data, placeToLand: data, index: number) {
+  function movePiece(pieceToMove: data, placeToLand: data,) {
     let movingPiece = pieceToMove
     let chipToBeTaken = {}
     let multipleJumpSearcher = {}
@@ -682,6 +682,95 @@ if (tripleTakeArr.length) tempArrForJumps = tripleTakeArr
   }, [playerOneTurn])
 
 
+
+  // // BOT MOVE HANDLER
+  useEffect(() => {
+    if (!playWithBot || playerOneTurn || gameOver) return //only works when bot mode is on
+
+
+    let timeOut = setTimeout(() => {
+      let moveObject : Record<number, data[]> = {}
+      let boardCopy : data[] = boardData
+    
+      boardCopy.forEach((box: data, index: number) => {
+        
+
+        if (box?.movable && box?.piece === 'x') {
+
+          if (!box?.king) {
+            let moves : data[] = []
+            let jumps : data[] = []
+            let dummyArr: string[] = []
+            checkForMovesPlayerTwo(box, index, boardCopy, moves, 7)
+            checkForMovesPlayerTwo(box, index, boardCopy, moves, 9)
+
+            checkForJumps(box, index, boardCopy, jumps, -7, dummyArr)
+            checkForJumps(box, index, boardCopy, jumps, -9, dummyArr)
+            checkForJumps(box, index, boardCopy, jumps, 7, dummyArr)
+            checkForJumps(box, index, boardCopy, jumps, 9, dummyArr)
+            
+            if (jumps.length > 0) {
+              moveObject[index] = jumps
+            }
+            else if (moves.length > 0) {
+              moveObject[index] = moves
+            }
+          }
+          
+          if (box?.king) {
+            let moves: data[] = []
+            let jumps: data[] = []
+            let dummyArr: string[] = []
+
+            kingBotLeft(box, index, null, boardCopy, moves, jumps, dummyArr, -7)
+            kingBotLeft(box, index, null, boardCopy, moves, jumps, dummyArr, -9)
+            kingBotLeft(box, index, null, boardCopy, moves, jumps, dummyArr, 7)
+            kingBotLeft(box, index, null, boardCopy, moves, jumps, dummyArr, 9)
+
+            if (jumps.length > 0) {
+              moveObject[index] = jumps
+            }
+            else if (moves.length > 0) {
+              moveObject[index] = moves
+            }
+          }
+
+        }      
+      })
+      console.log(moveObject, 'moveObject')
+
+      if (Object.entries(moveObject).length > 0) {
+        const moveArr = Object.entries(moveObject)
+        const random = Math.floor(Math.random() * moveArr.length)
+        const randomPieceIndex = Number(moveArr[random][0])
+        const randomPiece = boardCopy[randomPieceIndex]
+        const moves = moveArr[random][1]
+
+        if (!randomPiece?.king) {
+            highlightMoves(randomPiece, randomPieceIndex, playerOneTurn, boardData)
+        }
+        else if (randomPiece.king) {
+            highlightMovesKing(randomPiece, randomPieceIndex, playerOneTurn, boardData)
+        }
+
+        const moveTimeout = setTimeout(() => {
+          let randomMoveIndex = Math.floor(Math.random() * moves.length)
+          let placeToLand = moves[randomMoveIndex]
+          movePiece(randomPiece as data, placeToLand)
+          clearTimeout(moveTimeout)
+        }, 500)
+
+
+
+      }
+
+
+    
+    }, 1500)
+    
+    return () => clearTimeout(timeOut)
+
+  }, [playerOneTurn, multipleCapture])
 
 
 

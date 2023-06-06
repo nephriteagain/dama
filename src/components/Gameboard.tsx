@@ -92,7 +92,7 @@ function Gameboard({showRules}: GameboardProps) {
     useEffect(() => {
     if (isFirstMove) return
     handleNext()
-    console.log('handle next ran')
+    // console.log('handle next ran')
   }, [playerOneTurn])
 
 
@@ -170,8 +170,8 @@ function Gameboard({showRules}: GameboardProps) {
       
       })
 
-      console.log(forceFeed, 'forcefeed')
-      console.log(jumpedArr, 'jumped arr')
+      // console.log(forceFeed, 'forcefeed')
+      // console.log(jumpedArr, 'jumped arr')
 
 // second jump --------------------------------------------------------------------
     function doubleTake() {
@@ -209,8 +209,8 @@ function Gameboard({showRules}: GameboardProps) {
 
     
 
-    console.log(forceFeed2nd, 'forcefeed2nd')
-    console.log(jumpedArr2nd, 'jump arr second')
+    // console.log(forceFeed2nd, 'forcefeed2nd')
+    // console.log(jumpedArr2nd, 'jump arr second')
 
     if (forceFeed2nd.length) forceFeed = forceFeed2nd
     // -----------------------------------------------------------------------------------
@@ -318,7 +318,7 @@ if (forceFeed3rd.length) forceFeed = forceFeed3rd
               () => {
                 if (!item.highlighted) return
                 isFirstMove && handleStart()
-                movePiece(pieceToMove as data, item, index)
+                movePiece(pieceToMove as data, item)
                 
               }
             }

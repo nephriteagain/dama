@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import { useGlobalContext } from './context/GameContext'
 
@@ -12,6 +12,7 @@ import Rules from './components/Rules'
 
 function App() {
   const [ openRules, setOpenRules ] = useState<boolean>(false)
+  const [ bodyHeight, setBodyHeight] = useState<undefined|number>(undefined)
 
   const {gameOver, gameMode} = useGlobalContext()
 
@@ -19,11 +20,18 @@ function App() {
     setOpenRules(true)
   }
 
+  useEffect(() => {
+    window.addEventListener('resize', () => {
+      const height = document.body.scrollHeight
+      setBodyHeight(height)
+    })
+  }, [])
+
   return (
     <div className="App">
-      { !gameMode && <GameModeModal  showRules={showRules} /> }
-      { gameOver && <WinnerModal /> }
-      { openRules && <Rules setOpenRules={setOpenRules} openRules={openRules}/>}
+      { !gameMode && <GameModeModal  showRules={showRules} bodyHeight={bodyHeight}/> }
+      { gameOver && <WinnerModal bodyHeight={bodyHeight}/> }
+      { openRules && <Rules setOpenRules={setOpenRules} openRules={openRules}  />}
       <Gameboard showRules={showRules} />
     </div>
   )
