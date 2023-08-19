@@ -1,4 +1,18 @@
-export const arrayData = [
+export interface data {
+  x?: number
+  y?: number
+  piece?: piece
+  playable?: boolean
+  highlighted?: boolean
+  king?: boolean
+  selected?: boolean
+  movable?: boolean
+}
+
+
+export type piece = ('x'|'z'|null)
+
+export const arrayData : data[] = [
   {x: 0, y: 7, piece: 'x',  playable: true, highlighted: false, king: false  , selected: false, movable: true},
   {x: 1, y: 7, piece: null, playable: false, highlighted: false},
 

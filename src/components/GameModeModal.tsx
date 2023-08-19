@@ -1,14 +1,20 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, ChangeEvent } from 'react'
 
 import {AiOutlineInfoCircle} from 'react-icons/ai'
 import { BsFillFileRuledFill } from 'react-icons/bs'
 import { RiTimerFlashLine } from 'react-icons/ri'
+import { GrRobot } from 'react-icons/gr'
 
 import { useGlobalContext } from "../context/GameContext"
 import '../sass/GameModeModal.scss'
 
+type GameModeModalProps = {
+  showRules: () => void;
+  bodyHeight: number|undefined
+}
 
-const GameModeModal = ({ showRules }) => {
+
+const GameModeModal = ({ showRules, bodyHeight } : GameModeModalProps) => {
 
 
   const {
@@ -17,19 +23,23 @@ const GameModeModal = ({ showRules }) => {
     timeLimit,
     setTimeLimit,
     setTimerOne,
-    setTimerTwo
+    setTimerTwo,
+    playWithBot,
+    setPlayWithBot
   } = useGlobalContext()
 
 
-  const damaRef = useRef()
-  const perdiganaRef = useRef()
+  const damaRef = useRef<HTMLButtonElement>(null)
+  const perdiganaRef = useRef<HTMLButtonElement>(null)
+  const alertRef = useRef<HTMLDivElement>(null)
+  const dropdropRef = useRef<HTMLSelectElement>(null)
   const gameModeRef = useRef('')
-  const alertRef = useRef()
-  const dropdropRef = useRef()
 
 
 
-  function handleSelectChange(event) {
+  function handleSelectChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    if (!dropdropRef.current) return
+
     event.preventDefault();
     let selectedValue = event.target.value
 
@@ -61,12 +71,17 @@ const GameModeModal = ({ showRules }) => {
     setTimerOne(timeLimit)
     setTimerTwo(timeLimit)
 
-    
   }, [timeLimit])
+
+  useEffect(() => {
+    console.log(playWithBot, 'bot bool')
+  }, [playWithBot])
 
 
 
   function selectDamaMode() {
+    if (!damaRef.current || !perdiganaRef.current) return
+
     perdiganaRef.current.classList.remove('selected-mode')
     damaRef.current.classList.add('selected-mode')
 
@@ -74,6 +89,8 @@ const GameModeModal = ({ showRules }) => {
 
   }
   function selectPerdiganaMode() {
+    if (!damaRef.current || !perdiganaRef.current) return
+
     damaRef.current.classList.remove('selected-mode')
     perdiganaRef.current.classList.add('selected-mode')
 
@@ -81,7 +98,7 @@ const GameModeModal = ({ showRules }) => {
 
   }
 
-  function formatTime (deciseconds) {
+  function formatTime (deciseconds: number) {
     if (deciseconds === Infinity) return 'Unlimited'
     const minutes = Math.floor(deciseconds / 600);
     const seconds = Math.floor((deciseconds % 600) / 10);
@@ -92,17 +109,23 @@ const GameModeModal = ({ showRules }) => {
 
 
   function startGame() {
+    if (!alertRef.current) return
+
     if (gameModeRef.current === 'dama' || gameModeRef.current === 'perdigana') {
       setGameMode(gameModeRef.current)
     } else {
       alertRef.current.style.transform = 'translate(-50%, 0%)'
       setTimeout(() => {
+      if (!alertRef.current) return
+
         alertRef.current.style.transform = 'translate(-50%, -500%)'
       }, 3000)
     }
   }
 
   function showTimer() {
+    if (!dropdropRef.current) return
+
     const dropdown = window.getComputedStyle(dropdropRef.current)
     const opacity = dropdown.opacity
     if (opacity === '0') {
@@ -112,7 +135,12 @@ const GameModeModal = ({ showRules }) => {
   }
 }
 
-
+// useEffect(() => {
+//   const modalBackground = document.querySelector('game-mode-modal') as HTMLDivElement
+//   if (bodyHeight && modalBackground) {
+//     modalBackground.style.height = `${bodyHeight}px`
+//   }
+// }, [bodyHeight])
   return (
     <div className='game-mode-modal-background'>
       <div className='game-mode-modal'>
@@ -134,7 +162,7 @@ const GameModeModal = ({ showRules }) => {
             <AiOutlineInfoCircle className='more-info-perdigana' />
             </span> 
           </button> 
-
+          
           <div className='selected-time'>
             {formatTime(timeLimit)}
           </div> 
@@ -153,6 +181,21 @@ const GameModeModal = ({ showRules }) => {
 
 
         </div>
+
+        <div className='bot-div'>
+          <input type="checkbox" value='bot' name='bot' checked={playWithBot}
+            onChange={(e) => {
+              if (e.currentTarget.checked) {
+                setPlayWithBot(true)
+              } else {
+                setPlayWithBot(false)
+              }
+            }}
+          />
+          <label htmlFor='bot'>Play with a BOT <GrRobot/>
+          </label>
+        </div>        
+
         <span className='rule-icon'
           onClick={showRules}
         >

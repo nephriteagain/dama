@@ -1,4 +1,6 @@
-export const POSSIBLEJUMPS = [
+export type POSSIBLEJUMPSTYPE = number[][]
+
+export const POSSIBLEJUMPS : POSSIBLEJUMPSTYPE = [
   [2, 9, 16],
   [4, 11, 18, 25, 32],
   [6, 13, 20, 27, 34, 41, 48],

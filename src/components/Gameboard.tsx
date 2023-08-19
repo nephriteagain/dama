@@ -3,10 +3,40 @@ import { useEffect, useRef } from "react"
 import { useGlobalContext } from "../context/GameContext"
 import Timer from './Timer'
 import TimerTwo from "./TimerTwo"
+import PlayerTurnBar from "./PlayerTurnBar"
+import RestartButton from "./RestartButton"
+import ChangeModeButton from "./ChangeModeButton"
+import ShowRuleButton from "./ShowRuleButton"
 
 import '../sass/Gameboard.scss'
+// regular chips
+import { forceCaptureRegular } from "../gamelogic/forceCapture/forceCapture/forceCaptureFirstJump"
+import { foreCaptureSecond } from "../gamelogic/forceCapture/forceCapture/forceCaptureSecond"
+import { forceCaptureThird } from "../gamelogic/forceCapture/forceCapture/forceCaptureThird"
 
-function Gameboard({showRules}) {
+// king chips
+import { forceKingCapture } from "../gamelogic/forceCapture/kingForceCapture/forceKingFirst/forceKingFirst"
+import { forceKingBotLeft } from "../gamelogic/forceCapture/kingForceCapture/forceKingSecond/forceKingSecondBotLeft"
+import { forceKingBotRight } from "../gamelogic/forceCapture/kingForceCapture/forceKingSecond/forceKingSecondBotRight"
+import { forceKingTopLeft } from "../gamelogic/forceCapture/kingForceCapture/forceKingSecond/forceKingSecondTopLeft"
+import { forceKingTopRight } from "../gamelogic/forceCapture/kingForceCapture/forceKingSecond/forceKingSecondTopRight"
+import { forceKingThirdBotLeft } from "../gamelogic/forceCapture/kingForceCapture/forceKingThird/forceKingThirdBotLeft"
+import { forceKingThirdBotRight } from "../gamelogic/forceCapture/kingForceCapture/forceKingThird/forceKingThirdBotRight"
+import { forceKingThirdTopLeft } from "../gamelogic/forceCapture/kingForceCapture/forceKingThird/forceKingThirdTopLeft"
+import { forceKingThirdTopRight } from "../gamelogic/forceCapture/kingForceCapture/forceKingThird/forceKingThirdTopRight"
+
+// gameboard style
+import { boardStyling } from "../tsStyle/boardGameStyle"
+import { chipStyling } from "../tsStyle/chipStyling"
+import { cursorPointers } from "../tsStyle/cursorPointers"
+
+import { data } from "../data/arrayData"
+
+type GameboardProps = {
+  showRules: () => void
+}
+
+function Gameboard({showRules}: GameboardProps) {
   
 
 
@@ -41,14 +71,12 @@ function Gameboard({showRules}) {
     handleReset,
     setGameOver,
     setTimesUp,
-    timeSup
+    timeSup,
+    playWithBot
 
     
   } = useGlobalContext()
 
-  function changeGameMode() {
-    setGameMode('')
-  }
   
   const handleStart = () => {
     setIsActive(true);
@@ -65,12 +93,12 @@ function Gameboard({showRules}) {
     useEffect(() => {
     if (isFirstMove) return
     handleNext()
-    console.log('handle next ran')
+    // console.log('handle next ran')
   }, [playerOneTurn])
 
 
   useEffect(() => {
-    let interval = null;
+    let interval : any = null;
     if  (isActive && getCurrentTimer() === 0) setTimesUp(true)
     if (isActive && getCurrentTimer() > 0) {
       interval = setInterval(() => {
@@ -111,346 +139,40 @@ function Gameboard({showRules}) {
       setKingJumpDirection(null)
     }
     if (forceCapture) return //this wont rerun again multiple times
-    let forceFeed = []
-    let forceFeed2nd = []
-    let forceFeed3rd = []
-    let jumpedArr = []
-    let jumpDirection = []
-    let jumpedArr2nd = []
-    let jumpDirection2nd = []
-    let jumpedArr3rd = []   
+    let forceFeed : data[] = []
+    let forceFeed2nd : data[] = []
+    let forceFeed3rd : data[] = []
+    let jumpedArr : data[] = []
+    let jumpDirection : string[] = []
+    let jumpedArr2nd : data[] = []
+    let jumpDirection2nd : string[] = []
+    let jumpedArr3rd : data[] = []   
 
     
 
 
     boardData.forEach((item, index) => {
       if (!item.playable) return
+      if (item?.piece === null) return
       // regular pawn only
       else if (!item.king) {
-      function firstJump() {
-        // top right jump
-        if (
-        item.piece !== null &&
-        boardData[index - 14]?.playable &&
-        boardData[index - 7]?.piece !== null &&
-        boardData[index - 7]?.piece !== item.piece &&
-        boardData[index - 14]?.piece === null
-        ) {
-          forceFeed.push(item)
-          jumpDirection.push('top right')
-          jumpedArr.push(boardData[index - 14])
-        }
-      // top left jump
-      if (
-        item.piece !== null &&
-        boardData[index - 18]?.playable &&
-        boardData[index - 9]?.piece !== null &&
-        boardData[index - 9]?.piece !== item.piece &&
-        boardData[index - 18]?.piece === null
-        ) {
-          forceFeed.push(item)
-          jumpDirection.push('top left')
-          jumpedArr.push(boardData[index - 18])
-        }
-      // bot left jump
-      if (
-        item.piece !== null &&
-        boardData[index + 14]?.playable &&
-        boardData[index + 7]?.piece !== null &&
-        boardData[index + 7]?.piece !== item.piece &&
-        boardData[index + 14]?.piece === null
-        ) {
-          forceFeed.push(item)
-          jumpDirection.push('bot left')
-          jumpedArr.push(boardData[index +14])
-        }
-      // bot right jump
-      if (
-        item.piece !== null &&
-        boardData[index + 18]?.playable &&
-        boardData[index + 9]?.piece !== null &&
-        boardData[index + 9]?.piece !== item.piece &&
-        boardData[index + 18]?.piece === null
-        ) {
-          forceFeed.push(item)
-          jumpDirection.push('bot right')
-          jumpedArr.push(boardData[index + 18])
-        }
-      }
-      firstJump()
+        forceCaptureRegular(item, index, boardData, forceFeed, jumpDirection, jumpedArr, -7)
+        forceCaptureRegular(item, index, boardData, forceFeed, jumpDirection, jumpedArr, -9)
+        forceCaptureRegular(item, index, boardData, forceFeed, jumpDirection, jumpedArr, 9)
+        forceCaptureRegular(item, index, boardData, forceFeed, jumpDirection, jumpedArr, 7)
       
     }
       else if (item.king) {
-        function topRightKing() {
-          // top right ----------------------
-        if (
-        item.piece !== null &&
-        boardData[index - 7]?.piece !== null && boardData[index - 7]?.piece !== item.piece &&
-        boardData[index - 14]?.playable && boardData[index - 14]?.piece === null
-        ) {
-          forceFeed.push(item)
-          jumpDirection.push('top right')
-          jumpedArr.push(boardData[index - 14])
-        }
-        else if (
-        item.piece !== null &&
-        boardData[index - 7]?.playable && boardData[index - 7]?.piece === null &&
-        boardData[index - 14]?.piece !== null && boardData[index - 14]?.piece !== item.piece &&
-        boardData[index - 21]?.playable && boardData[index - 21]?.piece === null
-        ) {
-          forceFeed.push(item)
-          jumpDirection.push('top right')
-          jumpedArr.push(boardData[index - 21])
-        }
-        else if (
-        item.piece !== null &&
-        boardData[index - 7]?.playable && boardData[index - 7]?.piece === null &&
-        boardData[index - 14]?.playable && boardData[index - 14]?.piece === null &&
-        boardData[index - 21]?.piece !== null && boardData[index - 21]?.piece !== item.piece &&
-        boardData[index - 28]?.playable && boardData[index - 28]?.piece === null
-        ) {
-          forceFeed.push(item)
-          jumpDirection.push('top right')
-          jumpedArr.push(boardData[index - 28])
-        }
-        else if (
-        item.piece !== null &&
-        boardData[index - 7]?.playable && boardData[index - 7]?.piece === null &&
-        boardData[index - 14]?.playable && boardData[index - 14]?.piece === null &&
-        boardData[index - 21]?.playable && boardData[index - 21]?.piece === null &&
-        boardData[index - 28]?.piece !== null && boardData[index - 28]?.piece !== item.piece &&
-        boardData[index - 35]?.playable && boardData[index - 35]?.piece === null
-        ) {
-          forceFeed.push(item)
-          jumpDirection.push('top right')
-          jumpedArr.push(boardData[index - 35])
-        }
-        else if (
-        item.piece !== null &&
-        boardData[index - 7]?.playable && boardData[index - 7]?.piece === null &&
-        boardData[index - 14]?.playable && boardData[index - 14]?.piece === null &&
-        boardData[index - 21]?.playable && boardData[index - 21]?.piece === null &&
-        boardData[index - 28]?.playable && boardData[index - 28]?.piece === null &&
-        boardData[index - 35]?.piece !== null && boardData[index - 35]?.piece !== item.piece &&
-        boardData[index - 42]?.playable && boardData[index - 42]?.piece === null
-        ) {
-          forceFeed.push(item)
-          jumpDirection.push('top right')
-          jumpedArr.push(boardData[index - 49])
-        }
-        }
-        function botLeftKing() {
-          // bot left -----------------------------
-        if (
-        item.piece !== null &&
-        boardData[index + 7]?.piece !== null && boardData[index + 7]?.piece !== item.piece &&
-        boardData[index + 14]?.playable && boardData[index + 14]?.piece === null
-        ) {
-          forceFeed.push(item)
-          jumpDirection.push('bot left')
-          jumpedArr.push(boardData[index +14])
-        }
-        else if (
-        item.piece !== null &&
-        boardData[index + 7]?.playable && boardData[index + 7]?.piece === null &&
-        boardData[index + 14]?.piece !== null && boardData[index + 14]?.piece !== item.piece &&
-        boardData[index + 21]?.playable && boardData[index + 21]?.piece === null
-        ) {
-          forceFeed.push(item)
-          jumpDirection.push('bot left')
-          jumpedArr.push(boardData[index +21])
-        }
-        else if (
-        item.piece !== null &&
-        boardData[index + 7]?.playable && boardData[index + 7]?.piece === null &&
-        boardData[index + 14]?.playable && boardData[index + 14]?.piece === null &&
-        boardData[index + 21]?.piece !== null && boardData[index + 21]?.piece !== item.piece &&
-        boardData[index + 28]?.playable && boardData[index + 28]?.piece === null
-        ) {
-          forceFeed.push(item)
-          jumpDirection.push('bot left')
-          jumpedArr.push(boardData[index +28])
-        }
-        else if (
-        item.piece !== null &&
-        boardData[index + 7]?.playable && boardData[index + 7]?.piece === null &&
-        boardData[index + 14]?.playable && boardData[index + 14]?.piece === null &&
-        boardData[index + 21]?.playable && boardData[index + 21]?.piece === null &&
-        boardData[index + 28]?.piece !== null && boardData[index + 28]?.piece !== item.piece &&
-        boardData[index + 35]?.playable && boardData[index + 35]?.piece === null
-        ) {
-          forceFeed.push(item)
-          jumpDirection.push('bot left')
-          jumpedArr.push(boardData[index +35])
-        }
-        else if (
-        item.piece !== null &&
-        boardData[index + 7]?.playable && boardData[index + 7]?.piece === null &&
-        boardData[index + 14]?.playable && boardData[index + 14]?.piece === null &&
-        boardData[index + 21]?.playable && boardData[index + 21]?.piece === null &&
-        boardData[index + 28]?.playable && boardData[index + 28]?.piece === null &&
-        boardData[index + 35]?.piece !== null && boardData[index + 35]?.piece !== item.piece &&
-        boardData[index + 42]?.playable && boardData[index + 42]?.piece === null
-        ) {
-          forceFeed.push(item)
-          jumpDirection.push('bot left')
-          jumpedArr.push(boardData[index +42])
-        }
-        }
-        function topLeftKing() {
-           // top left ----------------------------
-        if (
-        item.piece !== null &&
-        boardData[index - 9]?.piece !== null && boardData[index - 9]?.piece !== item.piece &&
-        boardData[index - 18]?.playable && boardData[index - 18]?.piece === null
-        ) {
-          forceFeed.push(item)
-          jumpDirection.push('top left')
-          jumpedArr.push(boardData[index - 18])
-        }
-        else if (
-        item.piece !== null &&
-        boardData[index - 9]?.playable && boardData[index - 9]?.piece === null &&
-        boardData[index - 18]?.piece !== null && boardData[index - 18]?.piece !== item.piece &&        
-        boardData[index - 27]?.playable && boardData[index - 27]?.piece === null
-        ) {
-          forceFeed.push(item)
-          jumpDirection.push('top left')
-          jumpedArr.push(boardData[index - 27])
-        }
-        else if (
-        item.piece !== null &&
-        boardData[index - 9]?.playable && boardData[index - 9]?.piece === null &&
-        boardData[index - 18]?.playable && boardData[index - 18]?.piece === null &&
-        boardData[index - 27]?.piece !== null && boardData[index - 27]?.piece !== item.piece &&
-        boardData[index - 36]?.playable && boardData[index - 36]?.piece === null
-        ) {
-          forceFeed.push(item)
-          jumpDirection.push('top left')
-          jumpedArr.push(boardData[index - 36])
-        }
-        else if (
-        item.piece !== null &&
-        boardData[index - 9]?.playable && boardData[index - 9]?.piece === null && 
-        boardData[index - 18]?.playable && boardData[index - 18]?.piece === null && 
-        boardData[index - 27]?.playable && boardData[index - 27]?.piece === null && 
-        boardData[index - 36]?.piece !== null && boardData[index - 36]?.piece !== item.piece && 
-        boardData[index - 45]?.playable && boardData[index - 45]?.piece === null
-        ) {
-          forceFeed.push(item)
-          jumpDirection.push('top left')
-          jumpedArr.push(boardData[index - 45])
-        }
-        else if (
-        item.piece !== null &&
-        boardData[index - 9]?.playable && boardData[index - 9]?.piece === null &&
-        boardData[index - 18]?.playable && boardData[index - 18]?.piece === null &&
-        boardData[index - 27]?.playable && boardData[index - 27]?.piece === null &&
-        boardData[index - 36]?.playable && boardData[index - 36]?.piece === null &&
-        boardData[index - 45]?.piece !== null && boardData[index - 45]?.piece !== item.piece &&
-        boardData[index - 54]?.playable && boardData[index - 54]?.piece === null
-        ) {
-          forceFeed.push(item)
-          jumpDirection.push('top left')
-          jumpedArr.push(boardData[index - 54])
-        }
-        else if (
-        item.piece !== null &&
-        boardData[index - 9]?.playable && boardData[index - 9]?.piece === null &&
-        boardData[index - 18]?.playable && boardData[index - 18]?.piece === null &&
-        boardData[index - 27]?.playable && boardData[index - 27]?.piece === null &&
-        boardData[index - 36]?.playable && boardData[index - 36]?.piece === null &&
-        boardData[index - 45]?.playable && boardData[index - 45]?.piece === null &&
-        boardData[index - 54]?.piece !== null && boardData[index - 45]?.piece !== item.piece &&        
-        boardData[index - 63]?.playable && boardData[index - 63]?.piece === null
-        ) {
-          forceFeed.push(item)
-          jumpDirection.push('top left')
-          jumpedArr.push(boardData[index - 63])
-        }
-        }
-        function botRightKing() {
-          // bot right
-        if (
-        item.piece !== null &&
-        boardData[index + 9]?.piece !== null && boardData[index + 9]?.piece !== item.piece &&
-        boardData[index + 18]?.playable && boardData[index + 18]?.piece === null
-        ) {
-          forceFeed.push(item)
-          jumpDirection.push('bot right')
-          jumpedArr.push(boardData[index + 18])
-          
-        }
-        else if (
-        item.piece !== null &&
-        boardData[index + 9]?.playable && boardData[index + 9]?.piece === null &&
-        boardData[index + 18]?.piece !== null && boardData[index + 18]?.piece !== item.piece &&        
-        boardData[index + 27]?.playable && boardData[index + 27]?.piece === null
-        ) {
-          forceFeed.push(item)
-          jumpDirection.push('bot right')
-          jumpedArr.push(boardData[index + 27])
-        }
-        else if (
-        item.piece !== null &&
-        boardData[index + 9]?.playable && boardData[index + 9]?.piece === null &&
-        boardData[index + 18]?.playable && boardData[index + 18]?.piece === null &&
-        boardData[index + 27]?.piece !== null && boardData[index + 27]?.piece !== item.piece &&
-        boardData[index + 36]?.playable && boardData[index + 36]?.piece === null
-        ) {
-          forceFeed.push(item)
-          jumpDirection.push('bot right')
-          jumpedArr.push(boardData[index + 36])
-        }
-        else if (
-        item.piece !== null &&
-        boardData[index + 9]?.playable && boardData[index + 9]?.piece === null && 
-        boardData[index + 18]?.playable && boardData[index + 18]?.piece === null && 
-        boardData[index + 27]?.playable && boardData[index + 27]?.piece === null && 
-        boardData[index + 36]?.piece !== null && boardData[index + 36]?.piece !== item.piece && 
-        boardData[index + 45]?.playable && boardData[index + 45]?.piece === null
-        ) {
-          forceFeed.push(item)
-          jumpDirection.push('bot right')
-          jumpedArr.push(boardData[index + 45])
-        }
-        else if (
-        item.piece !== null &&
-        boardData[index + 9]?.playable && boardData[index + 9]?.piece === null &&
-        boardData[index + 18]?.playable && boardData[index + 18]?.piece === null &&
-        boardData[index + 27]?.playable && boardData[index + 27]?.piece === null &&
-        boardData[index + 36]?.playable && boardData[index + 36]?.piece === null &&
-        boardData[index + 45]?.piece !== null && boardData[index + 45]?.piece !== item.piece &&
-        boardData[index + 54]?.playable && boardData[index + 54]?.piece === null
-        ) {
-          forceFeed.push(item)
-          jumpDirection.push('bot right')
-          jumpedArr.push(boardData[index + 54])
-        }
-        else if (
-        item.piece !== null &&
-        boardData[index + 9]?.playable && boardData[index + 9]?.piece === null &&
-        boardData[index + 18]?.playable && boardData[index + 18]?.piece === null &&
-        boardData[index + 27]?.playable && boardData[index + 27]?.piece === null &&
-        boardData[index + 36]?.playable && boardData[index + 36]?.piece === null &&
-        boardData[index + 45]?.playable && boardData[index + 45]?.piece === null &&
-        boardData[index + 54]?.piece !== null && boardData[index + 45]?.piece !== item.piece &&        
-        boardData[index + 63]?.playable && boardData[index + 63]?.piece === null
-        ) {
-          forceFeed.push(item)
-          jumpDirection.push('bot right')
-          jumpedArr.push(boardData[index + 63])
-        }
-        }
-        topRightKing()
-        botLeftKing()
-        topLeftKing()
-        botRightKing()
       }
-      
+      forceKingCapture(item, index, boardData, forceFeed, jumpDirection, jumpedArr, -7)
+      forceKingCapture(item, index, boardData, forceFeed, jumpDirection, jumpedArr, -9)
+      forceKingCapture(item, index, boardData, forceFeed, jumpDirection, jumpedArr, 7)
+      forceKingCapture(item, index, boardData, forceFeed, jumpDirection, jumpedArr, 9)
       
       })
 
+      // console.log(forceFeed, 'forcefeed')
+      // console.log(jumpedArr, 'jumped arr')
 
 // second jump --------------------------------------------------------------------
     function doubleTake() {
@@ -470,421 +192,28 @@ function Gameboard({showRules}) {
     arrToJump.forEach((itemToMove, index) => {
         const jumpIndex = arrToJumpIndices[index]
           if (!itemToMove.king) {
-          // top right jump
-          if (
-            boardData[jumpIndex - 14]?.playable &&
-            boardData[jumpIndex - 14]?.piece === null &&
-            boardData[jumpIndex - 7]?.piece !== null &&
-            boardData[jumpIndex - 7]?.piece !== itemToMove?.piece &&
-            jumpDirection[index] !== 'bot left'
-            ) {
-              jumpedArr2nd.push(boardData[jumpIndex - 14])
-              jumpDirection2nd.push('top right')
-              forceFeed2nd.push(forceFeed[index])
-            }
-          // top left
-          if (
-            boardData[jumpIndex - 18]?.playable &&
-            boardData[jumpIndex - 18]?.piece === null &&
-            boardData[jumpIndex - 9]?.piece !== null &&
-            boardData[jumpIndex - 9]?.piece !== itemToMove?.piece &&
-            jumpDirection[index] !== 'bot right'
-            ) {
-              jumpedArr2nd.push(boardData[jumpIndex - 18])
-              jumpDirection2nd.push('top left')
-              forceFeed2nd.push(forceFeed[index])
-
-            }
-          // bot right
-          if (
-            boardData[jumpIndex + 18]?.playable &&
-            boardData[jumpIndex + 18]?.piece === null &&
-            boardData[jumpIndex + 9]?.piece !== null &&
-            boardData[jumpIndex + 9]?.piece !== itemToMove?.piece &&
-            jumpDirection[index] !== 'top left'
-            ) {
-              jumpedArr2nd.push(boardData[jumpIndex + 18])
-              jumpDirection2nd.push('bot right')
-              forceFeed2nd.push(forceFeed[index])
-            } 
-          // bot left
-          if (
-            boardData[jumpIndex + 14]?.playable &&
-            boardData[jumpIndex + 14]?.piece === null &&
-            boardData[jumpIndex + 7]?.piece !== null &&
-            boardData[jumpIndex + 7]?.piece !== itemToMove?.piece &&
-            jumpDirection[index] !== 'top right'
-            ) {
-              jumpedArr2nd.push(boardData[jumpIndex + 14])
-              jumpDirection2nd.push('bot left')
-              forceFeed2nd.push(forceFeed[index])
-            }
+          foreCaptureSecond(itemToMove, index, boardData, jumpIndex, jumpDirection2nd, forceFeed2nd, jumpDirection, jumpedArr2nd, forceFeed, -7)
+          foreCaptureSecond(itemToMove, index, boardData, jumpIndex, jumpDirection2nd, forceFeed2nd, jumpDirection, jumpedArr2nd, forceFeed, -9)
+          foreCaptureSecond(itemToMove, index, boardData, jumpIndex, jumpDirection2nd, forceFeed2nd, jumpDirection, jumpedArr2nd, forceFeed, 7)
+          foreCaptureSecond(itemToMove, index, boardData, jumpIndex, jumpDirection2nd, forceFeed2nd, jumpDirection, jumpedArr2nd, forceFeed, 9)
       }
           else if (itemToMove.king) {
-            function topRightKing() {
-            if (
-            boardData[jumpIndex - 14]?.playable &&
-            boardData[jumpIndex - 14]?.piece === null &&
-            boardData[jumpIndex - 7]?.piece !== null &&
-            boardData[jumpIndex - 7]?.piece !== itemToMove?.piece &&
-            jumpDirection[index] !== 'bot left'
-            ) {
-              jumpedArr2nd.push(boardData[jumpIndex - 14])
-              jumpDirection2nd.push('top right')
-              forceFeed2nd.push(forceFeed[index])
-            }
-            if (
-            boardData[jumpIndex - 21]?.playable &&
-            boardData[jumpIndex - 21]?.piece === null &&
-            boardData[jumpIndex - 14]?.piece !== null &&
-            boardData[jumpIndex - 14]?.piece !== itemToMove?.piece &&
-            boardData[jumpIndex - 7]?.playable &&
-            boardData[jumpIndex - 7]?.piece === null &&
-            jumpDirection[index] !== 'bot left'
-            ) {
-              jumpedArr2nd.push(boardData[jumpIndex - 21])
-              jumpDirection2nd.push('top right')
-              forceFeed2nd.push(forceFeed[index])
-            }
-            if (
-            boardData[jumpIndex - 28]?.playable &&
-            boardData[jumpIndex - 28]?.piece === null &&
-            boardData[jumpIndex - 21]?.piece !== null &&
-            boardData[jumpIndex - 21]?.piece !== itemToMove?.piece &&
-            boardData[jumpIndex - 14]?.playable &&
-            boardData[jumpIndex - 14]?.piece === null &&
-            boardData[jumpIndex - 7]?.playable &&
-            boardData[jumpIndex - 7]?.piece === null &&
-            jumpDirection[index] !== 'bot left'
-            ) {
-              jumpedArr2nd.push(boardData[jumpIndex - 28])
-              jumpDirection2nd.push('top right')
-              forceFeed2nd.push(forceFeed[index])
-            }
-            if (
-            boardData[jumpIndex - 35]?.playable &&
-            boardData[jumpIndex - 35]?.piece === null &&
-            boardData[jumpIndex - 28]?.piece !== null &&
-            boardData[jumpIndex - 28]?.piece !== itemToMove?.piece &&
-            boardData[jumpIndex - 21]?.playable &&
-            boardData[jumpIndex - 21]?.piece === null &&
-            boardData[jumpIndex - 14]?.playable &&
-            boardData[jumpIndex - 14]?.piece === null &&
-            boardData[jumpIndex - 7]?.playable &&
-            boardData[jumpIndex - 7]?.piece === null &&
-            jumpDirection[index] !== 'bot left'
-            ) {
-              jumpedArr2nd.push(boardData[jumpIndex - 35])
-              jumpDirection2nd.push('top right')
-              forceFeed2nd.push(forceFeed[index])
-            }
-            if (
-            boardData[jumpIndex - 42]?.playable &&
-            boardData[jumpIndex - 42]?.piece === null &&
-            boardData[jumpIndex - 35]?.piece !== null &&
-            boardData[jumpIndex - 35]?.piece !== itemToMove?.piece &&
-            boardData[jumpIndex - 28]?.playable &&
-            boardData[jumpIndex - 28]?.piece === null &&
-            boardData[jumpIndex - 21]?.playable &&
-            boardData[jumpIndex - 21]?.piece === null &&
-            boardData[jumpIndex - 14]?.playable &&
-            boardData[jumpIndex - 14]?.piece === null &&
-            boardData[jumpIndex - 7]?.playable &&
-            boardData[jumpIndex - 7]?.piece === null &&
-            jumpDirection[index] !== 'bot left'
-            ) {
-              jumpedArr2nd.push(boardData[jumpIndex - 42])
-              jumpDirection2nd.push('top right')
-              forceFeed2nd.push(forceFeed[index])
-            }
-            }
-            function botLeftKing() {
-            if (
-            boardData[jumpIndex + 14]?.playable &&
-            boardData[jumpIndex + 14]?.piece === null &&
-            boardData[jumpIndex + 7]?.piece !== null &&
-            boardData[jumpIndex + 7]?.piece !== itemToMove?.piece &&
-            jumpDirection[index] !== 'top right'
-            ) {
-              jumpedArr2nd.push(boardData[jumpIndex + 14])
-              jumpDirection2nd.push('bot left')
-              forceFeed2nd.push(forceFeed[index])
-            }
-            if (
-            boardData[jumpIndex + 21]?.playable &&
-            boardData[jumpIndex + 21]?.piece === null &&
-            boardData[jumpIndex + 14]?.piece !== null &&
-            boardData[jumpIndex + 14]?.piece !== itemToMove?.piece &&
-            boardData[jumpIndex + 7]?.playable &&
-            boardData[jumpIndex + 7]?.piece === null &&
-            jumpDirection[index] !== 'top right'
-            ) {
-              jumpedArr2nd.push(boardData[jumpIndex + 21])
-              jumpDirection2nd.push('bot left')
-              forceFeed2nd.push(forceFeed[index])
-            }
-            if (
-            boardData[jumpIndex + 28]?.playable &&
-            boardData[jumpIndex + 28]?.piece === null &&
-            boardData[jumpIndex + 21]?.piece !== null &&
-            boardData[jumpIndex + 21]?.piece !== itemToMove?.piece &&
-            boardData[jumpIndex + 14]?.playable &&
-            boardData[jumpIndex + 14]?.piece === null &&
-            boardData[jumpIndex + 7]?.playable &&
-            boardData[jumpIndex + 7]?.piece === null &&
-            jumpDirection[index] !== 'top right'
-            ) {
-              jumpedArr2nd.push(boardData[jumpIndex + 28])
-              jumpDirection2nd.push('bot left')
-              forceFeed2nd.push(forceFeed[index])
-            }
-            if (
-            boardData[jumpIndex + 35]?.playable &&
-            boardData[jumpIndex + 35]?.piece === null &&
-            boardData[jumpIndex + 28]?.piece !== null &&
-            boardData[jumpIndex + 28]?.piece !== itemToMove?.piece &&
-            boardData[jumpIndex + 21]?.playable &&
-            boardData[jumpIndex + 21]?.piece === null &&
-            boardData[jumpIndex + 14]?.playable &&
-            boardData[jumpIndex + 14]?.piece === null &&
-            boardData[jumpIndex + 7]?.playable &&
-            boardData[jumpIndex + 7]?.piece === null &&
-            jumpDirection[index] !== 'top right'
-            ) {
-              jumpedArr2nd.push(boardData[jumpIndex + 35])
-              jumpDirection2nd.push('bot left')
-              forceFeed2nd.push(forceFeed[index])
-            }
-            if (
-            boardData[jumpIndex + 42]?.playable &&
-            boardData[jumpIndex + 42]?.piece === null &&
-            boardData[jumpIndex + 35]?.piece !== null &&
-            boardData[jumpIndex + 35]?.piece !== itemToMove?.piece &&
-            boardData[jumpIndex + 28]?.playable &&
-            boardData[jumpIndex + 28]?.piece === null &&
-            boardData[jumpIndex + 21]?.playable &&
-            boardData[jumpIndex + 21]?.piece === null &&
-            boardData[jumpIndex + 14]?.playable &&
-            boardData[jumpIndex + 14]?.piece === null &&
-            boardData[jumpIndex + 7]?.playable &&
-            boardData[jumpIndex + 7]?.piece === null &&
-            jumpDirection[index] !== 'top right'
-            ) {
-              jumpedArr2nd.push(boardData[jumpIndex + 42])
-              jumpDirection2nd.push('bot left')
-              forceFeed2nd.push(forceFeed[index])
-            }
-            }
-            function topLeftKing() {
-            if (
-            boardData[jumpIndex - 18]?.playable &&
-            boardData[jumpIndex - 18]?.piece === null &&
-            boardData[jumpIndex - 9]?.piece !== null &&
-            boardData[jumpIndex - 9]?.piece !== itemToMove?.piece &&
-            jumpDirection[index] !== 'bot right'
-            ) {
-              jumpedArr2nd.push(boardData[jumpIndex - 18])
-              jumpDirection2nd.push('top left')
-              forceFeed2nd.push(forceFeed[index])
-            }
-            if (
-            boardData[jumpIndex - 27]?.playable &&
-            boardData[jumpIndex - 27]?.piece === null &&
-            boardData[jumpIndex - 18]?.piece !== null &&
-            boardData[jumpIndex - 18]?.piece !== itemToMove?.piece &&
-            boardData[jumpIndex - 9]?.playable &&
-            boardData[jumpIndex - 9]?.piece === null &&
-            jumpDirection[index] !== 'bot right'
-            ) {
-              jumpedArr2nd.push(boardData[jumpIndex - 27])
-              jumpDirection2nd.push('top left')
-              forceFeed2nd.push(forceFeed[index])
-            }
-            if (
-            boardData[jumpIndex - 36]?.playable &&
-            boardData[jumpIndex - 36]?.piece === null &&
-            boardData[jumpIndex - 27]?.piece !== null &&
-            boardData[jumpIndex - 27]?.piece !== itemToMove?.piece &&
-            boardData[jumpIndex - 18]?.playable &&
-            boardData[jumpIndex - 18]?.piece === null &&
-            boardData[jumpIndex - 9]?.playable &&
-            boardData[jumpIndex - 9]?.piece === null &&
-            jumpDirection[index] !== 'bot right'
-            ) {
-              jumpedArr2nd.push(boardData[jumpIndex - 36])
-              jumpDirection2nd.push('top left')
-              forceFeed2nd.push(forceFeed[index])
-            }
-            if (
-            boardData[jumpIndex - 45]?.playable &&
-            boardData[jumpIndex - 45]?.piece === null &&
-            boardData[jumpIndex - 36]?.piece !== null &&
-            boardData[jumpIndex - 36]?.piece !== itemToMove?.piece &&
-            boardData[jumpIndex - 27]?.playable &&
-            boardData[jumpIndex - 27]?.piece === null &&
-            boardData[jumpIndex - 18]?.playable &&
-            boardData[jumpIndex - 18]?.piece === null &&
-            boardData[jumpIndex - 9]?.playable &&
-            boardData[jumpIndex - 9]?.piece === null &&
-            jumpDirection[index] !== 'bot right'
-            ) {
-              jumpedArr2nd.push(boardData[jumpIndex - 45])
-              jumpDirection2nd.push('top left')
-              forceFeed2nd.push(forceFeed[index])
-            }
-            if (
-            boardData[jumpIndex - 54]?.playable &&
-            boardData[jumpIndex - 54]?.piece === null &&
-            boardData[jumpIndex - 45]?.piece !== null &&
-            boardData[jumpIndex - 45]?.piece !== itemToMove?.piece &&
-            boardData[jumpIndex - 36]?.playable &&
-            boardData[jumpIndex - 36]?.piece === null &&
-            boardData[jumpIndex - 27]?.playable &&
-            boardData[jumpIndex - 27]?.piece === null &&
-            boardData[jumpIndex - 18]?.playable &&
-            boardData[jumpIndex - 18]?.piece === null &&
-            boardData[jumpIndex - 9]?.playable &&
-            boardData[jumpIndex - 9]?.piece === null &&
-            jumpDirection[index] !== 'bot right'
-            ) {
-              jumpedArr2nd.push(boardData[jumpIndex - 54])
-              jumpDirection2nd.push('top left')
-              forceFeed2nd.push(forceFeed[index])
-            }
-            if (
-            boardData[jumpIndex - 63]?.playable &&
-            boardData[jumpIndex - 63]?.piece === null &&
-            boardData[jumpIndex - 54]?.piece !== null &&
-            boardData[jumpIndex - 54]?.piece !== itemToMove?.piece &&
-            boardData[jumpIndex - 45]?.playable &&
-            boardData[jumpIndex - 45]?.piece === null &&
-            boardData[jumpIndex - 36]?.playable &&
-            boardData[jumpIndex - 36]?.piece === null &&
-            boardData[jumpIndex - 27]?.playable &&
-            boardData[jumpIndex - 27]?.piece === null &&
-            boardData[jumpIndex - 18]?.playable &&
-            boardData[jumpIndex - 18]?.piece === null &&
-            boardData[jumpIndex - 9]?.playable &&
-            boardData[jumpIndex - 9]?.piece === null &&
-            jumpDirection[index] !== 'bot right'
-            ) {
-              jumpedArr2nd.push(boardData[jumpIndex - 54])
-              jumpDirection2nd.push('top left')
-              forceFeed2nd.push(forceFeed[index])
-            }
-            }
-            function botRightKing() {
-            if (
-            boardData[jumpIndex + 18]?.playable &&
-            boardData[jumpIndex + 18]?.piece === null &&
-            boardData[jumpIndex + 9]?.piece !== null &&
-            boardData[jumpIndex + 9]?.piece !== itemToMove?.piece &&
-            jumpDirection[index] !== 'top left'
-            ) {
-              jumpedArr2nd.push(boardData[jumpIndex + 18])
-              jumpDirection2nd.push('bot right')
-              forceFeed2nd.push(forceFeed[index])
-            }
-            if (
-            boardData[jumpIndex + 27]?.playable &&
-            boardData[jumpIndex + 27]?.piece === null &&
-            boardData[jumpIndex + 18]?.piece !== null &&
-            boardData[jumpIndex + 18]?.piece !== itemToMove?.piece &&
-            boardData[jumpIndex + 9]?.playable &&
-            boardData[jumpIndex + 9]?.piece === null &&
-            jumpDirection[index] !== 'top left'
-            ) {
-              jumpedArr2nd.push(boardData[jumpIndex + 27])
-              jumpDirection2nd.push('bot right')
-              forceFeed2nd.push(forceFeed[index])
-            }
-            if (
-            boardData[jumpIndex + 36]?.playable &&
-            boardData[jumpIndex + 36]?.piece === null &&
-            boardData[jumpIndex + 27]?.piece !== null &&
-            boardData[jumpIndex + 27]?.piece !== itemToMove?.piece &&
-            boardData[jumpIndex + 18]?.playable &&
-            boardData[jumpIndex + 18]?.piece === null &&
-            boardData[jumpIndex + 9]?.playable &&
-            boardData[jumpIndex + 9]?.piece === null &&
-            jumpDirection[index] !== 'top left'
-            ) {
-              jumpedArr2nd.push(boardData[jumpIndex + 36])
-              jumpDirection2nd.push('bot right')
-              forceFeed2nd.push(forceFeed[index])
-            }
-            if (
-            boardData[jumpIndex + 45]?.playable &&
-            boardData[jumpIndex + 45]?.piece === null &&
-            boardData[jumpIndex + 36]?.piece !== null &&
-            boardData[jumpIndex + 36]?.piece !== itemToMove?.piece &&
-            boardData[jumpIndex + 27]?.playable &&
-            boardData[jumpIndex + 27]?.piece === null &&
-            boardData[jumpIndex + 18]?.playable &&
-            boardData[jumpIndex + 18]?.piece === null &&
-            boardData[jumpIndex + 9]?.playable &&
-            boardData[jumpIndex + 9]?.piece === null &&
-            jumpDirection[index] !== 'top left'
-            ) {
-              jumpedArr2nd.push(boardData[jumpIndex + 45])
-              jumpDirection2nd.push('bot right')
-              forceFeed2nd.push(forceFeed[index])
-            }
-            if (
-            boardData[jumpIndex + 54]?.playable &&
-            boardData[jumpIndex + 54]?.piece === null &&
-            boardData[jumpIndex + 45]?.piece !== null &&
-            boardData[jumpIndex + 45]?.piece !== itemToMove?.piece &&
-            boardData[jumpIndex + 36]?.playable &&
-            boardData[jumpIndex + 36]?.piece === null &&
-            boardData[jumpIndex + 27]?.playable &&
-            boardData[jumpIndex + 27]?.piece === null &&
-            boardData[jumpIndex + 18]?.playable &&
-            boardData[jumpIndex + 18]?.piece === null &&
-            boardData[jumpIndex + 9]?.playable &&
-            boardData[jumpIndex + 9]?.piece === null &&
-            jumpDirection[index] !== 'top left'
-            ) {
-              jumpedArr2nd.push(boardData[jumpIndex + 54])
-              jumpDirection2nd.push('bot right')
-              forceFeed2nd.push(forceFeed[index])
-            }
-            if (
-            boardData[jumpIndex + 63]?.playable &&
-            boardData[jumpIndex + 63]?.piece === null &&
-            boardData[jumpIndex + 54]?.piece !== null &&
-            boardData[jumpIndex + 54]?.piece !== itemToMove?.piece &&
-            boardData[jumpIndex + 45]?.playable &&
-            boardData[jumpIndex + 45]?.piece === null &&
-            boardData[jumpIndex + 36]?.playable &&
-            boardData[jumpIndex + 36]?.piece === null &&
-            boardData[jumpIndex + 27]?.playable &&
-            boardData[jumpIndex + 27]?.piece === null &&
-            boardData[jumpIndex + 18]?.playable &&
-            boardData[jumpIndex + 18]?.piece === null &&
-            boardData[jumpIndex + 9]?.playable &&
-            boardData[jumpIndex + 9]?.piece === null &&
-            jumpDirection[index] !== 'top left'
-            ) {
-              jumpedArr2nd.push(boardData[jumpIndex + 54])
-              jumpDirection2nd.push('bot right')
-              forceFeed2nd.push(forceFeed[index])
-            }
-            }
-            
-            topRightKing()
-            botLeftKing()
-            topLeftKing()
-            botRightKing()
-            botRightKing()
+            forceKingBotLeft(itemToMove, index, boardData, jumpIndex, jumpDirection, jumpedArr2nd, jumpDirection2nd, forceFeed2nd, forceFeed, 7)
+            forceKingBotRight(itemToMove, index, boardData, jumpIndex, jumpDirection, jumpedArr2nd, jumpDirection2nd, forceFeed2nd, forceFeed, 9)
+            forceKingTopLeft(itemToMove, index, boardData, jumpIndex, jumpDirection, jumpedArr2nd, jumpDirection2nd, forceFeed2nd, forceFeed, -9)
+            forceKingTopRight(itemToMove, index, boardData, jumpIndex, jumpDirection, jumpedArr2nd, jumpDirection2nd, forceFeed2nd, forceFeed, -7)
           }
       })
     }
     doubleTake()
 
 
-    if (forceFeed2nd.length) forceFeed = forceFeed2nd
     
+
+    // console.log(forceFeed2nd, 'forcefeed2nd')
+    // console.log(jumpedArr2nd, 'jump arr second')
+
+    if (forceFeed2nd.length) forceFeed = forceFeed2nd
     // -----------------------------------------------------------------------------------
 
 // third jump ---------------------------------------------------------------------------
@@ -904,410 +233,18 @@ function tripleTake() {
   
   arrToJump3rd.forEach((item, index) => {
     const jumpIndex = arrToJumpIndices[index]
-    if (!item.king) {
-          // top right jump
-          if (
-            boardData[jumpIndex - 7].piece !== null &&
-            boardData[jumpIndex - 7] !== item.piece &&
-            boardData[jumpIndex - 14]?.playable &&
-            boardData[jumpIndex - 14].piece === null &&
-            jumpDirection2nd[index] !== 'bot left'
-          ) {
-            forceFeed3rd.push(forceFeed2nd[index])
-
-          }
-          // top left
-          else if (
-            boardData[jumpIndex - 9].piece !== null &&
-            boardData[jumpIndex - 9] !== item.piece &&
-            boardData[jumpIndex - 18]?.playable &&
-            boardData[jumpIndex - 18].piece === null &&
-            jumpDirection2nd[index] !== 'bot right'
-          ) {
-            forceFeed3rd.push(forceFeed2nd[index])
-
-          }
-          // bot left
-          else if (
-            boardData[jumpIndex + 7].piece !== null &&
-            boardData[jumpIndex + 7] !== item.piece &&
-            boardData[jumpIndex + 14]?.playable &&
-            boardData[jumpIndex + 14].piece === null &&
-            jumpDirection2nd[index] !== 'top right'
-          ) {
-            forceFeed3rd.push(forceFeed2nd[index])
-
-          }
-          // bot right
-          else if (
-            boardData[jumpIndex + 9].piece !== null &&
-            boardData[jumpIndex + 9] !== item.piece &&
-            boardData[jumpIndex + 18]?.playable &&
-            boardData[jumpIndex + 18].piece === null &&
-            jumpDirection2nd[index] !== 'top left'
-          ) {
-            forceFeed3rd.push(forceFeed2nd[index])
-          }
+    if (!item?.king) {
+      forceCaptureThird(item, index, boardData, jumpIndex, jumpDirection2nd, forceFeed3rd, forceFeed2nd, -7)
+      forceCaptureThird(item, index, boardData, jumpIndex, jumpDirection2nd, forceFeed3rd, forceFeed2nd, -9)
+      forceCaptureThird(item, index, boardData, jumpIndex, jumpDirection2nd, forceFeed3rd, forceFeed2nd, 7)
+      forceCaptureThird(item, index, boardData, jumpIndex, jumpDirection2nd, forceFeed3rd, forceFeed2nd, 9)
 }
-    else if (item.king) {
-
-            function topRightKing() {
-            if (
-            boardData[jumpIndex - 14]?.playable &&
-            boardData[jumpIndex - 14]?.piece === null &&
-            boardData[jumpIndex - 7]?.piece !== null &&
-            boardData[jumpIndex - 7]?.piece !== item?.piece &&
-            jumpDirection2nd[index] !== 'bot left'
-            ) {
-            
-              
-              forceFeed3rd.push(forceFeed2nd[index])
-            }
-            if (
-            boardData[jumpIndex - 21]?.playable &&
-            boardData[jumpIndex - 21]?.piece === null &&
-            boardData[jumpIndex - 14]?.piece !== null &&
-            boardData[jumpIndex - 14]?.piece !== item?.piece &&
-            boardData[jumpIndex - 7]?.playable &&
-            boardData[jumpIndex - 7]?.piece === null &&
-            jumpDirection2nd[index] !== 'bot left'
-            ) {
-            
-              
-              forceFeed3rd.push(forceFeed2nd[index])
-            }
-            if (
-            boardData[jumpIndex - 28]?.playable &&
-            boardData[jumpIndex - 28]?.piece === null &&
-            boardData[jumpIndex - 21]?.piece !== null &&
-            boardData[jumpIndex - 21]?.piece !== item?.piece &&
-            boardData[jumpIndex - 14]?.playable &&
-            boardData[jumpIndex - 14]?.piece === null &&
-            boardData[jumpIndex - 7]?.playable &&
-            boardData[jumpIndex - 7]?.piece === null &&
-            jumpDirection2nd[index] !== 'bot left'
-            ) {
-            
-              
-              forceFeed3rd.push(forceFeed2nd[index])
-            }
-            if (
-            boardData[jumpIndex - 35]?.playable &&
-            boardData[jumpIndex - 35]?.piece === null &&
-            boardData[jumpIndex - 28]?.piece !== null &&
-            boardData[jumpIndex - 28]?.piece !== item?.piece &&
-            boardData[jumpIndex - 21]?.playable &&
-            boardData[jumpIndex - 21]?.piece === null &&
-            boardData[jumpIndex - 14]?.playable &&
-            boardData[jumpIndex - 14]?.piece === null &&
-            boardData[jumpIndex - 7]?.playable &&
-            boardData[jumpIndex - 7]?.piece === null &&
-            jumpDirection2nd[index] !== 'bot left'
-            ) {
-            
-              
-              forceFeed3rd.push(forceFeed2nd[index])
-            }
-            if (
-            boardData[jumpIndex - 42]?.playable &&
-            boardData[jumpIndex - 42]?.piece === null &&
-            boardData[jumpIndex - 35]?.piece !== null &&
-            boardData[jumpIndex - 35]?.piece !== item?.piece &&
-            boardData[jumpIndex - 28]?.playable &&
-            boardData[jumpIndex - 28]?.piece === null &&
-            boardData[jumpIndex - 21]?.playable &&
-            boardData[jumpIndex - 21]?.piece === null &&
-            boardData[jumpIndex - 14]?.playable &&
-            boardData[jumpIndex - 14]?.piece === null &&
-            boardData[jumpIndex - 7]?.playable &&
-            boardData[jumpIndex - 7]?.piece === null &&
-            jumpDirection2nd[index] !== 'bot left'
-            ) {
-            
-              
-              forceFeed3rd.push(forceFeed2nd[index])
-            }
-            }
-            function botLeftKing() {
-            if (
-            boardData[jumpIndex + 14]?.playable &&
-            boardData[jumpIndex + 14]?.piece === null &&
-            boardData[jumpIndex + 7]?.piece !== null &&
-            boardData[jumpIndex + 7]?.piece !== item?.piece &&
-            jumpDirection2nd[index] !== 'top right'
-            ) {
-            
-              
-              forceFeed3rd.push(forceFeed2nd[index])
-            }
-            if (
-            boardData[jumpIndex + 21]?.playable &&
-            boardData[jumpIndex + 21]?.piece === null &&
-            boardData[jumpIndex + 14]?.piece !== null &&
-            boardData[jumpIndex + 14]?.piece !== item?.piece &&
-            boardData[jumpIndex + 7]?.playable &&
-            boardData[jumpIndex + 7]?.piece === null &&
-            jumpDirection2nd[index] !== 'top right'
-            ) {
-            
-              
-              forceFeed3rd.push(forceFeed2nd[index])
-            }
-            if (
-            boardData[jumpIndex + 28]?.playable &&
-            boardData[jumpIndex + 28]?.piece === null &&
-            boardData[jumpIndex + 21]?.piece !== null &&
-            boardData[jumpIndex + 21]?.piece !== item?.piece &&
-            boardData[jumpIndex + 14]?.playable &&
-            boardData[jumpIndex + 14]?.piece === null &&
-            boardData[jumpIndex + 7]?.playable &&
-            boardData[jumpIndex + 7]?.piece === null &&
-            jumpDirection2nd[index] !== 'top right'
-            ) {
-            
-              
-              forceFeed3rd.push(forceFeed2nd[index])
-            }
-            if (
-            boardData[jumpIndex + 35]?.playable &&
-            boardData[jumpIndex + 35]?.piece === null &&
-            boardData[jumpIndex + 28]?.piece !== null &&
-            boardData[jumpIndex + 28]?.piece !== item?.piece &&
-            boardData[jumpIndex + 21]?.playable &&
-            boardData[jumpIndex + 21]?.piece === null &&
-            boardData[jumpIndex + 14]?.playable &&
-            boardData[jumpIndex + 14]?.piece === null &&
-            boardData[jumpIndex + 7]?.playable &&
-            boardData[jumpIndex + 7]?.piece === null &&
-            jumpDirection2nd[index] !== 'top right'
-            ) {
-            
-              
-              forceFeed3rd.push(forceFeed2nd[index])
-            }
-            if (
-            boardData[jumpIndex + 42]?.playable &&
-            boardData[jumpIndex + 42]?.piece === null &&
-            boardData[jumpIndex + 35]?.piece !== null &&
-            boardData[jumpIndex + 35]?.piece !== item?.piece &&
-            boardData[jumpIndex + 28]?.playable &&
-            boardData[jumpIndex + 28]?.piece === null &&
-            boardData[jumpIndex + 21]?.playable &&
-            boardData[jumpIndex + 21]?.piece === null &&
-            boardData[jumpIndex + 14]?.playable &&
-            boardData[jumpIndex + 14]?.piece === null &&
-            boardData[jumpIndex + 7]?.playable &&
-            boardData[jumpIndex + 7]?.piece === null &&
-            jumpDirection2nd[index] !== 'top right'
-            ) {
-            
-              
-              forceFeed3rd.push(forceFeed2nd[index])
-            }
-            }
-            function topLeftKing() {
-            if (
-            boardData[jumpIndex - 18]?.playable &&
-            boardData[jumpIndex - 18]?.piece === null &&
-            boardData[jumpIndex - 9]?.piece !== null &&
-            boardData[jumpIndex - 9]?.piece !== item?.piece &&
-            jumpDirection2nd[index] !== 'bot right'
-            ) {
-        
-              
-              forceFeed3rd.push(forceFeed2nd[index])
-            }
-            if (
-            boardData[jumpIndex - 27]?.playable &&
-            boardData[jumpIndex - 27]?.piece === null &&
-            boardData[jumpIndex - 18]?.piece !== null &&
-            boardData[jumpIndex - 18]?.piece !== item?.piece &&
-            boardData[jumpIndex - 9]?.playable &&
-            boardData[jumpIndex - 9]?.piece === null &&
-            jumpDirection2nd[index] !== 'bot right'
-            ) {
-        
-              
-              forceFeed3rd.push(forceFeed2nd[index])
-            }
-            if (
-            boardData[jumpIndex - 36]?.playable &&
-            boardData[jumpIndex - 36]?.piece === null &&
-            boardData[jumpIndex - 27]?.piece !== null &&
-            boardData[jumpIndex - 27]?.piece !== item?.piece &&
-            boardData[jumpIndex - 18]?.playable &&
-            boardData[jumpIndex - 18]?.piece === null &&
-            boardData[jumpIndex - 9]?.playable &&
-            boardData[jumpIndex - 9]?.piece === null &&
-            jumpDirection2nd[index] !== 'bot right'
-            ) {
-        
-              
-              forceFeed3rd.push(forceFeed2nd[index])
-            }
-            if (
-            boardData[jumpIndex - 45]?.playable &&
-            boardData[jumpIndex - 45]?.piece === null &&
-            boardData[jumpIndex - 36]?.piece !== null &&
-            boardData[jumpIndex - 36]?.piece !== item?.piece &&
-            boardData[jumpIndex - 27]?.playable &&
-            boardData[jumpIndex - 27]?.piece === null &&
-            boardData[jumpIndex - 18]?.playable &&
-            boardData[jumpIndex - 18]?.piece === null &&
-            boardData[jumpIndex - 9]?.playable &&
-            boardData[jumpIndex - 9]?.piece === null &&
-            jumpDirection2nd[index] !== 'bot right'
-            ) {
-        
-              
-              forceFeed3rd.push(forceFeed2nd[index])
-            }
-            if (
-            boardData[jumpIndex - 54]?.playable &&
-            boardData[jumpIndex - 54]?.piece === null &&
-            boardData[jumpIndex - 45]?.piece !== null &&
-            boardData[jumpIndex - 45]?.piece !== item?.piece &&
-            boardData[jumpIndex - 36]?.playable &&
-            boardData[jumpIndex - 36]?.piece === null &&
-            boardData[jumpIndex - 27]?.playable &&
-            boardData[jumpIndex - 27]?.piece === null &&
-            boardData[jumpIndex - 18]?.playable &&
-            boardData[jumpIndex - 18]?.piece === null &&
-            boardData[jumpIndex - 9]?.playable &&
-            boardData[jumpIndex - 9]?.piece === null &&
-            jumpDirection2nd[index] !== 'bot right'
-            ) {
-        
-              
-              forceFeed3rd.push(forceFeed2nd[index])
-            }
-            if (
-            boardData[jumpIndex - 63]?.playable &&
-            boardData[jumpIndex - 63]?.piece === null &&
-            boardData[jumpIndex - 54]?.piece !== null &&
-            boardData[jumpIndex - 54]?.piece !== item?.piece &&
-            boardData[jumpIndex - 45]?.playable &&
-            boardData[jumpIndex - 45]?.piece === null &&
-            boardData[jumpIndex - 36]?.playable &&
-            boardData[jumpIndex - 36]?.piece === null &&
-            boardData[jumpIndex - 27]?.playable &&
-            boardData[jumpIndex - 27]?.piece === null &&
-            boardData[jumpIndex - 18]?.playable &&
-            boardData[jumpIndex - 18]?.piece === null &&
-            boardData[jumpIndex - 9]?.playable &&
-            boardData[jumpIndex - 9]?.piece === null &&
-            jumpDirection2nd[index] !== 'bot right'
-            ) {
-        
-              
-              forceFeed3rd.push(forceFeed2nd[index])
-            }
-            }
-            function botRightKing() {
-            if (
-            boardData[jumpIndex + 18]?.playable &&
-            boardData[jumpIndex + 18]?.piece === null &&
-            boardData[jumpIndex + 9]?.piece !== null &&
-            boardData[jumpIndex + 9]?.piece !== item?.piece &&
-            jumpDirection2nd[index] !== 'top left'
-            ) {
-        
-              
-              forceFeed3rd.push(forceFeed2nd[index])
-            }
-            if (
-            boardData[jumpIndex + 27]?.playable &&
-            boardData[jumpIndex + 27]?.piece === null &&
-            boardData[jumpIndex + 18]?.piece !== null &&
-            boardData[jumpIndex + 18]?.piece !== item?.piece &&
-            boardData[jumpIndex + 9]?.playable &&
-            boardData[jumpIndex + 9]?.piece === null &&
-            jumpDirection2nd[index] !== 'top left'
-            ) {
-        
-              
-              forceFeed3rd.push(forceFeed2nd[index])
-            }
-            if (
-            boardData[jumpIndex + 36]?.playable &&
-            boardData[jumpIndex + 36]?.piece === null &&
-            boardData[jumpIndex + 27]?.piece !== null &&
-            boardData[jumpIndex + 27]?.piece !== item?.piece &&
-            boardData[jumpIndex + 18]?.playable &&
-            boardData[jumpIndex + 18]?.piece === null &&
-            boardData[jumpIndex + 9]?.playable &&
-            boardData[jumpIndex + 9]?.piece === null &&
-            jumpDirection2nd[index] !== 'top left'
-            ) {
-        
-              
-              forceFeed3rd.push(forceFeed2nd[index])
-            }
-            if (
-            boardData[jumpIndex + 45]?.playable &&
-            boardData[jumpIndex + 45]?.piece === null &&
-            boardData[jumpIndex + 36]?.piece !== null &&
-            boardData[jumpIndex + 36]?.piece !== item?.piece &&
-            boardData[jumpIndex + 27]?.playable &&
-            boardData[jumpIndex + 27]?.piece === null &&
-            boardData[jumpIndex + 18]?.playable &&
-            boardData[jumpIndex + 18]?.piece === null &&
-            boardData[jumpIndex + 9]?.playable &&
-            boardData[jumpIndex + 9]?.piece === null &&
-            jumpDirection2nd[index] !== 'top left'
-            ) {
-        
-              
-              forceFeed3rd.push(forceFeed2nd[index])
-            }
-            if (
-            boardData[jumpIndex + 54]?.playable &&
-            boardData[jumpIndex + 54]?.piece === null &&
-            boardData[jumpIndex + 45]?.piece !== null &&
-            boardData[jumpIndex + 45]?.piece !== item?.piece &&
-            boardData[jumpIndex + 36]?.playable &&
-            boardData[jumpIndex + 36]?.piece === null &&
-            boardData[jumpIndex + 27]?.playable &&
-            boardData[jumpIndex + 27]?.piece === null &&
-            boardData[jumpIndex + 18]?.playable &&
-            boardData[jumpIndex + 18]?.piece === null &&
-            boardData[jumpIndex + 9]?.playable &&
-            boardData[jumpIndex + 9]?.piece === null &&
-            jumpDirection2nd[index] !== 'top left'
-            ) {
-        
-              
-              forceFeed3rd.push(forceFeed2nd[index])
-            }
-            if (
-            boardData[jumpIndex + 63]?.playable &&
-            boardData[jumpIndex + 63]?.piece === null &&
-            boardData[jumpIndex + 54]?.piece !== null &&
-            boardData[jumpIndex + 54]?.piece !== item?.piece &&
-            boardData[jumpIndex + 45]?.playable &&
-            boardData[jumpIndex + 45]?.piece === null &&
-            boardData[jumpIndex + 36]?.playable &&
-            boardData[jumpIndex + 36]?.piece === null &&
-            boardData[jumpIndex + 27]?.playable &&
-            boardData[jumpIndex + 27]?.piece === null &&
-            boardData[jumpIndex + 18]?.playable &&
-            boardData[jumpIndex + 18]?.piece === null &&
-            boardData[jumpIndex + 9]?.playable &&
-            boardData[jumpIndex + 9]?.piece === null &&
-            jumpDirection2nd[index] !== 'top left'
-            ) {
-        
-              
-              forceFeed3rd.push(forceFeed2nd[index])
-            }
-            }
-            
-            topRightKing()
-            botLeftKing()
-            topLeftKing()
-            botRightKing()
-            botRightKing()
-          }
+    else if (item?.king) {
+      forceKingThirdBotLeft(item, index, boardData, jumpIndex, jumpDirection2nd, forceFeed3rd, forceFeed2nd, 7)
+      forceKingThirdBotRight(item, index, boardData, jumpIndex, jumpDirection2nd, forceFeed3rd, forceFeed2nd, 9)
+      forceKingThirdTopLeft(item, index, boardData, jumpIndex, jumpDirection2nd, forceFeed3rd, forceFeed2nd, -9)
+      forceKingThirdTopRight(item, index, boardData, jumpIndex, jumpDirection2nd, forceFeed3rd, forceFeed2nd, -7)
+    }
   })
 
 }
@@ -1346,100 +283,33 @@ if (forceFeed3rd.length) forceFeed = forceFeed3rd
   
   }, [pieceToMove])
 
-  const playerTurnStyle = {}
-  if (playerOneTurn) {
-    playerTurnStyle.color = 'red'
-    playerTurnStyle.backgroundColor = 'rgb(255, 220, 220)'
-  }
-  else if (!playerOneTurn) {
-    playerTurnStyle.color = 'blue'
-    playerTurnStyle.backgroundColor = 'rgb(220, 220, 255)'
-  }
   
 
 
   return (
     <div className="container">
-    <div className="player-turn"
-    style={playerTurnStyle}
-    >
-      Player {playerOneTurn? 'One' : 'Two'}'s Turn
-    </div>
+    <PlayerTurnBar />
+    <RestartButton />
+    <ChangeModeButton />
+    <ShowRuleButton showRules={showRules}/>
+    <TimerTwo timerTwo={timerTwo} currentTimer={currentTimer} />
 
-    <div className="restart-game">
-      <button className="btn-restart"
-        onClick={() => {
-          handleRestart()
-          handleReset()
-        }}
-      >Restart Game</button>
-    </div>
-    <div className="change-mode">
-      <button className="btn-mode"
-        onClick = {
-          () => {
-            handleRestart()
-            handleReset()
-            changeGameMode()
-          }
-        }
-      >
-        Change Game Mode
-      </button>
-    </div>
-    <div className="show-rules">
-        <button className="btn-show-rules" onClick={showRules}>
-          Show Rules
-        </button>
-    </div>
     { gameMode && <div className="current-game-mode">
         Game Mode: <span>{gameMode.toUpperCase()}</span>
     </div> }
-    <TimerTwo timerTwo={timerTwo} currentTimer={currentTimer} />
 
     <div className='board'>
-      { boardData.map((item: [], index: number) => {
+      { boardData.map((item: data, index: number) => {
 
         const boardStyle  = {}
-        function boardStyling() {
-        if (!item.playable) {
-          boardStyle.backgroundColor = '#111'
-        } else if (item?.highlighted) {
-          boardStyle.backgroundColor = '#ccccff'
-          boardStyle.cursor = 'pointer'
-        } else if (item?.selected) {
-          boardStyle.backgroundColor = '#6CD486'
-        } else if (playerOneTurn) {
-          boardStyle.backgroundColor = 'rgba(255, 0, 0, 0.08)'
-        } else if (!playerOneTurn) {
-          boardStyle.backgroundColor = 'rgba(0,0,255, 0.08)'
-        }
-        }
-        boardStyling()
+        boardStyling(item, boardStyle, playerOneTurn)
         
         const chipStyle = {}
-        function chipStyling() {
-        if (item?.piece === 'z') chipStyle.background = 'linear-gradient(to right, red 0%, rgb(255, 90, 90) 70%)'
-        if (item?.piece === 'x') chipStyle.background = 'linear-gradient(to right, blue 0%, rgb(90, 90, 255) 70%)'
-        if (item?.king) chipStyle.border = '0.4rem dashed #111'
-        if (item?.movable) chipStyle.opacity = '1'
-        if (!item?.movable) chipStyle.opacity = '0.4'
-        }
-        chipStyling()
+        chipStyling(item, chipStyle)
         
         // cursor pointers
-        function cursorPointers() {
-          if (playerOneTurn && item?.piece === 'z' && item?.movable) chipStyle.cursor = 'grab'
-        if (playerOneTurn && item?.piece === 'x' && item?.movable) chipStyle.cursor = 'not-allowed'
-        if (!playerOneTurn && item?.piece === 'x' && item?.movable) chipStyle.cursor = 'grab'
-        if (!playerOneTurn && item?.piece === 'z' && item?.movable) chipStyle.cursor = 'not-allowed'
-        if (playerOneTurn && item?.piece === 'z' && !item?.movable) chipStyle.cursor = 'not-allowed'
-        if (!playerOneTurn && item?.piece === 'x' && !item?.movable) chipStyle.cursor = 'not-allowed'
-        }
-        cursorPointers()
+        cursorPointers(playerOneTurn, item, chipStyle)
         
-
-
 
         return ( 
           <div className='square'
@@ -1448,9 +318,14 @@ if (forceFeed3rd.length) forceFeed = forceFeed3rd
             onClick={
               () => {
                 if (!item.highlighted) return
-                isFirstMove && handleStart()
-                movePiece(pieceToMove, item, index)
-                
+                  if (!playWithBot) {
+                    isFirstMove && handleStart()
+                    movePiece(pieceToMove as data, item)
+                  }
+                  else if (pieceToMove?.piece === 'z') {
+                    isFirstMove && handleStart()
+                    movePiece(pieceToMove as data, item)
+                  }                               
               }
             }
           >
@@ -1461,9 +336,17 @@ if (forceFeed3rd.length) forceFeed = forceFeed3rd
             style={chipStyle}
             onClick={() => {
               if (!item.movable) return
-              item.king === false ?
-              highlightMoves(item, index, playerOneTurn, boardData) : // for normal piece
-              highlightMovesKing(item, index, playerOneTurn, boardData) // for king piece
+                if (!playWithBot) {
+                  item.king === false ?
+                  highlightMoves(item, index, playerOneTurn, boardData) : // for normal piece
+                  highlightMovesKing(item, index, playerOneTurn, boardData) // for king piece
+                }
+                else if (item?.piece === 'z') {
+                  item.king === false ?
+                  highlightMoves(item, index, playerOneTurn, boardData) : // for normal piece
+                  highlightMovesKing(item, index, playerOneTurn, boardData) // for king piece
+                }
+              
             }}
           >
           </div>}

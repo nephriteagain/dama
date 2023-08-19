@@ -1,12 +1,23 @@
+import { useEffect } from "react"
 import { useGlobalContext } from "../context/GameContext"
 
 import '../sass/WinnerModal.scss'
 
+type WinnerModalProps = {
+  bodyHeight: number|undefined
+}
 
-function WinnerModal() {
+function WinnerModal({bodyHeight}: WinnerModalProps) {
 
   const { playerOneTurn, handleRestart, gameMode, timeSup } = useGlobalContext()
 
+
+  // useEffect(() => {
+  //   const modalBackground = document.querySelector('modal-background') as HTMLDivElement
+  //   if (bodyHeight && modalBackground) {
+  //     modalBackground.style.height = `${bodyHeight}px`
+  //   }
+  // }, [bodyHeight])
 
   if (timeSup) {
     return (
@@ -42,7 +53,8 @@ function WinnerModal() {
     </div>  
     )
   }
-  else if (gameMode === 'perdigana') {
+  // else if (gameMode === 'perdigana') {
+  else {
     return (
     <div className='modal-background'>
       <div className='winner-modal'>

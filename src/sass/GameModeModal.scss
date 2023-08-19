@@ -2,7 +2,7 @@
 
 
 .game-mode-modal-background {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   background-color: rgba($color: #000000, $alpha: 0.3);
@@ -162,7 +162,8 @@
 
 
 .selected-mode {
-  border: 0.25rem solid gold;
+  border: 0.25rem solid #fff;
+  cursor: pointer;
 }
 
 .notification {
@@ -177,7 +178,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 2rem 0.3rem rgba(0, 0, 0, 0.8);
+  box-shadow: 0 0 0.8rem 0.1rem rgba(0, 0, 0, 0.3);
   -webkit-transition: all 0.4s ease;
   -moz-transition: all 0.4s ease;
   -o-transition: all 0.4s ease;
@@ -276,6 +277,26 @@
   border: 1px solid blue;
   transition: all 0.2s ease-in-out;
   cursor: pointer;
+}
+
+.bot-div {
+  padding-inline: 1rem;
+  padding-block: 0.5rem;
+  margin-inline: auto;
+  margin-block: 0.5rem;
+  font-size: 1.3rem;
+  background-color: gainsboro;
+  width: fit-content;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 0.3rem 0.1rem rgba(0, 0, 0, 0.25);  
+}
+
+.bot-div:hover {
+  box-shadow: 0 0 0.3rem 0.1rem rgb(255, 255, 255, 0.7);    
+}
+
+.bot-div input {
+  margin-right: 0.5rem;
 }
 
 
